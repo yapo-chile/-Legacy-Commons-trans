@@ -128,7 +128,7 @@ No request parameters
 }
 ```
 
-### POST  /api/v1/{command}
+### POST  /api/v1/execute/{command}
 Sends the specified command to a trans server with the given params in the JSON body
 
 #### Request
