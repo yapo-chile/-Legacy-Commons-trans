@@ -32,10 +32,12 @@ export LOGGER_STDLOG_ENABLED=true
 export LOGGER_LOG_LEVEL=0
 
 
-# Trans variables
-export TRANS_HOST=jenna.schibsted.cl
-export TRANS_PORT=27205
-
+# Trans variables 
+# Change to target a trans server,i.e.:
+# TRANS_HOST=jenna.schibsted.cl
+# TRANS_PORT=27205
+export TRANS_HOST=
+export TRANS_PORT=
 # Pact test variables
 export PACT_MAIN_FILE=cmd/${APPNAME}-pact/main.go
 export PACT_BINARY=${APPNAME}-pact
