@@ -43,8 +43,15 @@ type RuntimeConfig struct {
 	Port int    `env:"PORT" envDefault:"8080"`
 }
 
+// TransConf transaction server conection
+type TransConf struct {
+	Host string `env:"HOST" envDefault:"jenna.schibsted.cl"`
+	Port int    `env:"PORT" envDefault:"27205"`
+}
+
 // Config holds all configuration for the service
 type Config struct {
+	Trans        TransConf     `env:"TRANS_"`
 	ServiceConf  ServiceConf   `env:"SERVICE_"`
 	NewRelicConf NewRelicConf  `env:"NEWRELIC_"`
 	LoggerConf   LoggerConf    `env:"LOGGER_"`
@@ -61,7 +68,7 @@ func valueFromEnv(envTag, envDefault string) string {
 	// Maybe it's a secret and <envTag>_FILE points to a file with the value
 	// https://rancher.com/docs/rancher/v1.6/en/cattle/secrets/#docker-hub-images
 	if fileName, ok := os.LookupEnv(fmt.Sprintf("%s_FILE", envTag)); ok {
-		b, err := ioutil.ReadFile(fileName)
+		b, err := ioutil.ReadFile(fileName) // nolint: gosec
 		if err == nil {
 			return string(b)
 		}

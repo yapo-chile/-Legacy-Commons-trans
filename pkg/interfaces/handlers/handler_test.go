@@ -1,13 +1,14 @@
 package handlers
 
 import (
-	"github.com/Yapo/goutils"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/Yapo/goutils"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 type MockHandler struct {
@@ -58,6 +59,16 @@ type DummyInput struct {
 	X int
 }
 
+type DummyInputGet struct {
+	Method string `get:"method"`
+	x      int
+}
+
+type DummyInputPartial struct {
+	Method string
+	Params map[string]interface{} `partial:""`
+}
+
 type DummyOutput struct {
 	Y string
 }
@@ -76,6 +87,33 @@ func TestJsonHandlerFuncOK(t *testing.T) {
 
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/someurl", strings.NewReader("{}"))
+
+	l.On("LogRequestStart", r)
+	l.On("LogRequestEnd", r, response)
+
+	fn := MakeJSONHandlerFunc(&h, &l)
+	fn(w, r)
+
+	assert.Equal(t, 42, w.Code)
+	assert.Equal(t, `{"Y":"That's some bad hat, Harry"}`+"\n", w.Body.String())
+	h.AssertExpectations(t)
+	l.AssertExpectations(t)
+}
+
+func TestJsonHandlerFillStruct(t *testing.T) {
+	h := MockHandler{}
+	l := MockLogger{}
+	input := &DummyInput{}
+	response := &goutils.Response{
+		Code: 42,
+		Body: DummyOutput{"That's some bad hat, Harry"},
+	}
+	getter := mock.AnythingOfType("handlers.InputGetter")
+	h.On("Execute", getter).Return(response).Once()
+	h.On("Input").Return(input).Once()
+
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", "/someurl", strings.NewReader("{\"X\":5}"))
 
 	l.On("LogRequestStart", r)
 	l.On("LogRequestEnd", r, response)

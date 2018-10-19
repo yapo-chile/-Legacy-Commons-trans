@@ -128,5 +128,34 @@ No request parameters
 }
 ```
 
-## Contact
+### POST  /api/v1/{command}
+Sends the specified command to a trans server with the given params in the JSON body
+
+#### Request
+A JSON object, were the fields are the name of trans params, and the values are the values required
+by the trans command
+
+#### Response
+
+```javascript
+200 OK
+{
+	"status": "TRANS_OK"
+	"response" - A JSON field containing all the values returned by the trans command
+	
+}
+```
+
+#### Error response
+```javascript
+400 Bad Request
+{
+	"status": "TRANS_ERROR"
+	"response": {
+		"error" - An error message
+	}
+}
+```
+
+### Contact
 dev@schibsted.cl

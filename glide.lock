@@ -1,8 +1,10 @@
-hash: 31b8ec67f11455d14a527581ee278ae71ff6f57c6c737605c887c0cfb301f390
-updated: 2018-10-24T12:16:42.783096-03:00
+hash: 69aeed349cd1eb1de30dce9ad942e8e026148012f7c9ccc659ee6152d35bf3fe
+updated: 2018-10-24T12:53:37.222028-03:00
 imports:
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
+- name: github.com/mitchellh/mapstructure
+  version: 3536a929edddb9a5b34bd6861dc4a9647cb459fe
 - name: github.com/newrelic/go-agent
   version: f5bce3387232559bcbe6a5f8227c4bf508dac1ba
   subpackages:
@@ -16,6 +18,8 @@ imports:
   version: 721ca4146b6a61457bd15254c0fc1d6f6bcbce20
 - name: github.com/Yapo/logger
   version: 91855e974718b8c68dd00e63817568f1f512a4cc
+- name: gopkg.in/facebookgo/atomicfile.v0
+  version: 2de1f203e7d5e386a6833233882782932729f27e
 - name: gopkg.in/gorilla/mux.v1
   version: e3702bed27f0d39777b0b37b664b6280e8ef8fbf
 testImports:

@@ -2,8 +2,11 @@ package: github.schibsted.io/Yapo/trans
 import:
 - package: github.com/Yapo/goutils
 - package: github.com/Yapo/logger
-- package: github.com/newrelic/go-agent
+- package: gopkg.in/facebookgo/atomicfile.v0
 - package: gopkg.in/gorilla/mux.v1
+  version: ^1.6.1
+- package: github.com/mitchellh/mapstructure
+- package: github.com/newrelic/go-agent
 testImport:
 - package: github.com/stretchr/testify
   subpackages:
