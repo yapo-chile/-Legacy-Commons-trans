@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func MakeMockInputGetter(input HandlerInput, response *goutils.Response) InputGetter {
+func MakeMockInputHealthGetter(input HandlerInput, response *goutils.Response) InputGetter {
 	return func() (HandlerInput, *goutils.Response) {
 		return input, response
 	}
@@ -23,7 +23,7 @@ func TestHealthHandlerInput(t *testing.T) {
 func TestHealthHandlerRun(t *testing.T) {
 	var h HealthHandler
 	var input HandlerInput
-	getter := MakeMockInputGetter(&input, nil)
+	getter := MakeMockInputHealthGetter(&input, nil)
 	r := h.Execute(getter)
 
 	expected := &goutils.Response{
