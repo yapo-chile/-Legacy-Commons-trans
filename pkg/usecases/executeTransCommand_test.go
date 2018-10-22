@@ -26,6 +26,7 @@ type MockTransInteractorLogger struct {
 func (m *MockTransInteractorLogger) LogBadInput(c domain.TransCommand) {
 	m.Called(c)
 }
+
 func (m *MockTransInteractorLogger) LogRepositoryError(c domain.TransCommand, err error) {
 	m.Called(c, err)
 }
