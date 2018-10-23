@@ -127,6 +127,39 @@ func TestJsonHandlerFillStruct(t *testing.T) {
 	l.AssertExpectations(t)
 }
 
+func TestJsonHandlerFillStructError(t *testing.T) {
+	h := MockHandler{}
+	l := MockLogger{}
+	input := &DummyInput{}
+	response := &goutils.Response{
+		Code: 400,
+		Body: goutils.GenericError{
+			ErrorMessage: "Is not a valid struct",
+		},
+	}
+	getter := mock.AnythingOfType("handlers.InputGetter")
+	h.On("Execute", getter).Return(response).Once()
+	h.On("Input").Return(input).Once()
+
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", "/someurl", strings.NewReader("{\"X\":true}"))
+
+	l.On("LogRequestStart", r)
+	l.On("LogRequestEnd", r, response)
+
+	fn := MakeJSONHandlerFunc(&h, &l)
+	fn(w, r)
+
+	assert.Equal(t, 400, w.Code)
+	assert.Equal(
+		t,
+		`{"ErrorMessage":"Is not a valid struct"}`+"\n",
+		w.Body.String(),
+	)
+	h.AssertExpectations(t)
+	l.AssertExpectations(t)
+}
+
 func TestJsonHandlerFillGet(t *testing.T) {
 	h := MockHandler{}
 	l := MockLogger{}
@@ -150,6 +183,36 @@ func TestJsonHandlerFillGet(t *testing.T) {
 
 	assert.Equal(t, 42, w.Code)
 	assert.Equal(t, `{"Y":"That's some bad hat, Harry"}`+"\n", w.Body.String())
+	h.AssertExpectations(t)
+	l.AssertExpectations(t)
+}
+
+func TestJsonHandlerFillGetInvalidStruct(t *testing.T) {
+	h := MockHandler{}
+	l := MockLogger{}
+	input := 6
+	response := &goutils.Response{
+		Code: 400,
+		Body: goutils.GenericError{
+			ErrorMessage: "Is not a valid struct",
+		},
+	}
+
+	getter := mock.AnythingOfType("handlers.InputGetter")
+	h.On("Execute", getter).Return(response).Once()
+	h.On("Input").Return(input).Once()
+
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", "/someurl", strings.NewReader("{\"x\":12}"))
+
+	l.On("LogRequestStart", r)
+	l.On("LogRequestEnd", r, response)
+
+	fn := MakeJSONHandlerFunc(&h, &l)
+	fn(w, r)
+
+	assert.Equal(t, 400, w.Code)
+	assert.Equal(t, `{"ErrorMessage":"Is not a valid struct"}`+"\n", w.Body.String())
 	h.AssertExpectations(t)
 	l.AssertExpectations(t)
 }

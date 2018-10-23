@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"reflect"
 
@@ -114,19 +115,13 @@ func fillStruct(vars map[string]interface{}, result interface{}) *goutils.Respon
 		Metadata: &md,
 		Result:   &result,
 	}
-
 	decoder, err := ms.NewDecoder(config)
 	if err != nil {
-		errorResponse.Body = goutils.GenericError{
-			ErrorMessage: err.Error(),
-		}
+		fmt.Println("called error on decoder")
 		return errorResponse
 	}
 
 	if err := decoder.Decode(vars); err != nil {
-		errorResponse.Body = goutils.GenericError{
-			ErrorMessage: err.Error(),
-		}
 		return errorResponse
 	}
 	for _, field := range md.Keys {

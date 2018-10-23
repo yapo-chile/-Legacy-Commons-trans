@@ -40,7 +40,6 @@ func (repo *TransRepo) Execute(command domain.TransCommand) (domain.TransRespons
 
 	if err != nil {
 		response.Params["error"] = err.Error()
-		fmt.Printf("response: %+v error: %+v\n", resp, err)
 		return response, err
 	}
 	if status, ok := resp["status"]; ok {
