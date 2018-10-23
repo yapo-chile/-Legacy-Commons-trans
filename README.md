@@ -1,27 +1,53 @@
-# goms
+# trans
 
 <!-- Badger start badges -->
-[![Status of the build](https://badger.spt-engprod-pro.schibsted.io/badge/travis/Yapo/goms)](https://travis.schibsted.io/Yapo/goms)
-[![Testing Coverage](https://badger.spt-engprod-pro.schibsted.io/badge/coverage/Yapo/goms)](https://reports.spt-engprod-pro.schibsted.io/#/Yapo/goms?branch=master&type=push&daterange&daterange)
-[![Style/Linting issues](https://badger.spt-engprod-pro.schibsted.io/badge/issues/Yapo/goms)](https://reports.spt-engprod-pro.schibsted.io/#/Yapo/goms?branch=master&type=push&daterange&daterange)
-[![Badger](https://badger.spt-engprod-pro.schibsted.io/badge/flaky_tests/Yapo/goms)](https://databulous.spt-engprod-pro.schibsted.io/test/flaky/Yapo/goms)
-[![Badger](https://badger.spt-engprod-pro.schibsted.io/badge/quality_index/Yapo/goms)](https://databulous.spt-engprod-pro.schibsted.io/quality/repo/Yapo/goms)
-[![Badger](https://badger.spt-engprod-pro.schibsted.io/badge/engprod/Yapo/goms)](https://github.schibsted.io/spt-engprod/badger)
+[![Status of the build](https://badger.spt-engprod-pro.schibsted.io/badge/travis/Yapo/trans)](https://travis.schibsted.io/Yapo/trans)
+[![Testing Coverage](https://badger.spt-engprod-pro.schibsted.io/badge/coverage/Yapo/trans)](https://reports.spt-engprod-pro.schibsted.io/#/Yapo/trans?branch=master&type=push&daterange&daterange)
+[![Style/Linting issues](https://badger.spt-engprod-pro.schibsted.io/badge/issues/Yapo/trans)](https://reports.spt-engprod-pro.schibsted.io/#/Yapo/trans?branch=master&type=push&daterange&daterange)
+[![Badger](https://badger.spt-engprod-pro.schibsted.io/badge/flaky_tests/Yapo/trans)](https://databulous.spt-engprod-pro.schibsted.io/test/flaky/Yapo/trans)
+[![Badger](https://badger.spt-engprod-pro.schibsted.io/badge/quality_index/Yapo/trans)](https://databulous.spt-engprod-pro.schibsted.io/quality/repo/Yapo/trans)
+[![Badger](https://badger.spt-engprod-pro.schibsted.io/badge/engprod/Yapo/trans)](https://github.schibsted.io/spt-engprod/badger)
 <!-- Badger end badges -->
 
-Goms is the official golang microservice template for Yapo.
+trans needs a description here.
 
-## A few rules
+## Checklist: Is my service ready?
 
-* Goms was built following [Clean Architecture](https://www.amazon.com/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164) so, please, familiarize yourself with it and let's code great code!
+* [ ] Configure your github repository
+  - Open https://github.schibsted.io/Yapo/trans/settings
+  - Features: Wikis, Restrict editing, Issues, Projects
+  - Merge button: Only allow merge commits
+  - GitHub Pages: master branch / docs folder
+  - Open https://github.schibsted.io/Yapo/trans/settings/branches
+  - Default branch: master
+  - Protected branches: choose master
+  - Protect this branch
+    + Require pull request reviews
+      - Dismiss stale pull request
+    + Require status checks before merging
+      - Require branches to be up to date
+      - Quality gate code analysis
+      - Quality gate coverage
+      - Travis-ci
+    + Include administrators
+* [ ] Enable TravisCI
+  - Go to your service's github settings -> Hooks & Services -> Add Service -> Travis CI
+  - Fill in the form with the credentials you obtain from https://travis.schibsted.io/profile/
+  - Sync your repos and organizations on Travis
+  - Create a pull request and make a push on it
+  - The push should trigger a build. If it didn't, ensure that it is enabled on the travis service list
+  - Enjoy! This should automatically enable quality-gate reports and a few other goodies
+* [ ] Get your first PR merged
+  - Master should be a protected branch, so the only way to get commits there is via pull request
+  - Once the travis build is ok, and you got approval merge it back to master
+  - This will allow for the broken badges on top of this readme to display correctly
+  - Should them not display after some time, please report it
+* [ ] Delete this section
+  - It's time for me to leave, I've done my part
+  - It's time for you to start coding your new service and documenting your endpoints below
+  - Seriously, document your endpoints and delete this section
 
-* Goms has great [test coverage](https://quality-gate.schibsted.io/#/Yapo/goms) and [examples](https://github.schibsted.io/Yapo/goms/search?l=Go&q=func+Test&type=&utf8=%E2%9C%93) of how good testing can be done. Please honor the effort and keep your test quality in the top tier.
-
-* Goms is not a silver bullet. If your service clearly doesn't fit in this template, let's have a [conversation](mailto:dev@schibsted.cl)
-
-* [README.md](README.md) is the entrypoint for new users of your service. Keep it up to date and get others to proof-read it.
-
-## How to run the service
+## How to run trans
 
 * Create the dir: `~/go/src/github.schibsted.io/Yapo`
 
@@ -31,13 +57,13 @@ Goms is the official golang microservice template for Yapo.
 
   ```
   $ cd ~/go/src/github.schibsted.io/Yapo
-  $ git clone git@github.schibsted.io:Yapo/goms.git
+  $ git clone git@github.schibsted.io:Yapo/trans.git
   ```
 
 * On the top dir execute the make instruction to clean and start:
 
   ```
-  $ cd goms
+  $ cd trans
   $ make start
   ```
 
@@ -81,50 +107,6 @@ Goms is the official golang microservice template for Yapo.
   ```
   $ make checkstyle
   ```
-  
-
-## Creating a new service
-
-* Create a repo for your new service on: https://github.schibsted.io/Yapo
-* Rename your goms dir to your service name:
-  ```
-  $ mv goms YourService
-  ```
-* Update origin: 
-  ```
-  # https://help.github.com/articles/changing-a-remote-s-url/
-  $ git remote set-url origin git@github.schibsted.io:Yapo/YourService.git
-  ```
-
-* Replace every goms reference to your service's name:
-  ```
-  $ git grep -l goms | xargs sed -i.bak 's/goms/yourservice/g'
-  $ find . -name "*.bak" | xargs rm
-  ```
-
-* Go through the code examples and implement your service
-  ```
-  $ git grep -il fibonacci
-  README.md
-  cmd/goms/main.go
-  pkg/domain/fibonacci.go
-  pkg/domain/fibonacci_test.go
-  pkg/interfaces/handlers/fibonacci.go
-  pkg/interfaces/handlers/fibonacci_test.go
-  pkg/interfaces/loggers/fibonacciInteractorLogger.go
-  pkg/interfaces/repository/fibonacci.go
-  pkg/interfaces/repository/fibonacci_test.go
-  pkg/usecases/getNthFibonacci.go
-  pkg/usecases/getNthFibonacci_test.go
-  ```
-
-* Enable TravisCI
-  - Go to your service's github settings -> Hooks & Services -> Add Service -> Travis CI
-  - Fill in the form with the credentials you obtain from https://travis.schibsted.io/profile/
-  - Sync your repos and organizations on Travis
-  - Make a push on your service
-  - The push should trigger a build. If it didn't ensure that it is enabled on the travis service list
-  - Enjoy! This should automatically enable quality-gate reports and a few other goodies
 
 ## Endpoints
 ### GET  /api/v1/healthcheck
@@ -146,30 +128,5 @@ No request parameters
 }
 ```
 
-### GET  /api/v1/fibonacci
-Implements the Fibonacci Numbers with Clean Architecture
-
-#### Request
-{
-	"n": int - Ask for the nth fibonacci number
-}
-
-#### Response
-
-```javascript
-200 OK
-{
-	"Result": int - The nth fibonacci number
-}
-```
-
-#### Error response
-```javascript
-400 Bad Request
-{
-	"ErrorMessage": string - Explaining what went wrong
-}
-```
-
-### Contact
+## Contact
 dev@schibsted.cl

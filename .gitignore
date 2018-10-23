@@ -7,5 +7,5 @@ conf/conf.json
 logs/*
 reports/*
 vendor/*
-goms*
 app.docker
+goms*

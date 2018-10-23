@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"net/http/pprof"
 
-	"github.schibsted.io/Yapo/goms/pkg/interfaces/handlers"
-	"github.schibsted.io/Yapo/goms/pkg/interfaces/loggers"
+	"github.schibsted.io/Yapo/trans/pkg/interfaces/handlers"
+	"github.schibsted.io/Yapo/trans/pkg/interfaces/loggers"
 	"gopkg.in/gorilla/mux.v1"
 )
 

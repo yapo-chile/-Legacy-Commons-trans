@@ -5,7 +5,7 @@ DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 . "$DIR/colors.sh"
 
-TEMPLATE=goms
+TEMPLATE=trans
 BRANCH=master
 GITHUB_ORG=github.schibsted.io/Yapo
 GITHUB_URL=git@github.schibsted.io:Yapo
@@ -41,7 +41,7 @@ echoTitle "Preparing the new repo ${SERVICE}:${BRANCH}"
 git config user.name "${NAME}"
 git config user.email "${EMAIL}"
 TEMPLATE_HEAD=$(git rev-parse HEAD)
-SERVICE_HEAD=$(echo "Fork made from goms:${TEMPLATE_HEAD}" | git commit-tree HEAD^{tree})
+SERVICE_HEAD=$(echo "Fork made from trans:${TEMPLATE_HEAD}" | git commit-tree HEAD^{tree})
 git reset ${SERVICE_HEAD}
 git tag | xargs git tag -d
 

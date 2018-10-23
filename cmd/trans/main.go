@@ -6,11 +6,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.schibsted.io/Yapo/goms/pkg/infrastructure"
-	"github.schibsted.io/Yapo/goms/pkg/interfaces/handlers"
-	"github.schibsted.io/Yapo/goms/pkg/interfaces/loggers"
-	"github.schibsted.io/Yapo/goms/pkg/interfaces/repository"
-	"github.schibsted.io/Yapo/goms/pkg/usecases"
+	"github.schibsted.io/Yapo/trans/pkg/infrastructure"
+	"github.schibsted.io/Yapo/trans/pkg/interfaces/handlers"
 )
 
 var shutdownSequence = infrastructure.NewShutdownSequence()
@@ -47,16 +44,6 @@ func main() {
 
 	// HealthHandler
 	var healthHandler handlers.HealthHandler
-	// FibonacciHandler
-	fibonacciLogger := loggers.MakeFibonacciInteractorLogger(logger)
-	fibonacciRepository := repository.NewMapFibonacciRepository()
-	fibonacciInteractor := usecases.FibonacciInteractor{
-		Logger:     fibonacciLogger,
-		Repository: fibonacciRepository,
-	}
-	fibonacciHandler := handlers.FibonacciHandler{
-		Interactor: &fibonacciInteractor,
-	}
 
 	// Setting up router
 	maker := infrastructure.RouterMaker{
@@ -73,12 +60,6 @@ func main() {
 						Method:  "GET",
 						Pattern: "/healthcheck",
 						Handler: &healthHandler,
-					},
-					{
-						Name:    "Retrieve the Nth Fibonacci with Clean Architecture",
-						Method:  "GET",
-						Pattern: "/fibonacci",
-						Handler: &fibonacciHandler,
 					},
 				},
 			},

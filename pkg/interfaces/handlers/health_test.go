@@ -1,12 +1,18 @@
 package handlers
 
 import (
-	"github.com/Yapo/goutils"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
+
+	"github.com/Yapo/goutils"
+	"github.com/stretchr/testify/assert"
 )
 
+func MakeMockInputGetter(input HandlerInput, response *goutils.Response) InputGetter {
+	return func() (HandlerInput, *goutils.Response) {
+		return input, response
+	}
+}
 func TestHealthHandlerInput(t *testing.T) {
 	var h HealthHandler
 	input := h.Input()

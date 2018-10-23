@@ -2,7 +2,7 @@ package infrastructure
 
 import (
 	"github.com/Yapo/logger"
-	"github.schibsted.io/Yapo/goms/pkg/interfaces/loggers"
+	"github.schibsted.io/Yapo/trans/pkg/interfaces/loggers"
 )
 
 // yapoLogger struct that implements the Logger interface using the Yapo/logger library

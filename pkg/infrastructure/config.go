@@ -33,7 +33,7 @@ type LoggerConf struct {
 // TODO: You need to set the defaults according to your service
 type NewRelicConf struct {
 	Key     string `env:"KEY" envDefault:"923864cba2f12410aff39279cddfd339a07f13a3"`
-	Appname string `env:"APPNAME" envDefault:"yapo-goms-poya"`
+	Appname string `env:"APPNAME" envDefault:"yapo-trans-poya"`
 	Enabled bool   `env:"ENABLED" envDefault:"false"`
 }
 
