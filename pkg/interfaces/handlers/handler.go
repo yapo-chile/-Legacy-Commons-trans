@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"reflect"
 
@@ -117,11 +116,16 @@ func fillStruct(vars map[string]interface{}, result interface{}) *goutils.Respon
 	}
 	decoder, err := ms.NewDecoder(config)
 	if err != nil {
-		fmt.Println("called error on decoder")
+		errorResponse.Body = goutils.GenericError{
+			ErrorMessage: "Error creating map decoder",
+		}
 		return errorResponse
 	}
 
 	if err := decoder.Decode(vars); err != nil {
+		errorResponse.Body = goutils.GenericError{
+			ErrorMessage: "Error decoding map into struct",
+		}
 		return errorResponse
 	}
 	for _, field := range md.Keys {

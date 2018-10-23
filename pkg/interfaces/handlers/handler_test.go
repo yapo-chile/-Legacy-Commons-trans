@@ -134,7 +134,7 @@ func TestJsonHandlerFillStructError(t *testing.T) {
 	response := &goutils.Response{
 		Code: 400,
 		Body: goutils.GenericError{
-			ErrorMessage: "Is not a valid struct",
+			ErrorMessage: "Error decoding map into struct",
 		},
 	}
 	getter := mock.AnythingOfType("handlers.InputGetter")
@@ -153,7 +153,7 @@ func TestJsonHandlerFillStructError(t *testing.T) {
 	assert.Equal(t, 400, w.Code)
 	assert.Equal(
 		t,
-		`{"ErrorMessage":"Is not a valid struct"}`+"\n",
+		`{"ErrorMessage":"Error decoding map into struct"}`+"\n",
 		w.Body.String(),
 	)
 	h.AssertExpectations(t)
