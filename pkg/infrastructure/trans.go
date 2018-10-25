@@ -83,8 +83,7 @@ func (handler *Trans) SendCommand(cmd string, params map[string]string) (map[str
 }
 
 // parseFormatTrans parse a mapping string to trans string format
-func (handler *Trans) parseFormatTrans(m map[string]string, commit bool) string {
-	s := ""
+func (handler *Trans) parseFormatTrans(m map[string]string, commit bool) (s string) {
 	// sort by string for pact-test
 	keys := make([]string, 0, len(m))
 	for k := range m {
@@ -101,5 +100,5 @@ func (handler *Trans) parseFormatTrans(m map[string]string, commit bool) string 
 	if commit {
 		s += "commit:1\n"
 	}
-	return s
+	return
 }

@@ -47,7 +47,6 @@ func (repo *TransRepo) Execute(command domain.TransCommand) (domain.TransRespons
 		delete(resp, "status")
 	}
 	for key, val := range resp {
-
 		response.Params[key] = val
 	}
 	return response, nil
