@@ -2,6 +2,8 @@ package infrastructure
 
 import (
 	"bufio"
+	"bytes"
+	"io"
 	"net"
 	"strconv"
 	"strings"
@@ -11,22 +13,32 @@ import (
 )
 
 func TestSendCommand(t *testing.T) {
-	command := "cmd:test\nparam1:ok\ncommit:1\n\nend\n"
-	response := "status:TRANS_OK\n"
+	command := "cmd:test\nparam1:ok\ncommit:1\nend\n"
+	response := "status:TRANS_OK\nend\n"
 	//initiate a tcp listener for the test
 	ln, _ := net.Listen("tcp", "127.0.0.1:0")
 	go func() {
 		defer ln.Close()
 		conn, _ := ln.Accept()
-		receivedCommand := strings.Builder{}
-		data := ""
-		reader := bufio.NewReader(conn)
-		for strings.Compare(data, "end\n") != 0 {
-			data, _ = reader.ReadString('\n')
-			receivedCommand.WriteString(data)
-		}
+		io.WriteString(conn, "220 Welcome.\n")
+		br := bufio.NewReader(conn)
+		buf := make([]byte, 0, 100)
+		for {
+			line, err := br.ReadSlice('\n')
+			if err != nil {
+				if err != io.EOF {
+					t.Fatal(err)
+				}
+				break
+			}
+			buf = append(buf, line...)
 
-		assert.Equal(t, command, receivedCommand.String())
+			if bytes.Equal(line, []byte("end\n")) {
+				break
+			}
+		}
+		receivedCommand := string(buf)
+		assert.Equal(t, command, receivedCommand)
 		conn.Write([]byte(response))
 		conn.Close()
 	}()
@@ -35,11 +47,14 @@ func TestSendCommand(t *testing.T) {
 	host := addr[0]
 	port, _ := strconv.Atoi(addr[1])
 	conf := TransConf{
-		Host: host,
-		Port: port,
+		Host:       host,
+		Port:       port,
+		Timeout:    15,
+		RetryAfter: 5,
+		BuffSize:   4096,
 	}
 	logger := MockLoggerInfrastructure{}
-
+	logger.On("Debug")
 	expectedResponse := make(map[string]string)
 	expectedResponse["status"] = "TRANS_OK"
 	cmd := "test"

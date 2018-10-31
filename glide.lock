@@ -1,6 +1,10 @@
 hash: 69aeed349cd1eb1de30dce9ad942e8e026148012f7c9ccc659ee6152d35bf3fe
-updated: 2018-10-24T12:54:23.476148-03:00
+updated: 2018-10-30T17:35:13.802891-03:00
 imports:
+- name: github.com/eapache/go-resiliency
+  version: ef9aaa7ea8bd2448429af1a77cf41b2b3b34bdd6
+  subpackages:
+  - retrier
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/mitchellh/mapstructure
