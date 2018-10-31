@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSendCommand(t *testing.T) {
+func TestSendCommandOK(t *testing.T) {
 	command := "cmd:test\nparam1:ok\ncommit:1\nend\n"
 	response := "status:TRANS_OK\nend\n"
 	//initiate a tcp listener for the test
@@ -24,15 +24,8 @@ func TestSendCommand(t *testing.T) {
 		br := bufio.NewReader(conn)
 		buf := make([]byte, 0, 100)
 		for {
-			line, err := br.ReadSlice('\n')
-			if err != nil {
-				if err != io.EOF {
-					t.Fatal(err)
-				}
-				break
-			}
+			line, _ := br.ReadSlice('\n')
 			buf = append(buf, line...)
-
 			if bytes.Equal(line, []byte("end\n")) {
 				break
 			}

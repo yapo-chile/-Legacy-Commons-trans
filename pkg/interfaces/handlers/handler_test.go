@@ -64,11 +64,6 @@ type DummyInputGet struct {
 	X      int
 }
 
-type DummyInputPartial struct {
-	Method string
-	Params map[string]interface{} `partial:""`
-}
-
 type DummyOutput struct {
 	Y string
 }
@@ -99,67 +94,6 @@ func TestJsonHandlerFuncOK(t *testing.T) {
 	h.AssertExpectations(t)
 	l.AssertExpectations(t)
 }
-
-func TestJsonHandlerFillStruct(t *testing.T) {
-	h := MockHandler{}
-	l := MockLogger{}
-	input := &DummyInput{}
-	response := &goutils.Response{
-		Code: 42,
-		Body: DummyOutput{"That's some bad hat, Harry"},
-	}
-	getter := mock.AnythingOfType("handlers.InputGetter")
-	h.On("Execute", getter).Return(response).Once()
-	h.On("Input").Return(input).Once()
-
-	w := httptest.NewRecorder()
-	r := httptest.NewRequest("GET", "/someurl", strings.NewReader("{\"X\":5}"))
-
-	l.On("LogRequestStart", r)
-	l.On("LogRequestEnd", r, response)
-
-	fn := MakeJSONHandlerFunc(&h, &l)
-	fn(w, r)
-
-	assert.Equal(t, 42, w.Code)
-	assert.Equal(t, `{"Y":"That's some bad hat, Harry"}`+"\n", w.Body.String())
-	h.AssertExpectations(t)
-	l.AssertExpectations(t)
-}
-
-func TestJsonHandlerFillStructError(t *testing.T) {
-	h := MockHandler{}
-	l := MockLogger{}
-	input := &DummyInput{}
-	response := &goutils.Response{
-		Code: 400,
-		Body: goutils.GenericError{
-			ErrorMessage: "Error decoding map into struct",
-		},
-	}
-	getter := mock.AnythingOfType("handlers.InputGetter")
-	h.On("Execute", getter).Return(response).Once()
-	h.On("Input").Return(input).Once()
-
-	w := httptest.NewRecorder()
-	r := httptest.NewRequest("GET", "/someurl", strings.NewReader("{\"X\":true}"))
-
-	l.On("LogRequestStart", r)
-	l.On("LogRequestEnd", r, response)
-
-	fn := MakeJSONHandlerFunc(&h, &l)
-	fn(w, r)
-
-	assert.Equal(t, 400, w.Code)
-	assert.Equal(
-		t,
-		`{"ErrorMessage":"Error decoding map into struct"}`+"\n",
-		w.Body.String(),
-	)
-	h.AssertExpectations(t)
-	l.AssertExpectations(t)
-}
-
 func TestJsonHandlerFillGet(t *testing.T) {
 	h := MockHandler{}
 	l := MockLogger{}
@@ -213,33 +147,6 @@ func TestJsonHandlerFillGetInvalidStruct(t *testing.T) {
 
 	assert.Equal(t, 400, w.Code)
 	assert.Equal(t, `{"ErrorMessage":"Is not a valid struct"}`+"\n", w.Body.String())
-	h.AssertExpectations(t)
-	l.AssertExpectations(t)
-}
-
-func TestJsonHandlerFillPartial(t *testing.T) {
-	h := MockHandler{}
-	l := MockLogger{}
-	input := &DummyInputPartial{}
-	response := &goutils.Response{
-		Code: 42,
-		Body: DummyOutput{"That's some bad hat, Harry"},
-	}
-	getter := mock.AnythingOfType("handlers.InputGetter")
-	h.On("Execute", getter).Return(response).Once()
-	h.On("Input").Return(input).Once()
-
-	w := httptest.NewRecorder()
-	r := httptest.NewRequest("GET", "/someurl", strings.NewReader("{\"x\":12}"))
-
-	l.On("LogRequestStart", r)
-	l.On("LogRequestEnd", r, response)
-
-	fn := MakeJSONHandlerFunc(&h, &l)
-	fn(w, r)
-
-	assert.Equal(t, 42, w.Code)
-	assert.Equal(t, `{"Y":"That's some bad hat, Harry"}`+"\n", w.Body.String())
 	h.AssertExpectations(t)
 	l.AssertExpectations(t)
 }

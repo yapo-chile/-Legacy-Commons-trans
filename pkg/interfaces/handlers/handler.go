@@ -5,7 +5,6 @@ import (
 	"reflect"
 
 	"github.com/Yapo/goutils"
-	ms "github.com/mitchellh/mapstructure"
 	mux "gopkg.in/gorilla/mux.v1"
 )
 
@@ -70,17 +69,7 @@ func (jh *jsonHandler) run(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Parse the body params
-		params := make(map[string]interface{})
-		response = goutils.ParseJSONBody(r, &params)
-		if response != nil {
-			return input, response
-		}
-		response = fillStruct(params, input)
-		if response != nil {
-			return input, response
-		}
-		// Fill the partial param in the input, if any
-		fillPartial(params, input)
+		response = goutils.ParseJSONBody(r, &input)
 		return input, response
 	}
 	// Format the output and send it down the writer
@@ -102,38 +91,6 @@ func (jh *jsonHandler) run(w http.ResponseWriter, r *http.Request) {
 	jh.logger.LogRequestEnd(r, response)
 }
 
-func fillStruct(vars map[string]interface{}, result interface{}) *goutils.Response {
-	errorResponse := &goutils.Response{
-		Code: http.StatusBadRequest,
-		Body: goutils.GenericError{
-			ErrorMessage: "Is not a valid struct",
-		},
-	}
-	var md ms.Metadata
-	config := &ms.DecoderConfig{
-		Metadata: &md,
-		Result:   &result,
-	}
-	decoder, err := ms.NewDecoder(config)
-	if err != nil {
-		errorResponse.Body = goutils.GenericError{
-			ErrorMessage: "Error creating map decoder",
-		}
-		return errorResponse
-	}
-
-	if err := decoder.Decode(vars); err != nil {
-		errorResponse.Body = goutils.GenericError{
-			ErrorMessage: "Error decoding map into struct",
-		}
-		return errorResponse
-	}
-	for _, field := range md.Keys {
-		delete(vars, field)
-	}
-	return nil
-}
-
 // fillGet set variables into the corresponding get param
 func fillGet(vars map[string]string, input interface{}) *goutils.Response {
 	v := reflect.ValueOf(input)
@@ -153,20 +110,5 @@ func fillGet(vars map[string]string, input interface{}) *goutils.Response {
 		Body: goutils.GenericError{
 			ErrorMessage: "Is not a valid struct",
 		},
-	}
-}
-
-// fillPartial set map in a partial param
-func fillPartial(vars map[string]interface{}, input interface{}) {
-	v := reflect.ValueOf(input)
-	reflectedInput := reflect.Indirect(v)
-	// Only attempt to set writeable variables
-	if reflectedInput.IsValid() && reflectedInput.CanSet() && reflectedInput.Kind() == reflect.Struct {
-		// Recursively load inner struct field
-		for i := 0; i < reflectedInput.NumField(); i++ {
-			if _, ok := reflectedInput.Type().Field(i).Tag.Lookup("partial"); ok {
-				reflectedInput.Field(i).Set(reflect.ValueOf(vars))
-			}
-		}
 	}
 }

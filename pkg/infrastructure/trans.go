@@ -23,14 +23,14 @@ const (
 	EndMessage = "end\n"
 )
 
-// Trans struct definition
-type Trans struct {
+// trans struct definition
+type trans struct {
 	Conf   TransConf
 	Logger loggers.Logger
 }
 
-// TextProtocolTransFactory is a auxiliar struct to create trans on demand
-type TextProtocolTransFactory struct {
+// textProtocolTransFactory is a auxiliar struct to create trans on demand
+type textProtocolTransFactory struct {
 	Conf   TransConf
 	Logger loggers.Logger
 }
@@ -39,23 +39,23 @@ type TextProtocolTransFactory struct {
 func NewTextProtocolTransFactory(
 	conf TransConf,
 	logger loggers.Logger,
-) *TextProtocolTransFactory {
-	return &TextProtocolTransFactory{
+) services.TransFactory {
+	return &textProtocolTransFactory{
 		Conf:   conf,
 		Logger: logger,
 	}
 }
 
 // MakeTransHandler initialize a TransHandler on demand
-func (t *TextProtocolTransFactory) MakeTransHandler() services.TransHandler {
-	return &Trans{
+func (t *textProtocolTransFactory) MakeTransHandler() services.TransHandler {
+	return &trans{
 		Conf:   t.Conf,
 		Logger: t.Logger,
 	}
 }
 
 // SendCommand use a socket conection to send commands to trans port
-func (handler *Trans) SendCommand(cmd string, params map[string]string) (map[string]string, error) {
+func (handler *trans) SendCommand(cmd string, params map[string]string) (map[string]string, error) {
 	respMap := make(map[string]string)
 	conn, err := handler.connect()
 	if err != nil {
@@ -84,7 +84,7 @@ func (handler *Trans) SendCommand(cmd string, params map[string]string) (map[str
 
 // connect returns a connection to the trans client.
 // Retries to connect after retryAfter time if the connection times out
-func (handler *Trans) connect() (net.Conn, error) {
+func (handler *trans) connect() (net.Conn, error) {
 
 	r := retrier.New([]time.Duration{time.Duration(handler.Conf.RetryAfter) * time.Second}, nil)
 
@@ -109,7 +109,7 @@ func (handler *Trans) connect() (net.Conn, error) {
 // sendWithContext sends the message to trans but is cancelable via a context.
 // The context timeout specified how long the caller can wait
 // for the trans to respond
-func (handler *Trans) sendWithContext(ctx context.Context, conn io.ReadWriteCloser, cmd string, args map[string]string) (map[string]string, error) {
+func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteCloser, cmd string, args map[string]string) (map[string]string, error) {
 	var resp map[string]string
 	errChan := make(chan error, 1)
 
@@ -140,7 +140,7 @@ func (handler *Trans) sendWithContext(ctx context.Context, conn io.ReadWriteClos
 	}
 }
 
-func (handler *Trans) send(conn io.ReadWriter, cmd string, args map[string]string) (map[string]string, error) {
+func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]string) (map[string]string, error) {
 	// Check greeting.
 	br := bufio.NewReaderSize(conn, handler.Conf.BuffSize)
 	line, err := br.ReadSlice('\n')
