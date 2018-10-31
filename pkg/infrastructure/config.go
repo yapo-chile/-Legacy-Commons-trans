@@ -45,11 +45,12 @@ type RuntimeConfig struct {
 
 // TransConf transaction server conection
 type TransConf struct {
-	Host       string `env:"HOST" envDefault:"jenna.schibsted.cl"`
-	Port       int    `env:"PORT" envDefault:"27205"`
-	Timeout    int    `env:"TIMEOUT" envDefault:"15"`
-	RetryAfter int    `env:"RETRY" envDefault:"5"`
-	BuffSize   int    `env:"BUFFSIZE" envDefault:"4096"`
+	ValidCommand string `env:"COMMAND" envDefault:"transinfo"`
+	Host         string `env:"HOST" envDefault:"jenna.schibsted.cl"`
+	Port         int    `env:"PORT" envDefault:"27205"`
+	Timeout      int    `env:"TIMEOUT" envDefault:"15"`
+	RetryAfter   int    `env:"RETRY" envDefault:"5"`
+	BuffSize     int    `env:"BUFFSIZE" envDefault:"4096"`
 }
 
 // Config holds all configuration for the service

@@ -60,7 +60,7 @@ func TestExecuteError(t *testing.T) {
 	response, err := repo.Execute(command)
 	expectedResponse := domain.TransResponse{
 		Status: "TRANS_ERROR",
-		Params: make(map[string]interface{}),
+		Params: make(map[string]string),
 	}
 	expectedResponse.Params["error"] = "trans error"
 	assert.Equal(t, expectedErr, err)
@@ -103,7 +103,7 @@ func TestExecuteOK(t *testing.T) {
 	response, err := repo.Execute(command)
 	expectedResponse := domain.TransResponse{
 		Status: "TRANS_OK",
-		Params: make(map[string]interface{}),
+		Params: make(map[string]string),
 	}
 	expectedResponse.Params["response 1"] = "response 1"
 	assert.Equal(t, nil, err)
@@ -143,7 +143,7 @@ func TestExecuteOKNumbers(t *testing.T) {
 	response, err := repo.Execute(command)
 	expectedResponse := domain.TransResponse{
 		Status: "TRANS_OK",
-		Params: make(map[string]interface{}),
+		Params: make(map[string]string),
 	}
 	expectedResponse.Params["response 1"] = "response 1"
 	assert.Equal(t, nil, err)

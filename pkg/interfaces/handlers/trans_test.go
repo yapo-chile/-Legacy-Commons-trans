@@ -81,21 +81,21 @@ func TestTransHandlerParseInput(t *testing.T) {
 
 	response := domain.TransResponse{
 		Status: "TRANS_OK",
-		Params: make(map[string]interface{}),
+		Params: make(map[string]string),
 	}
-	response.Params["account_id"] = 1
+	response.Params["account_id"] = "1"
 	response.Params["email"] = "user@test.com"
-	response.Params["is_company"] = true
+	response.Params["is_company"] = "true"
 	m.On("ExecuteCommand", command).Return(response, nil).Once()
 	h := TransHandler{Interactor: &m}
 
 	requestOutput := TransRequestOutput{
 		Status:   "TRANS_OK",
-		Response: make(map[string]interface{}),
+		Response: make(map[string]string),
 	}
-	requestOutput.Response["account_id"] = 1
+	requestOutput.Response["account_id"] = "1"
 	requestOutput.Response["email"] = "user@test.com"
-	requestOutput.Response["is_company"] = true
+	requestOutput.Response["is_company"] = "true"
 	expectedResponse := &goutils.Response{
 		Code: http.StatusOK,
 		Body: requestOutput,

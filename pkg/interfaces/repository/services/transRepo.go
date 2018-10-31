@@ -34,10 +34,9 @@ func NewTransRepo(transFactory TransFactory) *TransRepo {
 func (repo *TransRepo) Execute(command domain.TransCommand) (domain.TransResponse, error) {
 	response := domain.TransResponse{
 		Status: "TRANS_ERROR",
-		Params: make(map[string]interface{}),
+		Params: make(map[string]string),
 	}
 	resp, err := repo.transaction(command.Command, command.Params)
-
 	if err != nil {
 		response.Params["error"] = err.Error()
 		return response, err

@@ -33,7 +33,7 @@ func (interactor TransInteractor) ExecuteCommand(
 ) (domain.TransResponse, error) {
 	response := domain.TransResponse{
 		Status: "TRANS_ERROR",
-		Params: make(map[string]interface{}),
+		Params: make(map[string]string),
 	}
 	// Ensure correct input
 	if command.Command == "" {
@@ -47,7 +47,7 @@ func (interactor TransInteractor) ExecuteCommand(
 		// Report the error
 		interactor.Logger.LogRepositoryError(command, err)
 		if transErr, ok := response.Params["error"]; ok {
-			err = fmt.Errorf(transErr.(string))
+			err = fmt.Errorf(transErr)
 		} else {
 			err = fmt.Errorf("error during execution")
 		}

@@ -8,9 +8,9 @@ import (
 	"github.schibsted.io/Yapo/trans/pkg/usecases"
 )
 
-// TransHandler implements the handler interface and responds to /send
+// TransHandler implements the handler interface and responds to /execute
 // requests with a message. Expected response format:
-// { Status: string }
+// { status: string, response: json }
 type TransHandler struct {
 	Interactor usecases.ExecuteTransUsecase
 }
@@ -18,13 +18,13 @@ type TransHandler struct {
 // TransHandlerInput struct that represents the input
 type TransHandlerInput struct {
 	Command string                 `get:"command"`
-	Params  map[string]interface{} `partial:""`
+	Params  map[string]interface{} `json:"params"`
 }
 
 // TransRequestOutput struct that represents the output
 type TransRequestOutput struct {
-	Status   string                 `json:"status"`
-	Response map[string]interface{} `json:"response"`
+	Status   string            `json:"status"`
+	Response map[string]string `json:"response"`
 }
 
 // Input returns a fresh, empty instance of transHandlerInput
