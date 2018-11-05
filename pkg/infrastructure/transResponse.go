@@ -11,7 +11,7 @@ type TransResponse []byte
 
 // Map returns a new map from a response.
 func (r TransResponse) Map() (map[string]string, error) {
-	m := make(map[string]string, r.countNewlines())
+	m := make(map[string]string)
 	err := r.apply(func(key, value string) {
 		m[key] = value
 	})
@@ -19,16 +19,6 @@ func (r TransResponse) Map() (map[string]string, error) {
 		return nil, err
 	}
 	return m, nil
-}
-
-func (r TransResponse) countNewlines() int {
-	n := 0
-	for _, b := range r {
-		if b == '\n' {
-			n++
-		}
-	}
-	return n
 }
 
 // apply applies the given function on all key-value pairs of the response.

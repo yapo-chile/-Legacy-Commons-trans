@@ -46,7 +46,7 @@ func TestSendCommandInvalidCommand(t *testing.T) {
 		Timeout:      15,
 		RetryAfter:   5,
 		BuffSize:     4096,
-		ValidCommand: "test",
+		AllowCommand: "test",
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Debug")
@@ -97,7 +97,7 @@ func TestSendCommandTimeout(t *testing.T) {
 		Timeout:      5,
 		RetryAfter:   5,
 		BuffSize:     4096,
-		ValidCommand: "test",
+		AllowCommand: "test",
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Debug")
@@ -147,7 +147,7 @@ func TestSendCommandOK(t *testing.T) {
 		Timeout:      15,
 		RetryAfter:   5,
 		BuffSize:     4096,
-		ValidCommand: "test",
+		AllowCommand: "test",
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Debug")

@@ -16,13 +16,6 @@ import (
 	"github.schibsted.io/Yapo/trans/pkg/interfaces/repository/services"
 )
 
-const (
-	// WelcomeMessage ...
-	WelcomeMessage = "220 Welcome.\n"
-	// EndMessage is command that define end of the message.
-	EndMessage = "end\n"
-)
-
 // trans struct definition
 type trans struct {
 	Conf   TransConf
@@ -35,7 +28,7 @@ type textProtocolTransFactory struct {
 	Logger loggers.Logger
 }
 
-// NewTextProtocolTransFactory initialize a TextProtocolTransFactory
+// NewTextProtocolTransFactory initialize a services.TransFactory
 func NewTextProtocolTransFactory(
 	conf TransConf,
 	logger loggers.Logger,
@@ -46,7 +39,7 @@ func NewTextProtocolTransFactory(
 	}
 }
 
-// MakeTransHandler initialize a TransHandler on demand
+// MakeTransHandler initialize a services.TransHandler on demand
 func (t *textProtocolTransFactory) MakeTransHandler() services.TransHandler {
 	return &trans{
 		Conf:   t.Conf,
@@ -57,33 +50,28 @@ func (t *textProtocolTransFactory) MakeTransHandler() services.TransHandler {
 // SendCommand use a socket conection to send commands to trans port
 func (handler *trans) SendCommand(cmd string, params map[string]string) (map[string]string, error) {
 	respMap := make(map[string]string)
-	// check if the command is valid; if not, return error
-	validCommands := strings.Split(handler.Conf.ValidCommand, "|")
-	valid := false
-	for _, validCommand := range validCommands {
-		if validCommand == cmd {
-			valid = true
-			break
-		}
-	}
+	// check if the command is allowed; if not, return error
+	valid := handler.allowedCommand(cmd)
 	if !valid {
-		err := fmt.Errorf("Invalid Command. Valid commands: %s", validCommands)
+		err := fmt.Errorf(
+			"Invalid Command. Valid commands: %s",
+			strings.Replace(
+				handler.Conf.AllowCommand,
+				"|",
+				", ",
+				-1,
+			),
+		)
 		handler.Logger.Debug(err.Error())
 		return respMap, err
 	}
 	conn, err := handler.connect()
+	defer conn.Close() //nolint
+
 	if err != nil {
 		handler.Logger.Debug("Error connecting to trans: %s\n", err.Error())
 		return respMap, err
 	}
-	// defer the close of the connection
-	defer func() {
-		err = conn.Close()
-		if err != nil {
-			handler.Logger.Debug("Error Closing connection to trans: %s\n", err.Error())
-		}
-	}()
-
 	// initiate the context so the request can timeout
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(handler.Conf.Timeout)*time.Second)
 	defer cancel()
@@ -96,14 +84,28 @@ func (handler *trans) SendCommand(cmd string, params map[string]string) (map[str
 	return respMap, err
 }
 
+// allowedCommand checks if the given command can be sent to trans
+func (handler *trans) allowedCommand(cmd string) bool {
+	allowedCommands := strings.Split(handler.Conf.AllowCommand, "|")
+	for _, allowedCommand := range allowedCommands {
+		if allowedCommand == cmd {
+			return true
+		}
+	}
+	return false
+}
+
 // connect returns a connection to the trans client.
 // Retries to connect after retryAfter time if the connection times out
 func (handler *trans) connect() (net.Conn, error) {
-
-	r := retrier.New([]time.Duration{time.Duration(handler.Conf.RetryAfter) * time.Second}, nil)
-
+	// initiate the retrier that will handle retry reconnect if the connection dies
+	r := retrier.New(
+		[]time.Duration{
+			time.Duration(handler.Conf.RetryAfter) * time.Second},
+		nil,
+	)
 	var conn net.Conn
-
+	// set the function that starts the connection
 	err := r.Run(func() error {
 		var e error
 		conn, e = net.DialTimeout(
@@ -127,6 +129,8 @@ func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteClos
 	var resp map[string]string
 	errChan := make(chan error, 1)
 
+	// starts the go routine that sends the message and retrieves the response and error, if any.
+	// it communicates any error through errChan
 	go func() {
 		errChan <- func() error {
 			var err error
@@ -161,13 +165,11 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 	if err != nil {
 		return nil, err
 	}
-	line = line[:len(line)-1] // Strip newline.
-	if !bytes.Equal(line, []byte("220 Welcome.")) {
+	if !bytes.Equal(line, []byte("220 Welcome.\n")) {
 		return nil, fmt.Errorf("trans: unexpected greeting: %q", line)
 	}
 
-	buf := make([]byte, 0, 100)
-
+	buf := make([]byte, 0)
 	// Send command to Trans.
 	buf = appendCmd(buf, cmd, args)
 	if _, err = conn.Write(buf); err != nil {
@@ -175,14 +177,14 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 	}
 
 	// Get response.
-	buf = buf[:0] // Reset buffer to reuse it to write the response.
+	buf = nil
 	for {
 		line, err = br.ReadSlice('\n')
 		if err != nil {
 			if err != io.EOF {
 				return nil, err
 			}
-			if !bytes.HasSuffix(buf, []byte(EndMessage)) {
+			if !bytes.HasSuffix(buf, []byte("end\n")) {
 				return nil, fmt.Errorf("trans: response truncated: %q", line)
 			}
 			buf = buf[:len(buf)-4] // Remove "end".

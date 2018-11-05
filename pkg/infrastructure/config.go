@@ -43,9 +43,11 @@ type RuntimeConfig struct {
 	Port int    `env:"PORT" envDefault:"8080"`
 }
 
-// TransConf transaction server conection
+// TransConf transaction server conection.
+// AllowCommand is a list with one or more trans commands, separated by '|'
+// that indicates the allowed commands to be sent by this service
 type TransConf struct {
-	ValidCommand string `env:"COMMAND" envDefault:"transinfo"`
+	AllowCommand string `env:"COMMAND" envDefault:"transinfo"`
 	Host         string `env:"HOST" envDefault:"jenna.schibsted.cl"`
 	Port         int    `env:"PORT" envDefault:"27205"`
 	Timeout      int    `env:"TIMEOUT" envDefault:"15"`
