@@ -11,9 +11,9 @@ import (
 
 // ServiceConf holds configuration for this Service
 type ServiceConf struct {
-	// the host and port where the service will listen for requests
+	// Host the host and port where the service will listen for requests
 	Host string `env:"HOST" envDefault:":8080"`
-	// if the service should add profiling endpoints with net/http/pprof
+	// Profiling if the service should add profiling endpoints with net/http/pprof
 	Profiling bool `env:"PROFILING" envDefault:"true"`
 }
 
@@ -34,11 +34,11 @@ type LoggerConf struct {
 // NewRelicConf holds configuration to report to New Relic
 // TODO: You need to set the defaults according to your service
 type NewRelicConf struct {
-	// the key to authenticate with NewRelic
+	// Key the key to authenticate with NewRelic
 	Key string `env:"KEY" envDefault:"923864cba2f12410aff39279cddfd339a07f13a3"`
-	// name of the service inside NewRelic
+	// Appname name of the service inside NewRelic
 	Appname string `env:"APPNAME" envDefault:"yapo-trans-poya"`
-	// if we should enable reporting to NewRelic
+	// Enabled if we should enable reporting to NewRelic
 	Enabled bool `env:"ENABLED" envDefault:"false"`
 }
 
@@ -50,18 +50,18 @@ type RuntimeConfig struct {
 
 // TransConf transaction server conection.
 type TransConf struct {
-	// Allowedommands is a list with one or more trans commands, separated by '|'
+	// AllowedCommands is a list with one or more trans commands, separated by '|'
 	// that indicates the allowed commands to be sent by this service
 	AllowedCommands string `env:"COMMANDS" envDefault:"transinfo"`
-	// host of the trans Server
+	// Host is the host of the trans Server
 	Host string `env:"HOST" envDefault:"jenna.schibsted.cl"`
-	// port of the trans server
+	// Port is the port of the trans server
 	Port int `env:"PORT" envDefault:"27205"`
-	// wait time before a request times out
+	// Timeout wait time before a request times out
 	Timeout int `env:"TIMEOUT" envDefault:"15"`
-	// wait time between reconnection to the trans server
+	// RetryAfter wait time between reconnection to the trans server
 	RetryAfter int `env:"RETRY" envDefault:"5"`
-	// Size of the buffer in bytes when reading messages from the trans server
+	// BuffSize size of the buffer in bytes when reading messages from the trans server
 	BuffSize int `env:"BUFFSIZE" envDefault:"4096"`
 }
 
