@@ -41,12 +41,12 @@ func TestSendCommandInvalidCommand(t *testing.T) {
 	host := addr[0]
 	port, _ := strconv.Atoi(addr[1])
 	conf := TransConf{
-		Host:         host,
-		Port:         port,
-		Timeout:      15,
-		RetryAfter:   5,
-		BuffSize:     4096,
-		AllowCommand: "test",
+		Host:            host,
+		Port:            port,
+		Timeout:         15,
+		RetryAfter:      5,
+		BuffSize:        4096,
+		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Debug")
@@ -92,12 +92,12 @@ func TestSendCommandTimeout(t *testing.T) {
 	host := addr[0]
 	port, _ := strconv.Atoi(addr[1])
 	conf := TransConf{
-		Host:         host,
-		Port:         port,
-		Timeout:      5,
-		RetryAfter:   5,
-		BuffSize:     4096,
-		AllowCommand: "test",
+		Host:            host,
+		Port:            port,
+		Timeout:         5,
+		RetryAfter:      5,
+		BuffSize:        4096,
+		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Debug")
@@ -142,12 +142,12 @@ func TestSendCommandOK(t *testing.T) {
 	host := addr[0]
 	port, _ := strconv.Atoi(addr[1])
 	conf := TransConf{
-		Host:         host,
-		Port:         port,
-		Timeout:      15,
-		RetryAfter:   5,
-		BuffSize:     4096,
-		AllowCommand: "test",
+		Host:            host,
+		Port:            port,
+		Timeout:         15,
+		RetryAfter:      5,
+		BuffSize:        4096,
+		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Debug")

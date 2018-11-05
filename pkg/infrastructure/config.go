@@ -11,8 +11,10 @@ import (
 
 // ServiceConf holds configuration for this Service
 type ServiceConf struct {
-	Host      string `env:"HOST" envDefault:":8080"`
-	Profiling bool   `env:"PROFILING" envDefault:"true"`
+	// the host and port where the service will listen for requests
+	Host string `env:"HOST" envDefault:":8080"`
+	// if the service should add profiling endpoints with net/http/pprof
+	Profiling bool `env:"PROFILING" envDefault:"true"`
 }
 
 // LoggerConf holds configuration for logging
@@ -32,9 +34,12 @@ type LoggerConf struct {
 // NewRelicConf holds configuration to report to New Relic
 // TODO: You need to set the defaults according to your service
 type NewRelicConf struct {
-	Key     string `env:"KEY" envDefault:"923864cba2f12410aff39279cddfd339a07f13a3"`
+	// the key to authenticate with NewRelic
+	Key string `env:"KEY" envDefault:"923864cba2f12410aff39279cddfd339a07f13a3"`
+	// name of the service inside NewRelic
 	Appname string `env:"APPNAME" envDefault:"yapo-trans-poya"`
-	Enabled bool   `env:"ENABLED" envDefault:"false"`
+	// if we should enable reporting to NewRelic
+	Enabled bool `env:"ENABLED" envDefault:"false"`
 }
 
 // RuntimeConfig config to start the app
@@ -44,15 +49,20 @@ type RuntimeConfig struct {
 }
 
 // TransConf transaction server conection.
-// AllowCommand is a list with one or more trans commands, separated by '|'
-// that indicates the allowed commands to be sent by this service
 type TransConf struct {
-	AllowCommand string `env:"COMMAND" envDefault:"transinfo"`
-	Host         string `env:"HOST" envDefault:"jenna.schibsted.cl"`
-	Port         int    `env:"PORT" envDefault:"27205"`
-	Timeout      int    `env:"TIMEOUT" envDefault:"15"`
-	RetryAfter   int    `env:"RETRY" envDefault:"5"`
-	BuffSize     int    `env:"BUFFSIZE" envDefault:"4096"`
+	// Allowedommands is a list with one or more trans commands, separated by '|'
+	// that indicates the allowed commands to be sent by this service
+	AllowedCommands string `env:"COMMANDS" envDefault:"transinfo"`
+	// host of the trans Server
+	Host string `env:"HOST" envDefault:"jenna.schibsted.cl"`
+	// port of the trans server
+	Port int `env:"PORT" envDefault:"27205"`
+	// wait time before a request times out
+	Timeout int `env:"TIMEOUT" envDefault:"15"`
+	// wait time between reconnection to the trans server
+	RetryAfter int `env:"RETRY" envDefault:"5"`
+	// Size of the buffer in bytes when reading messages from the trans server
+	BuffSize int `env:"BUFFSIZE" envDefault:"4096"`
 }
 
 // Config holds all configuration for the service

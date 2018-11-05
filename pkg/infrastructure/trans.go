@@ -18,14 +18,16 @@ import (
 
 // trans struct definition
 type trans struct {
-	Conf   TransConf
-	Logger loggers.Logger
+	conf            TransConf
+	logger          loggers.Logger
+	allowedCommands []string
 }
 
 // textProtocolTransFactory is a auxiliar struct to create trans on demand
 type textProtocolTransFactory struct {
-	Conf   TransConf
-	Logger loggers.Logger
+	conf            TransConf
+	logger          loggers.Logger
+	allowedCommands []string
 }
 
 // NewTextProtocolTransFactory initialize a services.TransFactory
@@ -34,16 +36,18 @@ func NewTextProtocolTransFactory(
 	logger loggers.Logger,
 ) services.TransFactory {
 	return &textProtocolTransFactory{
-		Conf:   conf,
-		Logger: logger,
+		conf:            conf,
+		logger:          logger,
+		allowedCommands: strings.Split(conf.AllowedCommands, "|"),
 	}
 }
 
 // MakeTransHandler initialize a services.TransHandler on demand
 func (t *textProtocolTransFactory) MakeTransHandler() services.TransHandler {
 	return &trans{
-		Conf:   t.Conf,
-		Logger: t.Logger,
+		conf:            t.conf,
+		logger:          t.logger,
+		allowedCommands: t.allowedCommands,
 	}
 }
 
@@ -55,30 +59,25 @@ func (handler *trans) SendCommand(cmd string, params map[string]string) (map[str
 	if !valid {
 		err := fmt.Errorf(
 			"Invalid Command. Valid commands: %s",
-			strings.Replace(
-				handler.Conf.AllowCommand,
-				"|",
-				", ",
-				-1,
-			),
+			handler.allowedCommands,
 		)
-		handler.Logger.Debug(err.Error())
+		handler.logger.Debug(err.Error())
 		return respMap, err
 	}
 	conn, err := handler.connect()
-	defer conn.Close() //nolint
+	defer conn.Close() //nolint: errcheck, megacheck
 
 	if err != nil {
-		handler.Logger.Debug("Error connecting to trans: %s\n", err.Error())
+		handler.logger.Debug("Error connecting to trans: %s\n", err.Error())
 		return respMap, err
 	}
 	// initiate the context so the request can timeout
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(handler.Conf.Timeout)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(handler.conf.Timeout)*time.Second)
 	defer cancel()
 
 	respMap, err = handler.sendWithContext(ctx, conn, cmd, params)
 	if err != nil {
-		handler.Logger.Debug("Error Sending command %s: %s\n", cmd, err)
+		handler.logger.Debug("Error Sending command %s: %s\n", cmd, err)
 	}
 
 	return respMap, err
@@ -86,8 +85,7 @@ func (handler *trans) SendCommand(cmd string, params map[string]string) (map[str
 
 // allowedCommand checks if the given command can be sent to trans
 func (handler *trans) allowedCommand(cmd string) bool {
-	allowedCommands := strings.Split(handler.Conf.AllowCommand, "|")
-	for _, allowedCommand := range allowedCommands {
+	for _, allowedCommand := range handler.allowedCommands {
 		if allowedCommand == cmd {
 			return true
 		}
@@ -101,7 +99,7 @@ func (handler *trans) connect() (net.Conn, error) {
 	// initiate the retrier that will handle retry reconnect if the connection dies
 	r := retrier.New(
 		[]time.Duration{
-			time.Duration(handler.Conf.RetryAfter) * time.Second},
+			time.Duration(handler.conf.RetryAfter) * time.Second},
 		nil,
 	)
 	var conn net.Conn
@@ -112,10 +110,10 @@ func (handler *trans) connect() (net.Conn, error) {
 			"tcp",
 			fmt.Sprintf(
 				"%s:%d",
-				handler.Conf.Host,
-				handler.Conf.Port,
+				handler.conf.Host,
+				handler.conf.Port,
 			),
-			time.Duration(handler.Conf.Timeout)*time.Second,
+			time.Duration(handler.conf.Timeout)*time.Second,
 		)
 		return e
 	})
@@ -145,7 +143,7 @@ func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteClos
 		// is waiting on reading from or writing to the connection.
 		err := conn.Close()
 		if err != nil {
-			handler.Logger.Debug("Error Closing connection to trans after ctx done: %s\n", err.Error())
+			handler.logger.Debug("Error Closing connection to trans after ctx done: %s\n", err.Error())
 		}
 		// wait for the goroutine to return and ignore the error
 		<-errChan
@@ -160,7 +158,7 @@ func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteClos
 
 func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]string) (map[string]string, error) {
 	// Check greeting.
-	br := bufio.NewReaderSize(conn, handler.Conf.BuffSize)
+	br := bufio.NewReaderSize(conn, handler.conf.BuffSize)
 	line, err := br.ReadSlice('\n')
 	if err != nil {
 		return nil, err
