@@ -55,7 +55,7 @@ func (t *textProtocolTransFactory) MakeTransHandler() services.TransHandler {
 func (handler *trans) SendCommand(cmd string, params map[string]string) (map[string]string, error) {
 	respMap := make(map[string]string)
 	// check if the command is allowed; if not, return error
-	valid := handler.allowedCommand(cmd)
+	valid := handler.isAllowedCommand(cmd)
 	if !valid {
 		err := fmt.Errorf(
 			"Invalid Command. Valid commands: %s",
@@ -83,8 +83,8 @@ func (handler *trans) SendCommand(cmd string, params map[string]string) (map[str
 	return respMap, err
 }
 
-// allowedCommand checks if the given command can be sent to trans
-func (handler *trans) allowedCommand(cmd string) bool {
+// isAllowedCommand checks if the given command can be sent to trans
+func (handler *trans) isAllowedCommand(cmd string) bool {
 	for _, allowedCommand := range handler.allowedCommands {
 		if allowedCommand == cmd {
 			return true
