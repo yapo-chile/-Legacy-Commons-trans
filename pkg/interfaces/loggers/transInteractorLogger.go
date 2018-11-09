@@ -15,7 +15,7 @@ func (t *TransInteractorDefaultLogger) LogBadInput(command domain.TransCommand) 
 	t.logger.Debug("Invalid trans command. Input: %+v", command)
 }
 
-// LogRepositoryError Logs a repository error
+// LogRepositoryError logs a repository error
 func (t *TransInteractorDefaultLogger) LogRepositoryError(command domain.TransCommand, err error) {
 	t.logger.Error("Error executing trans command %+v: %s", command, err)
 }

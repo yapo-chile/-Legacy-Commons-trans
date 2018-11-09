@@ -51,7 +51,7 @@ func (t *textProtocolTransFactory) MakeTransHandler() services.TransHandler {
 	}
 }
 
-// SendCommand use a socket conection to send commands to trans port
+// SendCommand use a socket connection to send commands to trans port
 func (handler *trans) SendCommand(cmd string, params map[string]string) (map[string]string, error) {
 	respMap := make(map[string]string)
 	// check if the command is allowed; if not, return error
@@ -72,7 +72,10 @@ func (handler *trans) SendCommand(cmd string, params map[string]string) (map[str
 		return respMap, err
 	}
 	// initiate the context so the request can timeout
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(handler.conf.Timeout)*time.Second)
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		time.Duration(handler.conf.Timeout)*time.Second,
+	)
 	defer cancel()
 
 	respMap, err = handler.sendWithContext(ctx, conn, cmd, params)

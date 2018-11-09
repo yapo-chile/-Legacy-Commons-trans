@@ -48,7 +48,7 @@ type RuntimeConfig struct {
 	Port int    `env:"PORT" envDefault:"8080"`
 }
 
-// TransConf transaction server conection.
+// TransConf transaction server connection.
 type TransConf struct {
 	// AllowedCommands is a list with one or more trans commands, separated by '|'
 	// that indicates the allowed commands to be sent by this service

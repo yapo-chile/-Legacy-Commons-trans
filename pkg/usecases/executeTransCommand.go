@@ -51,7 +51,6 @@ func (interactor TransInteractor) ExecuteCommand(
 		} else {
 			err = fmt.Errorf("error during execution")
 		}
-		return response, err
 	}
-	return response, nil
+	return response, err
 }

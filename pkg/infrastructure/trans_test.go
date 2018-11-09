@@ -54,6 +54,7 @@ func TestSendCommandInvalidCommand(t *testing.T) {
 	resp, err := transHandler.SendCommand(cmd, params)
 	assert.Error(t, err)
 	assert.Equal(t, expectedResponse, resp)
+	logger.AssertExpectations(t)
 }
 
 func TestSendCommandTimeout(t *testing.T) {
@@ -95,6 +96,7 @@ func TestSendCommandTimeout(t *testing.T) {
 	resp, err := transHandler.SendCommand(cmd, params)
 	assert.Error(t, err)
 	assert.Equal(t, expectedResponse, resp)
+	logger.AssertExpectations(t)
 }
 
 func TestSendCommandBusyServer(t *testing.T) {
@@ -128,6 +130,7 @@ func TestSendCommandBusyServer(t *testing.T) {
 	resp, err := transHandler.SendCommand(cmd, params)
 	assert.Error(t, err)
 	assert.Equal(t, expectedResponse, resp)
+	logger.AssertExpectations(t)
 }
 
 func TestSendCommandOK(t *testing.T) {
@@ -157,7 +160,6 @@ func TestSendCommandOK(t *testing.T) {
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
-	logger.On("Debug")
 	expectedResponse := make(map[string]string)
 	expectedResponse["status"] = "TRANS_OK"
 	cmd := "test"
@@ -170,4 +172,5 @@ func TestSendCommandOK(t *testing.T) {
 	resp, err := transHandler.SendCommand(cmd, params)
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, resp)
+	logger.AssertExpectations(t)
 }

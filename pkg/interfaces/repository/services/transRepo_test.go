@@ -106,7 +106,7 @@ func TestExecuteOK(t *testing.T) {
 		Params: make(map[string]string),
 	}
 	expectedResponse.Params["response 1"] = "response 1"
-	assert.Equal(t, nil, err)
+	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, response)
 	factory.AssertExpectations(t)
 	handler.AssertExpectations(t)
@@ -146,7 +146,7 @@ func TestExecuteOKNumbers(t *testing.T) {
 		Params: make(map[string]string),
 	}
 	expectedResponse.Params["response 1"] = "response 1"
-	assert.Equal(t, nil, err)
+	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, response)
 	factory.AssertExpectations(t)
 	handler.AssertExpectations(t)

@@ -15,10 +15,7 @@ func (r TransResponse) Map() (map[string]string, error) {
 	err := r.apply(func(key, value string) {
 		m[key] = value
 	})
-	if err != nil {
-		return nil, err
-	}
-	return m, nil
+	return m, err
 }
 
 // apply applies the given function on all key-value pairs of the response.
