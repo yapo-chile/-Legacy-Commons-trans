@@ -191,7 +191,6 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 
 		buf = append(buf, line...)
 	}
-
 	respMap, err := TransResponse(buf).Map()
 	if err != nil {
 		return respMap, fmt.Errorf("error parsing response: %s", err.Error())
