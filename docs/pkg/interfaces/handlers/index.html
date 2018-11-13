@@ -10,7 +10,14 @@
 <link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
 
 <link rel="stylesheet" href="../../../lib/godoc/jquery.treeview.css">
-<script type="text/javascript">window.initFuncs = [];</script>
+<script>window.initFuncs = [];</script>
+<script src="../../../lib/godoc/jquery.js" defer></script>
+<script src="../../../lib/godoc/jquery.treeview.js" defer></script>
+<script src="../../../lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script>var goVersion = "go1.11.1";</script>
+<script src="../../../lib/godoc/godocs.js" defer></script>
 </head>
 <body>
 
@@ -118,9 +125,9 @@ Under no circumstances an external objects enters, unfiltered, to the inner
 layers, nor inner layers have a word on outside world representation.
 </p>
 
+				
 			</div>
 		</div>
-		
 
 		<div id="pkg-index" class="toggleVisible">
 		<div class="collapsed">
@@ -138,17 +145,6 @@ layers, nor inner layers have a word on outside world representation.
 				
 				<dd><a href="index.html#MakeJSONHandlerFunc">func MakeJSONHandlerFunc(h Handler, l JSONHandlerLogger) http.HandlerFunc</a></dd>
 			
-			
-				
-				<dd><a href="index.html#FibonacciHandler">type FibonacciHandler</a></dd>
-				
-				
-					
-					<dd>&nbsp; &nbsp; <a href="index.html#FibonacciHandler.Execute">func (h *FibonacciHandler) Execute(ig InputGetter) *goutils.Response</a></dd>
-				
-					
-					<dd>&nbsp; &nbsp; <a href="index.html#FibonacciHandler.Input">func (h *FibonacciHandler) Input() HandlerInput</a></dd>
-				
 			
 				
 				<dd><a href="index.html#Handler">type Handler</a></dd>
@@ -181,6 +177,27 @@ layers, nor inner layers have a word on outside world representation.
 				
 				
 			
+				
+				<dd><a href="index.html#TransHandler">type TransHandler</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#TransHandler.Execute">func (t *TransHandler) Execute(ig InputGetter) *goutils.Response</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#TransHandler.Input">func (t *TransHandler) Input() HandlerInput</a></dd>
+				
+			
+				
+				<dd><a href="index.html#TransHandlerInput">type TransHandlerInput</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#TransRequestOutput">type TransRequestOutput</a></dd>
+				
+				
+			
 			
 			</dl>
 			</div><!-- #manual-nav -->
@@ -194,11 +211,11 @@ layers, nor inner layers have a word on outside world representation.
 			
 				<a href="pkg/interfaces/handlers/doc.go">doc.go</a>
 			
-				<a href="pkg/interfaces/handlers/fibonacci.go">fibonacci.go</a>
-			
 				<a href="pkg/interfaces/handlers/handler.go">handler.go</a>
 			
 				<a href="pkg/interfaces/handlers/health.go">health.go</a>
+			
+				<a href="pkg/interfaces/handlers/trans.go">trans.go</a>
 			
 			</span>
 			</p>
@@ -248,8 +265,10 @@ layers, nor inner layers have a word on outside world representation.
 		
 			
 			
-			<h2 id="MakeJSONHandlerFunc">func <a href="pkg/interfaces/handlers/handler.go?s=1153:1226#L21">MakeJSONHandlerFunc</a>
+			<h2 id="MakeJSONHandlerFunc">func <a href="pkg/interfaces/handlers/handler.go?s=1195:1268#L23">MakeJSONHandlerFunc</a>
 				<a class="permalink" href="index.html#MakeJSONHandlerFunc">&#xb6;</a>
+				
+				
 			</h2>
 			<pre>func MakeJSONHandlerFunc(h <a href="index.html#Handler">Handler</a>, l <a href="index.html#JSONHandlerLogger">JSONHandlerLogger</a>) <a href="http://localhost:30303/pkg/net/http/">http</a>.<a href="http://localhost:30303/pkg/net/http/#HandlerFunc">HandlerFunc</a></pre>
 			<p>
@@ -264,76 +283,10 @@ a standard http.HandlerFunc
 		
 			
 			
-			<h2 id="FibonacciHandler">type <a href="pkg/interfaces/handlers/fibonacci.go?s=356:432#L3">FibonacciHandler</a>
-				<a class="permalink" href="index.html#FibonacciHandler">&#xb6;</a>
-			</h2>
-			<p>
-FibonacciHandler implements the handler interface and responds to
-/fibonacci requests using an interactor. It&#39;s purpose is just to
-demonstrate Clean Architecture with a practical scenario
-</p>
-
-			<pre>type FibonacciHandler struct {
-<span id="FibonacciHandler.Interactor"></span>    Interactor <a href="../../usecases/index.html">usecases</a>.<a href="../../usecases/index.html#GetNthFibonacciUsecase">GetNthFibonacciUsecase</a>
-}</pre>
-
-			
-
-			
-
-			
-			
-			
-
-			
-
-			
-				
-				<h3 id="FibonacciHandler.Execute">func (*FibonacciHandler) <a href="pkg/interfaces/handlers/fibonacci.go?s=1127:1195#L31">Execute</a>
-					<a class="permalink" href="index.html#FibonacciHandler.Execute">&#xb6;</a>
-				</h3>
-				<pre>func (h *<a href="index.html#FibonacciHandler">FibonacciHandler</a>) Execute(ig <a href="index.html#InputGetter">InputGetter</a>) *<a href="http://localhost:30303/pkg/github.com/Yapo/goutils/">goutils</a>.<a href="http://localhost:30303/pkg/github.com/Yapo/goutils/#Response">Response</a></pre>
-				<p>
-Execute carries on a /fibonacci request. Uses the given interactor to carry out
-the operation and get the desired value. Expected body format:
-</p>
-<pre>{
-	n: int - Number of fibonacci to retrieve (1 based)
-}
-</pre>
-<p>
-Expected response format:
-</p>
-<pre>{ Result: int - Operation result }
-</pre>
-<p>
-Expected error format:
-</p>
-<pre>{ ErrorMessage: string - Error detail }
-</pre>
-
-				
-				
-				
-			
-				
-				<h3 id="FibonacciHandler.Input">func (*FibonacciHandler) <a href="pkg/interfaces/handlers/fibonacci.go?s=687:734#L18">Input</a>
-					<a class="permalink" href="index.html#FibonacciHandler.Input">&#xb6;</a>
-				</h3>
-				<pre>func (h *<a href="index.html#FibonacciHandler">FibonacciHandler</a>) Input() <a href="index.html#HandlerInput">HandlerInput</a></pre>
-				<p>
-Input returns a fresh, empty instance of fibonacciRequestInput
-</p>
-
-				
-				
-				
-			
-		
-			
-			
-			<h2 id="Handler">type <a href="pkg/interfaces/handlers/handler.go?s=694:1042#L10">Handler</a>
+			<h2 id="Handler">type <a href="pkg/interfaces/handlers/handler.go?s=736:1084#L12">Handler</a>
 				<a class="permalink" href="index.html#Handler">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 Handler is the interface for the objects that should process web requests.
@@ -364,8 +317,10 @@ Execute(input) receives a filled input struct to handle the request
 		
 			
 			
-			<h2 id="HandlerInput">type <a href="pkg/interfaces/handlers/handler.go?s=142:171#L1">HandlerInput</a>
+			<h2 id="HandlerInput">type <a href="pkg/interfaces/handlers/handler.go?s=184:213#L2">HandlerInput</a>
 				<a class="permalink" href="index.html#HandlerInput">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 HandlerInput is a placeholder for whatever input a handler may need.
@@ -387,8 +342,10 @@ HandlerInput is a placeholder for whatever input a handler may need.
 		
 			
 			
-			<h2 id="HealthHandler">type <a href="pkg/interfaces/handlers/health.go?s=247:274#L1">HealthHandler</a>
+			<h2 id="HealthHandler">type <a href="pkg/interfaces/handlers/health.go?s=248:275#L2">HealthHandler</a>
 				<a class="permalink" href="index.html#HealthHandler">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 HealthHandler implements the handler interface and responds to /healthcheck
@@ -396,7 +353,8 @@ requests with an OK message. Expected response format:
 { Status: string - Always set to OK }
 </p>
 
-			<pre>type HealthHandler struct{}</pre>
+			<pre>type HealthHandler struct{}
+</pre>
 
 			
 
@@ -410,8 +368,10 @@ requests with an OK message. Expected response format:
 
 			
 				
-				<h3 id="HealthHandler.Execute">func (*HealthHandler) <a href="pkg/interfaces/handlers/health.go?s=631:694#L16">Execute</a>
+				<h3 id="HealthHandler.Execute">func (*HealthHandler) <a href="pkg/interfaces/handlers/health.go?s=632:695#L17">Execute</a>
 					<a class="permalink" href="index.html#HealthHandler.Execute">&#xb6;</a>
+					
+					
 				</h3>
 				<pre>func (*<a href="index.html#HealthHandler">HealthHandler</a>) Execute(ig <a href="index.html#InputGetter">InputGetter</a>) *<a href="http://localhost:30303/pkg/github.com/Yapo/goutils/">goutils</a>.<a href="http://localhost:30303/pkg/github.com/Yapo/goutils/#Response">Response</a></pre>
 				<p>
@@ -426,8 +386,10 @@ Expected response format:
 				
 			
 				
-				<h3 id="HealthHandler.Input">func (*HealthHandler) <a href="pkg/interfaces/handlers/health.go?s=440:482#L9">Input</a>
+				<h3 id="HealthHandler.Input">func (*HealthHandler) <a href="pkg/interfaces/handlers/health.go?s=441:483#L10">Input</a>
 					<a class="permalink" href="index.html#HealthHandler.Input">&#xb6;</a>
+					
+					
 				</h3>
 				<pre>func (*<a href="index.html#HealthHandler">HealthHandler</a>) Input() <a href="index.html#HandlerInput">HandlerInput</a></pre>
 				<p>
@@ -441,8 +403,10 @@ Input returns a fresh, empty instance of healthHandlerInput
 		
 			
 			
-			<h2 id="InputGetter">type <a href="pkg/interfaces/handlers/handler.go?s=412:469#L5">InputGetter</a>
+			<h2 id="InputGetter">type <a href="pkg/interfaces/handlers/handler.go?s=454:511#L7">InputGetter</a>
 				<a class="permalink" href="index.html#InputGetter">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 InputGetter defines a type for all functions that, when called, will attempt
@@ -466,8 +430,10 @@ happen, a goutils.Response must be filled with an adequate message and code
 		
 			
 			
-			<h2 id="JSONHandlerLogger">type <a href="pkg/interfaces/handlers/handler.go?s=1358:1541#L27">JSONHandlerLogger</a>
+			<h2 id="JSONHandlerLogger">type <a href="pkg/interfaces/handlers/handler.go?s=1400:1583#L29">JSONHandlerLogger</a>
 				<a class="permalink" href="index.html#JSONHandlerLogger">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 JSONHandlerLogger defines all the events a jsonHandler can report
@@ -478,6 +444,128 @@ JSONHandlerLogger defines all the events a jsonHandler can report
     LogRequestEnd(*<a href="http://localhost:30303/pkg/net/http/">http</a>.<a href="http://localhost:30303/pkg/net/http/#Request">Request</a>, *<a href="http://localhost:30303/pkg/github.com/Yapo/goutils/">goutils</a>.<a href="http://localhost:30303/pkg/github.com/Yapo/goutils/#Response">Response</a>)
     LogRequestPanic(*<a href="http://localhost:30303/pkg/net/http/">http</a>.<a href="http://localhost:30303/pkg/net/http/#Request">Request</a>, *<a href="http://localhost:30303/pkg/github.com/Yapo/goutils/">goutils</a>.<a href="http://localhost:30303/pkg/github.com/Yapo/goutils/#Response">Response</a>, interface{})
 }</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="TransHandler">type <a href="pkg/interfaces/handlers/trans.go?s=328:397#L4">TransHandler</a>
+				<a class="permalink" href="index.html#TransHandler">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+TransHandler implements the handler interface and responds to /execute
+requests with a message. Expected response format:
+{ status: string, response: json }
+</p>
+
+			<pre>type TransHandler struct {
+<span id="TransHandler.Interactor"></span>    Interactor <a href="../../usecases/index.html">usecases</a>.<a href="../../usecases/index.html#ExecuteTransUsecase">ExecuteTransUsecase</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="TransHandler.Execute">func (*TransHandler) <a href="pkg/interfaces/handlers/trans.go?s=1071:1135#L29">Execute</a>
+					<a class="permalink" href="index.html#TransHandler.Execute">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (t *<a href="index.html#TransHandler">TransHandler</a>) Execute(ig <a href="index.html#InputGetter">InputGetter</a>) *<a href="http://localhost:30303/pkg/github.com/Yapo/goutils/">goutils</a>.<a href="http://localhost:30303/pkg/github.com/Yapo/goutils/#Response">Response</a></pre>
+				<p>
+Execute executes the given trans request and returns the response
+of the execution.
+Expected response format:
+</p>
+<pre>{ Status: string - &#34;TRANS_OK&#34; or error }
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="TransHandler.Input">func (*TransHandler) <a href="pkg/interfaces/handlers/trans.go?s=828:871#L21">Input</a>
+					<a class="permalink" href="index.html#TransHandler.Input">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (t *<a href="index.html#TransHandler">TransHandler</a>) Input() <a href="index.html#HandlerInput">HandlerInput</a></pre>
+				<p>
+Input returns a fresh, empty instance of transHandlerInput
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="TransHandlerInput">type <a href="pkg/interfaces/handlers/trans.go?s=453:582#L9">TransHandlerInput</a>
+				<a class="permalink" href="index.html#TransHandlerInput">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+TransHandlerInput struct that represents the input
+</p>
+
+			<pre>type TransHandlerInput struct {
+<span id="TransHandlerInput.Command"></span>    Command <a href="http://localhost:30303/pkg/builtin/#string">string</a>                 `get:&#34;command&#34;`
+<span id="TransHandlerInput.Params"></span>    Params  map[<a href="http://localhost:30303/pkg/builtin/#string">string</a>]interface{} `json:&#34;params&#34;`
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="TransRequestOutput">type <a href="pkg/interfaces/handlers/trans.go?s=640:764#L15">TransRequestOutput</a>
+				<a class="permalink" href="index.html#TransRequestOutput">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+TransRequestOutput struct that represents the output
+</p>
+
+			<pre>type TransRequestOutput struct {
+<span id="TransRequestOutput.Status"></span>    Status   <a href="http://localhost:30303/pkg/builtin/#string">string</a>            `json:&#34;status&#34;`
+<span id="TransRequestOutput.Response"></span>    Response map[<a href="http://localhost:30303/pkg/builtin/#string">string</a>]<a href="http://localhost:30303/pkg/builtin/#string">string</a> `json:&#34;response&#34;`
+}
+</pre>
 
 			
 
@@ -502,7 +590,7 @@ JSONHandlerLogger defines all the events a jsonHandler can report
 
 
 <div id="footer">
-Build version go1.10.1.<br>
+Build version go1.11.1.<br>
 Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
 the content of this page is licensed under the
 Creative Commons Attribution 3.0 License,
@@ -513,16 +601,6 @@ and code is licensed under a <a href="http://localhost:30303/LICENSE">BSD licens
 
 </div><!-- .container -->
 </div><!-- #page -->
-
-<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
-<script type="text/javascript" src="../../../lib/godoc/jquery.js"></script>
-<script type="text/javascript" src="../../../lib/godoc/jquery.treeview.js"></script>
-<script type="text/javascript" src="../../../lib/godoc/jquery.treeview.edit.js"></script>
-
-
-<script>var goVersion = "go1.10.1";</script>
-<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
-
 </body>
 </html>
 

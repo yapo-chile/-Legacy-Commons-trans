@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#375EAB">
 
-  <title>loggers - The Go Programming Language</title>
+  <title>services - The Go Programming Language</title>
 
-<link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
+<link type="text/css" rel="stylesheet" href="lib/godoc/style.css">
 
-<link rel="stylesheet" href="../../../lib/godoc/jquery.treeview.css">
+<link rel="stylesheet" href="lib/godoc/jquery.treeview.css">
 <script>window.initFuncs = [];</script>
-<script src="../../../lib/godoc/jquery.js" defer></script>
-<script src="../../../lib/godoc/jquery.treeview.js" defer></script>
-<script src="../../../lib/godoc/jquery.treeview.edit.js" defer></script>
+<script src="lib/godoc/jquery.js" defer></script>
+<script src="lib/godoc/jquery.treeview.js" defer></script>
+<script src="lib/godoc/jquery.treeview.edit.js" defer></script>
 
 
 <script>var goVersion = "go1.11.1";</script>
-<script src="../../../lib/godoc/godocs.js" defer></script>
+<script src="lib/godoc/godocs.js" defer></script>
 </head>
 <body>
 
@@ -52,7 +52,7 @@
 
 
   <h1>
-    Package loggers
+    Package services
     <span class="text-muted"></span>
   </h1>
 
@@ -86,7 +86,7 @@
 		
 		<div id="short-nav">
 			<dl>
-			<dd><code>import "github.schibsted.io/Yapo/trans/pkg/interfaces/loggers"</code></dd>
+			<dd><code>import "github.schibsted.io/Yapo/trans/pkg/interfaces/repository/services"</code></dd>
 			</dl>
 			<dl>
 			<dd><a href="index.html#pkg-overview" class="overviewLink">Overview</a></dd>
@@ -102,25 +102,7 @@
 			</div>
 			<div class="expanded">
 				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
-				<p>
-Package loggers is where all the events from the codebase converge. The goal is
-to decouple the event&#39;s source from the actual handling, as both will need to
-change by different reasons. The logger will decide how to deal with each
-event, freeing the reporter from such responsibility.
-</p>
-<h3 id="hdr-What_lives_here">What lives here</h3>
-<p>
-Types that require events to be logged should declare an interface that covers
-every possible event that can occur within its scope. Those events must be
-reported on business terms, and the implementation of such interfaces must live
-on this package.
-</p>
-<h3 id="hdr-Rules_of_the_road">Rules of the road</h3>
-<p>
-If you are using syslog, a logging library, or printing to stdout/stderr
-directly, rather declare a logger interface and implement it here.
-</p>
-
+				
 				
 			</div>
 		</div>
@@ -138,27 +120,26 @@ directly, rather declare a logger interface and implement it here.
 			
 			
 			
-				
-				<dd><a href="index.html#MakeJSONHandlerLogger">func MakeJSONHandlerLogger(logger Logger) handlers.JSONHandlerLogger</a></dd>
 			
 				
-				<dd><a href="index.html#MakeTransInteractorLogger">func MakeTransInteractorLogger(logger Logger) usecases.TransInteractorLogger</a></dd>
-			
-			
-				
-				<dd><a href="index.html#Logger">type Logger</a></dd>
+				<dd><a href="index.html#TransFactory">type TransFactory</a></dd>
 				
 				
 			
 				
-				<dd><a href="index.html#TransInteractorDefaultLogger">type TransInteractorDefaultLogger</a></dd>
+				<dd><a href="index.html#TransHandler">type TransHandler</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#TransRepo">type TransRepo</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewTransRepo">func NewTransRepo(transFactory TransFactory) *TransRepo</a></dd>
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="index.html#TransInteractorDefaultLogger.LogBadInput">func (t *TransInteractorDefaultLogger) LogBadInput(command domain.TransCommand)</a></dd>
-				
-					
-					<dd>&nbsp; &nbsp; <a href="index.html#TransInteractorDefaultLogger.LogRepositoryError">func (t *TransInteractorDefaultLogger) LogRepositoryError(command domain.TransCommand, err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="index.html#TransRepo.Execute">func (repo *TransRepo) Execute(command domain.TransCommand) (domain.TransResponse, error)</a></dd>
 				
 			
 			
@@ -172,13 +153,7 @@ directly, rather declare a logger interface and implement it here.
 			<p>
 			<span style="font-size:90%">
 			
-				<a href="pkg/interfaces/loggers/doc.go">doc.go</a>
-			
-				<a href="pkg/interfaces/loggers/jsonHandlerLogger.go">jsonHandlerLogger.go</a>
-			
-				<a href="pkg/interfaces/loggers/logger.go">logger.go</a>
-			
-				<a href="pkg/interfaces/loggers/transInteractorLogger.go">transInteractorLogger.go</a>
+				<a href="pkg/interfaces/repository/services/transRepo.go">transRepo.go</a>
 			
 			</span>
 			</p>
@@ -226,58 +201,20 @@ directly, rather declare a logger interface and implement it here.
 		
 		
 		
-			
-			
-			<h2 id="MakeJSONHandlerLogger">func <a href="pkg/interfaces/loggers/jsonHandlerLogger.go?s=799:867#L19">MakeJSONHandlerLogger</a>
-				<a class="permalink" href="index.html#MakeJSONHandlerLogger">&#xb6;</a>
-				
-				
-			</h2>
-			<pre>func MakeJSONHandlerLogger(logger <a href="index.html#Logger">Logger</a>) <a href="../handlers/index.html">handlers</a>.<a href="../handlers/index.html#JSONHandlerLogger">JSONHandlerLogger</a></pre>
-			<p>
-MakeJSONHandlerLogger sets up a JsonHandlerLogger instrumented
-via the provided logger.
-</p>
-
-			
-			
-
 		
 			
 			
-			<h2 id="MakeTransInteractorLogger">func <a href="pkg/interfaces/loggers/transInteractorLogger.go?s=759:835#L15">MakeTransInteractorLogger</a>
-				<a class="permalink" href="index.html#MakeTransInteractorLogger">&#xb6;</a>
-				
-				
-			</h2>
-			<pre>func MakeTransInteractorLogger(logger <a href="index.html#Logger">Logger</a>) <a href="../../usecases/index.html">usecases</a>.<a href="../../usecases/index.html#TransInteractorLogger">TransInteractorLogger</a></pre>
-			<p>
-MakeTransInteractorLogger sets up a TransInteractorLogger instrumented
-via the provided logger.
-</p>
-
-			
-			
-
-		
-		
-			
-			
-			<h2 id="Logger">type <a href="pkg/interfaces/loggers/logger.go?s=67:314#L1">Logger</a>
-				<a class="permalink" href="index.html#Logger">&#xb6;</a>
+			<h2 id="TransFactory">type <a href="pkg/interfaces/repository/services/transRepo.go?s=361:425#L7">TransFactory</a>
+				<a class="permalink" href="index.html#TransFactory">&#xb6;</a>
 				
 				
 			</h2>
 			<p>
-Logger is an interface for logging facilities.
+TransFactory is an interface that abstracts the Factory Pattern for creating TransHandler objects
 </p>
 
-			<pre>type Logger interface {
-    Debug(format <a href="http://localhost:30303/pkg/builtin/#string">string</a>, params ...interface{})
-    Info(format <a href="http://localhost:30303/pkg/builtin/#string">string</a>, params ...interface{})
-    Warn(format <a href="http://localhost:30303/pkg/builtin/#string">string</a>, params ...interface{})
-    Error(format <a href="http://localhost:30303/pkg/builtin/#string">string</a>, params ...interface{})
-    Crit(format <a href="http://localhost:30303/pkg/builtin/#string">string</a>, params ...interface{})
+			<pre>type TransFactory interface {
+    MakeTransHandler() <a href="index.html#TransHandler">TransHandler</a>
 }</pre>
 
 			
@@ -294,16 +231,43 @@ Logger is an interface for logging facilities.
 		
 			
 			
-			<h2 id="TransInteractorDefaultLogger">type <a href="pkg/interfaces/loggers/transInteractorLogger.go?s=189:248#L1">TransInteractorDefaultLogger</a>
-				<a class="permalink" href="index.html#TransInteractorDefaultLogger">&#xb6;</a>
+			<h2 id="TransHandler">type <a href="pkg/interfaces/repository/services/transRepo.go?s=160:258#L2">TransHandler</a>
+				<a class="permalink" href="index.html#TransHandler">&#xb6;</a>
 				
 				
 			</h2>
 			<p>
-TransInteractorDefaultLogger logger user in the TransInteractor.
+TransHandler is an interface to use Trans functions
 </p>
 
-			<pre>type TransInteractorDefaultLogger struct {
+			<pre>type TransHandler interface {
+    SendCommand(<a href="http://localhost:30303/pkg/builtin/#string">string</a>, map[<a href="http://localhost:30303/pkg/builtin/#string">string</a>]<a href="http://localhost:30303/pkg/builtin/#string">string</a>) (map[<a href="http://localhost:30303/pkg/builtin/#string">string</a>]<a href="http://localhost:30303/pkg/builtin/#string">string</a>, <a href="http://localhost:30303/pkg/builtin/#error">error</a>)
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="TransRepo">type <a href="pkg/interfaces/repository/services/transRepo.go?s=458:510#L12">TransRepo</a>
+				<a class="permalink" href="index.html#TransRepo">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+TransRepo struct definition
+</p>
+
+			<pre>type TransRepo struct {
     <span class="comment">// contains filtered or unexported fields</span>
 }
 </pre>
@@ -317,32 +281,31 @@ TransInteractorDefaultLogger logger user in the TransInteractor.
 			
 
 			
-
-			
 				
-				<h3 id="TransInteractorDefaultLogger.LogBadInput">func (*TransInteractorDefaultLogger) <a href="pkg/interfaces/loggers/transInteractorLogger.go?s=289:368#L4">LogBadInput</a>
-					<a class="permalink" href="index.html#TransInteractorDefaultLogger.LogBadInput">&#xb6;</a>
+				<h3 id="NewTransRepo">func <a href="pkg/interfaces/repository/services/transRepo.go?s=563:618#L17">NewTransRepo</a>
+					<a class="permalink" href="index.html#NewTransRepo">&#xb6;</a>
 					
 					
 				</h3>
-				<pre>func (t *<a href="index.html#TransInteractorDefaultLogger">TransInteractorDefaultLogger</a>) LogBadInput(command <a href="../../domain/index.html">domain</a>.<a href="../../domain/index.html#TransCommand">TransCommand</a>)</pre>
+				<pre>func NewTransRepo(transFactory <a href="index.html#TransFactory">TransFactory</a>) *<a href="index.html#TransRepo">TransRepo</a></pre>
 				<p>
-LogBadInput logs a bad input error.
+NewTransRepo instance TransRepo and set handler
 </p>
 
 				
 				
-				
+			
+
 			
 				
-				<h3 id="TransInteractorDefaultLogger.LogRepositoryError">func (*TransInteractorDefaultLogger) <a href="pkg/interfaces/loggers/transInteractorLogger.go?s=483:580#L9">LogRepositoryError</a>
-					<a class="permalink" href="index.html#TransInteractorDefaultLogger.LogRepositoryError">&#xb6;</a>
+				<h3 id="TransRepo.Execute">func (*TransRepo) <a href="pkg/interfaces/repository/services/transRepo.go?s=725:814#L24">Execute</a>
+					<a class="permalink" href="index.html#TransRepo.Execute">&#xb6;</a>
 					
 					
 				</h3>
-				<pre>func (t *<a href="index.html#TransInteractorDefaultLogger">TransInteractorDefaultLogger</a>) LogRepositoryError(command <a href="../../domain/index.html">domain</a>.<a href="../../domain/index.html#TransCommand">TransCommand</a>, err <a href="http://localhost:30303/pkg/builtin/#error">error</a>)</pre>
+				<pre>func (repo *<a href="index.html#TransRepo">TransRepo</a>) Execute(command <a href="../../../domain/index.html">domain</a>.<a href="../../../domain/index.html#TransCommand">TransCommand</a>) (<a href="../../../domain/index.html">domain</a>.<a href="../../../domain/index.html#TransResponse">TransResponse</a>, <a href="http://localhost:30303/pkg/builtin/#error">error</a>)</pre>
 				<p>
-LogRepositoryError logs a repository error.
+Execute executes the specified trans command
 </p>
 
 				

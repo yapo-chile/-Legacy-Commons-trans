@@ -10,7 +10,14 @@
 <link type="text/css" rel="stylesheet" href="../../../lib/godoc/style.css">
 
 <link rel="stylesheet" href="../../../lib/godoc/jquery.treeview.css">
-<script type="text/javascript">window.initFuncs = [];</script>
+<script>window.initFuncs = [];</script>
+<script src="../../../lib/godoc/jquery.js" defer></script>
+<script src="../../../lib/godoc/jquery.treeview.js" defer></script>
+<script src="../../../lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script>var goVersion = "go1.11.1";</script>
+<script src="../../../lib/godoc/godocs.js" defer></script>
 </head>
 <body>
 
@@ -86,6 +93,8 @@
 			<dd><a href="index.html#pkg-index" class="indexLink">Index</a></dd>
 			
 			
+				<dd><a href="index.html#pkg-subdirectories">Subdirectories</a></dd>
+			
 			</dl>
 		</div>
 		<!-- The package's Name is printed as title by the top-level template -->
@@ -118,9 +127,9 @@ retrieval or storage, or both. However, repository internal objects must NOT
 reach the internal layers. They must be converted to business entities first.
 </p>
 
+				
 			</div>
 		</div>
-		
 
 		<div id="pkg-index" class="toggleVisible">
 		<div class="collapsed">
@@ -135,9 +144,6 @@ reach the internal layers. They must be converted to business entities first.
 			
 			
 			
-				
-				<dd><a href="index.html#NewMapFibonacciRepository">func NewMapFibonacciRepository() domain.FibonacciRepository</a></dd>
-			
 			
 			
 			</dl>
@@ -151,8 +157,6 @@ reach the internal layers. They must be converted to business entities first.
 			<span style="font-size:90%">
 			
 				<a href="pkg/interfaces/repository/doc.go">doc.go</a>
-			
-				<a href="pkg/interfaces/repository/fibonacci.go">fibonacci.go</a>
 			
 			</span>
 			</p>
@@ -200,22 +204,6 @@ reach the internal layers. They must be converted to business entities first.
 		
 		
 		
-			
-			
-			<h2 id="NewMapFibonacciRepository">func <a href="pkg/interfaces/repository/fibonacci.go?s=776:835#L11">NewMapFibonacciRepository</a>
-				<a class="permalink" href="index.html#NewMapFibonacciRepository">&#xb6;</a>
-			</h2>
-			<pre>func NewMapFibonacciRepository() <a href="../../domain/index.html">domain</a>.<a href="../../domain/index.html#FibonacciRepository">FibonacciRepository</a></pre>
-			<p>
-NewMapFibonacciRepository instantiates a fresh mapFibonacciRepository,
-performs the initialization and returns it as a domain.FibonacciRepository.
-The return type prevents others to directly access data members.
-</p>
-
-			
-			
-
-		
 		
 	
 
@@ -224,11 +212,43 @@ The return type prevents others to directly access data members.
 
 
 
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	<div class="pkg-dir">
+		<table>
+			<tr>
+				<th class="pkg-name">Name</th>
+				<th class="pkg-synopsis">Synopsis</th>
+			</tr>
+
+			
+			<tr>
+				<td colspan="2"><a href="../index.html">..</a></td>
+			</tr>
+			
+
+			
+				<tr>
+				
+					<td class="pkg-name" style="padding-left: 0px;">
+						<a href="services/index.html">services</a>
+					</td>
+				
+					<td class="pkg-synopsis">
+						
+					</td>
+				</tr>
+			
+		</table>
+	</div>
 
 
 
 <div id="footer">
-Build version go1.10.1.<br>
+Build version go1.11.1.<br>
 Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
 the content of this page is licensed under the
 Creative Commons Attribution 3.0 License,
@@ -239,16 +259,6 @@ and code is licensed under a <a href="http://localhost:30303/LICENSE">BSD licens
 
 </div><!-- .container -->
 </div><!-- #page -->
-
-<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
-<script type="text/javascript" src="../../../lib/godoc/jquery.js"></script>
-<script type="text/javascript" src="../../../lib/godoc/jquery.treeview.js"></script>
-<script type="text/javascript" src="../../../lib/godoc/jquery.treeview.edit.js"></script>
-
-
-<script>var goVersion = "go1.10.1";</script>
-<script type="text/javascript" src="../../../lib/godoc/godocs.js"></script>
-
 </body>
 </html>
 

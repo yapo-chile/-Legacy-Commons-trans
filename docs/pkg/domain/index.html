@@ -10,7 +10,14 @@
 <link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
 
 <link rel="stylesheet" href="../../lib/godoc/jquery.treeview.css">
-<script type="text/javascript">window.initFuncs = [];</script>
+<script>window.initFuncs = [];</script>
+<script src="../../lib/godoc/jquery.js" defer></script>
+<script src="../../lib/godoc/jquery.treeview.js" defer></script>
+<script src="../../lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script>var goVersion = "go1.11.1";</script>
+<script src="../../lib/godoc/godocs.js" defer></script>
 </head>
 <body>
 
@@ -112,9 +119,9 @@ application, as this is the innermost layer of our Clean Architecture
 implementation.
 </p>
 
+				
 			</div>
 		</div>
-		
 
 		<div id="pkg-index" class="toggleVisible">
 		<div class="collapsed">
@@ -131,20 +138,22 @@ implementation.
 			
 			
 				
-				<dd><a href="index.html#Fibonacci">type Fibonacci</a></dd>
+				<dd><a href="index.html#TransCommand">type TransCommand</a></dd>
 				
 				
 			
 				
-				<dd><a href="index.html#FibonacciPair">type FibonacciPair</a></dd>
+				<dd><a href="index.html#TransParams">type TransParams</a></dd>
 				
-				
-					
-					<dd>&nbsp; &nbsp; <a href="index.html#FibonacciPair.Next">func (f FibonacciPair) Next() (int, Fibonacci)</a></dd>
 				
 			
 				
-				<dd><a href="index.html#FibonacciRepository">type FibonacciRepository</a></dd>
+				<dd><a href="index.html#TransRepository">type TransRepository</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#TransResponse">type TransResponse</a></dd>
 				
 				
 			
@@ -161,7 +170,7 @@ implementation.
 			
 				<a href="pkg/domain/doc.go">doc.go</a>
 			
-				<a href="pkg/domain/fibonacci.go">fibonacci.go</a>
+				<a href="pkg/domain/trans.go">trans.go</a>
 			
 			</span>
 			</p>
@@ -212,14 +221,22 @@ implementation.
 		
 			
 			
-			<h2 id="Fibonacci">type <a href="pkg/domain/fibonacci.go?s=93:111#L1">Fibonacci</a>
-				<a class="permalink" href="index.html#Fibonacci">&#xb6;</a>
+			<h2 id="TransCommand">type <a href="pkg/domain/trans.go?s=218:352#L1">TransCommand</a>
+				<a class="permalink" href="index.html#TransCommand">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
-Fibonacci is the datatype for numbers that belong to the Fibonacci Series
+TransCommand represents a trans command with params to be executed on a trans server
 </p>
 
-			<pre>type Fibonacci <a href="http://localhost:30303/pkg/builtin/#int">int</a></pre>
+			<pre>type TransCommand struct {
+    <span class="comment">// the command to be executed</span>
+<span id="TransCommand.Command"></span>    Command <a href="http://localhost:30303/pkg/builtin/#string">string</a>
+<span id="TransCommand.Params"></span>    <span class="comment">// Params the params of the command</span>
+    Params []<a href="index.html#TransParams">TransParams</a>
+}
+</pre>
 
 			
 
@@ -235,19 +252,20 @@ Fibonacci is the datatype for numbers that belong to the Fibonacci Series
 		
 			
 			
-			<h2 id="FibonacciPair">type <a href="pkg/domain/fibonacci.go?s=188:268#L1">FibonacciPair</a>
-				<a class="permalink" href="index.html#FibonacciPair">&#xb6;</a>
+			<h2 id="TransParams">type <a href="pkg/domain/trans.go?s=68:128#L1">TransParams</a>
+				<a class="permalink" href="index.html#TransParams">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
-FibonacciPair is the pair of the latest pair of known Fibonacci Numbers
+TransParams is a struct with Trans format params
 </p>
 
-			<pre>type FibonacciPair struct {
-    <span class="comment">// Indexes</span>
-<span id="FibonacciPair.IA"></span>    IA, IB <a href="http://localhost:30303/pkg/builtin/#int">int</a>
-    <span class="comment">// Values</span>
-<span id="FibonacciPair.A"></span>    A, B <a href="index.html#Fibonacci">Fibonacci</a>
-}</pre>
+			<pre>type TransParams struct {
+<span id="TransParams.Key"></span>    Key   <a href="http://localhost:30303/pkg/builtin/#string">string</a>
+<span id="TransParams.Value"></span>    Value interface{}
+}
+</pre>
 
 			
 
@@ -259,38 +277,54 @@ FibonacciPair is the pair of the latest pair of known Fibonacci Numbers
 
 			
 
-			
-				
-				<h3 id="FibonacciPair.Next">func (FibonacciPair) <a href="pkg/domain/fibonacci.go?s=745:791#L15">Next</a>
-					<a class="permalink" href="index.html#FibonacciPair.Next">&#xb6;</a>
-				</h3>
-				<pre>func (f <a href="index.html#FibonacciPair">FibonacciPair</a>) Next() (<a href="http://localhost:30303/pkg/builtin/#int">int</a>, <a href="index.html#Fibonacci">Fibonacci</a>)</pre>
-				<p>
-Next produces the Fibonacci Number and the index that comes right after f
-</p>
-
-				
-				
-				
 			
 		
 			
 			
-			<h2 id="FibonacciRepository">type <a href="pkg/domain/fibonacci.go?s=341:666#L5">FibonacciRepository</a>
-				<a class="permalink" href="index.html#FibonacciRepository">&#xb6;</a>
+			<h2 id="TransRepository">type <a href="pkg/domain/trans.go?s=678:817#L16">TransRepository</a>
+				<a class="permalink" href="index.html#TransRepository">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
-FibonacciRepository defines a backing storage for Fibonacci Numbers
+TransRepository defines a storage for the trans commands
 </p>
 
-			<pre>type FibonacciRepository interface {
-    <span class="comment">// Get should retrieve the Nth Fibonacci if available</span>
-    Get(nth <a href="http://localhost:30303/pkg/builtin/#int">int</a>) (<a href="index.html#Fibonacci">Fibonacci</a>, <a href="http://localhost:30303/pkg/builtin/#error">error</a>)
-    <span class="comment">// Save must store the Nth Fibonacci only if (N-1) and (N-2) are known</span>
-    Save(nth <a href="http://localhost:30303/pkg/builtin/#int">int</a>, x <a href="index.html#Fibonacci">Fibonacci</a>) <a href="http://localhost:30303/pkg/builtin/#error">error</a>
-    <span class="comment">// LatestPair should retrieve the latest know pair of Fibonacci</span>
-    LatestPair() <a href="index.html#FibonacciPair">FibonacciPair</a>
+			<pre>type TransRepository interface {
+    <span class="comment">// Execute executes the command on a trans server</span>
+    Execute(command <a href="index.html#TransCommand">TransCommand</a>) (<a href="index.html#TransResponse">TransResponse</a>, <a href="http://localhost:30303/pkg/builtin/#error">error</a>)
 }</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="TransResponse">type <a href="pkg/domain/trans.go?s=435:616#L8">TransResponse</a>
+				<a class="permalink" href="index.html#TransResponse">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+TransResponse represents the response given to the execution of a TransCommand
+</p>
+
+			<pre>type TransResponse struct {
+<span id="TransResponse.Status"></span>    <span class="comment">// Status the status of the response (normally TRANS_OK or TRANS_ERROR)</span>
+    Status <a href="http://localhost:30303/pkg/builtin/#string">string</a>
+<span id="TransResponse.Params"></span>    <span class="comment">// Params additional params returned</span>
+    Params map[<a href="http://localhost:30303/pkg/builtin/#string">string</a>]<a href="http://localhost:30303/pkg/builtin/#string">string</a>
+}
+</pre>
 
 			
 
@@ -315,7 +349,7 @@ FibonacciRepository defines a backing storage for Fibonacci Numbers
 
 
 <div id="footer">
-Build version go1.10.1.<br>
+Build version go1.11.1.<br>
 Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
 the content of this page is licensed under the
 Creative Commons Attribution 3.0 License,
@@ -326,16 +360,6 @@ and code is licensed under a <a href="http://localhost:30303/LICENSE">BSD licens
 
 </div><!-- .container -->
 </div><!-- #page -->
-
-<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
-<script type="text/javascript" src="../../lib/godoc/jquery.js"></script>
-<script type="text/javascript" src="../../lib/godoc/jquery.treeview.js"></script>
-<script type="text/javascript" src="../../lib/godoc/jquery.treeview.edit.js"></script>
-
-
-<script>var goVersion = "go1.10.1";</script>
-<script type="text/javascript" src="../../lib/godoc/godocs.js"></script>
-
 </body>
 </html>
 

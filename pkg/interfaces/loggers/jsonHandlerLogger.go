@@ -25,8 +25,7 @@ func (l *jsonHandlerDefaultLogger) LogRequestPanic(r *http.Request, response *go
 }
 
 // MakeJSONHandlerLogger sets up a JsonHandlerLogger instrumented
-// via the provided logger
-//func MakeJSONHandlerLogger(logger Logger) *jsonHandlerDefaultLogger {
+// via the provided logger.
 func MakeJSONHandlerLogger(logger Logger) handlers.JSONHandlerLogger {
 	return &jsonHandlerDefaultLogger{
 		logger: logger,

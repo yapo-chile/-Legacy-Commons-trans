@@ -1,6 +1,6 @@
 package loggers
 
-// Logger is an interface for logging facilities
+// Logger is an interface for logging facilities.
 type Logger interface {
 	Debug(format string, params ...interface{})
 	Info(format string, params ...interface{})

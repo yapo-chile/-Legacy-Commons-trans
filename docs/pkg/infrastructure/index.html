@@ -10,7 +10,14 @@
 <link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
 
 <link rel="stylesheet" href="../../lib/godoc/jquery.treeview.css">
-<script type="text/javascript">window.initFuncs = [];</script>
+<script>window.initFuncs = [];</script>
+<script src="../../lib/godoc/jquery.js" defer></script>
+<script src="../../lib/godoc/jquery.treeview.js" defer></script>
+<script src="../../lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script>var goVersion = "go1.11.1";</script>
+<script src="../../lib/godoc/godocs.js" defer></script>
 </head>
 <body>
 
@@ -119,9 +126,9 @@ If you didn&#39;t write it and you&#39;re talking to it, you need code here.
 If you need to know where is it, you need code here.
 </p>
 
+				
 			</div>
 		</div>
-		
 
 		<div id="pkg-index" class="toggleVisible">
 		<div class="collapsed">
@@ -134,6 +141,8 @@ If you need to know where is it, you need code here.
 			<div id="manual-nav">
 			<dl>
 			
+				<dd><a href="index.html#pkg-constants">Constants</a></dd>
+			
 			
 			
 				
@@ -142,6 +151,9 @@ If you need to know where is it, you need code here.
 				
 				<dd><a href="index.html#MakeYapoLogger">func MakeYapoLogger(config *LoggerConf) (loggers.Logger, error)</a></dd>
 			
+				
+				<dd><a href="index.html#NewTextProtocolTransFactory">func NewTextProtocolTransFactory(conf TransConf, logger loggers.Logger) services.TransFactory</a></dd>
+			
 			
 				
 				<dd><a href="index.html#Config">type Config</a></dd>
@@ -149,8 +161,36 @@ If you need to know where is it, you need code here.
 				
 			
 				
+				<dd><a href="index.html#Handler">type Handler</a></dd>
+				
+				
+			
+				
 				<dd><a href="index.html#LoggerConf">type LoggerConf</a></dd>
 				
+				
+			
+				
+				<dd><a href="index.html#MockTransServer">type MockTransServer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewMockTransServer">func NewMockTransServer() *MockTransServer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#MockTransServer.Close">func (srv *MockTransServer) Close()</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#MockTransServer.Serve">func (srv *MockTransServer) Serve(l net.Listener) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#MockTransServer.SetBusy">func (srv *MockTransServer) SetBusy(busy bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#MockTransServer.SetHandler">func (srv *MockTransServer) SetHandler(h Handler)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#MockTransServer.Start">func (srv *MockTransServer) Start()</a></dd>
 				
 			
 				
@@ -188,8 +228,57 @@ If you need to know where is it, you need code here.
 				
 			
 				
+				<dd><a href="index.html#RuntimeConfig">type RuntimeConfig</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#Server">type Server</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewHTTPServer">func NewHTTPServer(addr string, routes http.Handler, logger loggers.Logger) *Server</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#Server.Close">func (s *Server) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#Server.ListenAndServe">func (s *Server) ListenAndServe()</a></dd>
+				
+			
+				
 				<dd><a href="index.html#ServiceConf">type ServiceConf</a></dd>
 				
+				
+			
+				
+				<dd><a href="index.html#ShutdownSequence">type ShutdownSequence</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewShutdownSequence">func NewShutdownSequence() *ShutdownSequence</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#ShutdownSequence.Listen">func (s *ShutdownSequence) Listen()</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#ShutdownSequence.Push">func (s *ShutdownSequence) Push(task io.Closer)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#ShutdownSequence.Wait">func (s *ShutdownSequence) Wait()</a></dd>
+				
+			
+				
+				<dd><a href="index.html#TransConf">type TransConf</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#TransResponse">type TransResponse</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#TransResponse.Map">func (r TransResponse) Map() (map[string]string, error)</a></dd>
 				
 			
 				
@@ -208,6 +297,8 @@ If you need to know where is it, you need code here.
 			<p>
 			<span style="font-size:90%">
 			
+				<a href="pkg/infrastructure/MockTrans.go">MockTrans.go</a>
+			
 				<a href="pkg/infrastructure/config.go">config.go</a>
 			
 				<a href="pkg/infrastructure/doc.go">doc.go</a>
@@ -215,6 +306,14 @@ If you need to know where is it, you need code here.
 				<a href="pkg/infrastructure/newrelic.go">newrelic.go</a>
 			
 				<a href="pkg/infrastructure/router.go">router.go</a>
+			
+				<a href="pkg/infrastructure/server.go">server.go</a>
+			
+				<a href="pkg/infrastructure/shutdownSequence.go">shutdownSequence.go</a>
+			
+				<a href="pkg/infrastructure/trans.go">trans.go</a>
+			
+				<a href="pkg/infrastructure/transResponse.go">transResponse.go</a>
 			
 				<a href="pkg/infrastructure/yapoLogger.go">yapoLogger.go</a>
 			
@@ -262,12 +361,32 @@ If you need to know where is it, you need code here.
 		</div> <!-- #pkg-callgraph -->
 
 		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				
+				<pre>const (
+    <span class="comment">// WelcomeMessage is the message given when a client connects to the</span>
+    <span class="comment">// server and can answer its request. It also signals the start of a</span>
+    <span class="comment">// command response</span>
+    <span id="WelcomeMessage">WelcomeMessage</span> = &#34;220 Welcome.\n&#34;
+    <span class="comment">// BusyMessage is the message given when a client connects to the</span>
+    <span class="comment">// server and the server is configured to refuse new connections, or</span>
+    <span class="comment">// the number of pending connections is greater that the max connections</span>
+    <span id="BusyMessage">BusyMessage</span> = &#34;521 Busy.\n&#34;
+    <span class="comment">// EndMessage is message that define end of a command, or a</span>
+    <span class="comment">// command response.</span>
+    <span id="EndMessage">EndMessage</span> = &#34;end\n&#34;
+)</pre>
+			
+		
 		
 		
 			
 			
-			<h2 id="LoadFromEnv">func <a href="pkg/infrastructure/config.go?s=1197:1231#L36">LoadFromEnv</a>
+			<h2 id="LoadFromEnv">func <a href="pkg/infrastructure/config.go?s=2646:2680#L68">LoadFromEnv</a>
 				<a class="permalink" href="index.html#LoadFromEnv">&#xb6;</a>
+				
+				
 			</h2>
 			<pre>func LoadFromEnv(data interface{})</pre>
 			<p>
@@ -280,8 +399,10 @@ LoadFromEnv loads the config data from the environment variables
 		
 			
 			
-			<h2 id="MakeYapoLogger">func <a href="pkg/infrastructure/yapoLogger.go?s=293:356#L2">MakeYapoLogger</a>
+			<h2 id="MakeYapoLogger">func <a href="pkg/infrastructure/yapoLogger.go?s=294:357#L2">MakeYapoLogger</a>
 				<a class="permalink" href="index.html#MakeYapoLogger">&#xb6;</a>
+				
+				
 			</h2>
 			<pre>func MakeYapoLogger(config *<a href="index.html#LoggerConf">LoggerConf</a>) (<a href="../interfaces/loggers/index.html">loggers</a>.<a href="../interfaces/loggers/index.html#Logger">Logger</a>, <a href="http://localhost:30303/pkg/builtin/#error">error</a>)</pre>
 			<p>
@@ -292,21 +413,45 @@ MakeYapoLogger creates and sets up a yapo flavored Logger
 			
 
 		
+			
+			
+			<h2 id="NewTextProtocolTransFactory">func <a href="pkg/infrastructure/trans.go?s=689:787#L24">NewTextProtocolTransFactory</a>
+				<a class="permalink" href="index.html#NewTextProtocolTransFactory">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func NewTextProtocolTransFactory(
+    conf <a href="index.html#TransConf">TransConf</a>,
+    logger <a href="../interfaces/loggers/index.html">loggers</a>.<a href="../interfaces/loggers/index.html#Logger">Logger</a>,
+) <a href="../interfaces/repository/services/index.html">services</a>.<a href="../interfaces/repository/services/index.html#TransFactory">TransFactory</a></pre>
+			<p>
+NewTextProtocolTransFactory initialize a services.TransFactory
+</p>
+
+			
+			
+
+		
 		
 			
 			
-			<h2 id="Config">type <a href="pkg/infrastructure/config.go?s=973:1127#L29">Config</a>
+			<h2 id="Config">type <a href="pkg/infrastructure/config.go?s=2335:2576#L59">Config</a>
 				<a class="permalink" href="index.html#Config">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 Config holds all configuration for the service
 </p>
 
 			<pre>type Config struct {
-<span id="Config.ServiceConf"></span>    ServiceConf  <a href="index.html#ServiceConf">ServiceConf</a>  `env:&#34;SERVICE_&#34;`
-<span id="Config.NewRelicConf"></span>    NewRelicConf <a href="index.html#NewRelicConf">NewRelicConf</a> `env:&#34;NEWRELIC_&#34;`
-<span id="Config.LoggerConf"></span>    LoggerConf   <a href="index.html#LoggerConf">LoggerConf</a>   `env:&#34;LOGGER_&#34;`
-}</pre>
+<span id="Config.Trans"></span>    Trans        <a href="index.html#TransConf">TransConf</a>     `env:&#34;TRANS_&#34;`
+<span id="Config.ServiceConf"></span>    ServiceConf  <a href="index.html#ServiceConf">ServiceConf</a>   `env:&#34;SERVICE_&#34;`
+<span id="Config.NewRelicConf"></span>    NewRelicConf <a href="index.html#NewRelicConf">NewRelicConf</a>  `env:&#34;NEWRELIC_&#34;`
+<span id="Config.LoggerConf"></span>    LoggerConf   <a href="index.html#LoggerConf">LoggerConf</a>    `env:&#34;LOGGER_&#34;`
+<span id="Config.Runtime"></span>    Runtime      <a href="index.html#RuntimeConfig">RuntimeConfig</a> `env:&#34;APP_&#34;`
+}
+</pre>
 
 			
 
@@ -322,8 +467,37 @@ Config holds all configuration for the service
 		
 			
 			
-			<h2 id="LoggerConf">type <a href="pkg/infrastructure/config.go?s=368:626#L14">LoggerConf</a>
+			<h2 id="Handler">type <a href="pkg/infrastructure/MockTrans.go?s=835:867#L19">Handler</a>
+				<a class="permalink" href="index.html#Handler">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+Handler function used to manage the received command and returns a response in bytes.
+The response must have the form of &lt;param1&gt;:&lt;value1&gt;\n&lt;param2&gt;:&lt;value2&gt;\n...,
+without the &#34;end\n&#34; message
+</p>
+
+			<pre>type Handler func([]<a href="http://localhost:30303/pkg/builtin/#byte">byte</a>) []<a href="http://localhost:30303/pkg/builtin/#byte">byte</a></pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="LoggerConf">type <a href="pkg/infrastructure/config.go?s=570:828#L17">LoggerConf</a>
 				<a class="permalink" href="index.html#LoggerConf">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 LoggerConf holds configuration for logging
@@ -341,7 +515,8 @@ LogLevel definition:
 <span id="LoggerConf.SyslogEnabled"></span>    SyslogEnabled  <a href="http://localhost:30303/pkg/builtin/#bool">bool</a>   `env:&#34;SYSLOG_ENABLED&#34; envDefault:&#34;false&#34;`
 <span id="LoggerConf.StdlogEnabled"></span>    StdlogEnabled  <a href="http://localhost:30303/pkg/builtin/#bool">bool</a>   `env:&#34;STDLOG_ENABLED&#34; envDefault:&#34;true&#34;`
 <span id="LoggerConf.LogLevel"></span>    LogLevel       <a href="http://localhost:30303/pkg/builtin/#int">int</a>    `env:&#34;LOG_LEVEL&#34; envDefault:&#34;0&#34;`
-}</pre>
+}
+</pre>
 
 			
 
@@ -357,8 +532,131 @@ LogLevel definition:
 		
 			
 			
-			<h2 id="NewRelicConf">type <a href="pkg/infrastructure/config.go?s=751:921#L23">NewRelicConf</a>
+			<h2 id="MockTransServer">type <a href="pkg/infrastructure/MockTrans.go?s=934:1061#L22">MockTransServer</a>
+				<a class="permalink" href="index.html#MockTransServer">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+MockTransServer the struct tht represents a Mock trans server
+</p>
+
+			<pre>type MockTransServer struct {
+<span id="MockTransServer.Address"></span>    Address <a href="http://localhost:30303/pkg/builtin/#string">string</a>
+<span id="MockTransServer.IsBusy"></span>    IsBusy  <a href="http://localhost:30303/pkg/builtin/#bool">bool</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewMockTransServer">func <a href="pkg/infrastructure/MockTrans.go?s=3220:3262#L134">NewMockTransServer</a>
+					<a class="permalink" href="index.html#NewMockTransServer">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewMockTransServer() *<a href="index.html#MockTransServer">MockTransServer</a></pre>
+				<p>
+NewMockTransServer starts and returns a new Server.
+The caller should call Close when finished, to shut it down.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="MockTransServer.Close">func (*MockTransServer) <a href="pkg/infrastructure/MockTrans.go?s=1426:1461#L43">Close</a>
+					<a class="permalink" href="index.html#MockTransServer.Close">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (srv *<a href="index.html#MockTransServer">MockTransServer</a>) Close()</pre>
+				<p>
+Close shuts down the server and blocks until all outstanding
+requests on this server have completed.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="MockTransServer.Serve">func (*MockTransServer) <a href="pkg/infrastructure/MockTrans.go?s=1549:1604#L48">Serve</a>
+					<a class="permalink" href="index.html#MockTransServer.Serve">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (srv *<a href="index.html#MockTransServer">MockTransServer</a>) Serve(l <a href="http://localhost:30303/pkg/net/">net</a>.<a href="http://localhost:30303/pkg/net/#Listener">Listener</a>) <a href="http://localhost:30303/pkg/builtin/#error">error</a></pre>
+				<p>
+Serve starts listening for requests
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="MockTransServer.SetBusy">func (*MockTransServer) <a href="pkg/infrastructure/MockTrans.go?s=2996:3042#L126">SetBusy</a>
+					<a class="permalink" href="index.html#MockTransServer.SetBusy">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (srv *<a href="index.html#MockTransServer">MockTransServer</a>) SetBusy(busy <a href="http://localhost:30303/pkg/builtin/#bool">bool</a>)</pre>
+				<p>
+SetBusy sets if the server is busy or available to response requests.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="MockTransServer.SetHandler">func (*MockTransServer) <a href="pkg/infrastructure/MockTrans.go?s=2817:2866#L119">SetHandler</a>
+					<a class="permalink" href="index.html#MockTransServer.SetHandler">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (srv *<a href="index.html#MockTransServer">MockTransServer</a>) SetHandler(h <a href="index.html#Handler">Handler</a>)</pre>
+				<p>
+SetHandler sets handler function.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="MockTransServer.Start">func (*MockTransServer) <a href="pkg/infrastructure/MockTrans.go?s=1097:1132#L31">Start</a>
+					<a class="permalink" href="index.html#MockTransServer.Start">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (srv *<a href="index.html#MockTransServer">MockTransServer</a>) Start()</pre>
+				<p>
+Start starts mock trans server
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="NewRelicConf">type <a href="pkg/infrastructure/config.go?s=953:1317#L26">NewRelicConf</a>
 				<a class="permalink" href="index.html#NewRelicConf">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 NewRelicConf holds configuration to report to New Relic
@@ -366,9 +664,14 @@ TODO: You need to set the defaults according to your service
 </p>
 
 			<pre>type NewRelicConf struct {
-<span id="NewRelicConf.Key"></span>    Key     <a href="http://localhost:30303/pkg/builtin/#string">string</a> `env:&#34;KEY&#34; envDefault:&#34;923864cba2f12410aff39279cddfd339a07f13a3&#34;`
-<span id="NewRelicConf.Appname"></span>    Appname <a href="http://localhost:30303/pkg/builtin/#string">string</a> `env:&#34;APPNAME&#34; envDefault:&#34;yapo-trans-poya&#34;`
-}</pre>
+<span id="NewRelicConf.Key"></span>    <span class="comment">// Key the key to authenticate with NewRelic</span>
+    Key <a href="http://localhost:30303/pkg/builtin/#string">string</a> `env:&#34;KEY&#34; envDefault:&#34;923864cba2f12410aff39279cddfd339a07f13a3&#34;`
+<span id="NewRelicConf.Appname"></span>    <span class="comment">// Appname name of the service inside NewRelic</span>
+    Appname <a href="http://localhost:30303/pkg/builtin/#string">string</a> `env:&#34;APPNAME&#34; envDefault:&#34;yapo-trans-poya&#34;`
+<span id="NewRelicConf.Enabled"></span>    <span class="comment">// Enabled if we should enable reporting to NewRelic</span>
+    Enabled <a href="http://localhost:30303/pkg/builtin/#bool">bool</a> `env:&#34;ENABLED&#34; envDefault:&#34;false&#34;`
+}
+</pre>
 
 			
 
@@ -384,8 +687,10 @@ TODO: You need to set the defaults according to your service
 		
 			
 			
-			<h2 id="NewRelicHandler">type <a href="pkg/infrastructure/newrelic.go?s=162:255#L1">NewRelicHandler</a>
+			<h2 id="NewRelicHandler">type <a href="pkg/infrastructure/newrelic.go?s=219:350#L1">NewRelicHandler</a>
 				<a class="permalink" href="index.html#NewRelicHandler">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 NewRelicHandler struct representing a NewRelic handler with the new relic app
@@ -394,8 +699,12 @@ NewRelicHandler struct representing a NewRelic handler with the new relic app
 			<pre>type NewRelicHandler struct {
 <span id="NewRelicHandler.Appname"></span>    Appname <a href="http://localhost:30303/pkg/builtin/#string">string</a>
 <span id="NewRelicHandler.Key"></span>    Key     <a href="http://localhost:30303/pkg/builtin/#string">string</a>
+
+<span id="NewRelicHandler.Enabled"></span>    Enabled <a href="http://localhost:30303/pkg/builtin/#bool">bool</a>
+<span id="NewRelicHandler.Logger"></span>    Logger  <a href="../interfaces/loggers/index.html">loggers</a>.<a href="../interfaces/loggers/index.html#Logger">Logger</a>
     <span class="comment">// contains filtered or unexported fields</span>
-}</pre>
+}
+</pre>
 
 			
 
@@ -409,8 +718,10 @@ NewRelicHandler struct representing a NewRelic handler with the new relic app
 
 			
 				
-				<h3 id="NewRelicHandler.Start">func (*NewRelicHandler) <a href="pkg/infrastructure/newrelic.go?s=298:337#L7">Start</a>
+				<h3 id="NewRelicHandler.Start">func (*NewRelicHandler) <a href="pkg/infrastructure/newrelic.go?s=393:432#L10">Start</a>
 					<a class="permalink" href="index.html#NewRelicHandler.Start">&#xb6;</a>
+					
+					
 				</h3>
 				<pre>func (n *<a href="index.html#NewRelicHandler">NewRelicHandler</a>) Start() <a href="http://localhost:30303/pkg/builtin/#error">error</a></pre>
 				<p>
@@ -422,8 +733,10 @@ Start initializes the NewRelicHandler
 				
 			
 				
-				<h3 id="NewRelicHandler.TrackHandlerFunc">func (*NewRelicHandler) <a href="pkg/infrastructure/newrelic.go?s=546:647#L18">TrackHandlerFunc</a>
+				<h3 id="NewRelicHandler.TrackHandlerFunc">func (*NewRelicHandler) <a href="pkg/infrastructure/newrelic.go?s=736:837#L26">TrackHandlerFunc</a>
 					<a class="permalink" href="index.html#NewRelicHandler.TrackHandlerFunc">&#xb6;</a>
+					
+					
 				</h3>
 				<pre>func (n *<a href="index.html#NewRelicHandler">NewRelicHandler</a>) TrackHandlerFunc(pattern <a href="http://localhost:30303/pkg/builtin/#string">string</a>, handler <a href="http://localhost:30303/pkg/net/http/">http</a>.<a href="http://localhost:30303/pkg/net/http/#HandlerFunc">HandlerFunc</a>) <a href="http://localhost:30303/pkg/net/http/">http</a>.<a href="http://localhost:30303/pkg/net/http/#HandlerFunc">HandlerFunc</a></pre>
 				<p>
@@ -437,8 +750,10 @@ TrackHandlerFunc instruments an http.HandlerFunc
 		
 			
 			
-			<h2 id="Route">type <a href="pkg/infrastructure/router.go?s=238:333#L2">Route</a>
+			<h2 id="Route">type <a href="pkg/infrastructure/router.go?s=258:353#L3">Route</a>
 				<a class="permalink" href="index.html#Route">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 Route stands for an http endpoint description
@@ -449,7 +764,8 @@ Route stands for an http endpoint description
 <span id="Route.Method"></span>    Method  <a href="http://localhost:30303/pkg/builtin/#string">string</a>
 <span id="Route.Pattern"></span>    Pattern <a href="http://localhost:30303/pkg/builtin/#string">string</a>
 <span id="Route.Handler"></span>    Handler <a href="../interfaces/handlers/index.html">handlers</a>.<a href="../interfaces/handlers/index.html#Handler">Handler</a>
-}</pre>
+}
+</pre>
 
 			
 
@@ -465,18 +781,22 @@ Route stands for an http endpoint description
 		
 			
 			
-			<h2 id="RouterMaker">type <a href="pkg/infrastructure/router.go?s=729:829#L22">RouterMaker</a>
+			<h2 id="RouterMaker">type <a href="pkg/infrastructure/router.go?s=749:875#L23">RouterMaker</a>
 				<a class="permalink" href="index.html#RouterMaker">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 RouterMaker gathers route and wrapper information to build a router
 </p>
 
 			<pre>type RouterMaker struct {
-<span id="RouterMaker.Logger"></span>    Logger      <a href="../interfaces/loggers/index.html">loggers</a>.<a href="../interfaces/loggers/index.html#Logger">Logger</a>
-<span id="RouterMaker.Routes"></span>    Routes      <a href="index.html#Routes">Routes</a>
-<span id="RouterMaker.WrapperFunc"></span>    WrapperFunc <a href="index.html#WrapperFunc">WrapperFunc</a>
-}</pre>
+<span id="RouterMaker.Logger"></span>    Logger        <a href="../interfaces/loggers/index.html">loggers</a>.<a href="../interfaces/loggers/index.html#Logger">Logger</a>
+<span id="RouterMaker.WrapperFunc"></span>    WrapperFunc   <a href="index.html#WrapperFunc">WrapperFunc</a>
+<span id="RouterMaker.WithProfiling"></span>    WithProfiling <a href="http://localhost:30303/pkg/builtin/#bool">bool</a>
+<span id="RouterMaker.Routes"></span>    Routes        <a href="index.html#Routes">Routes</a>
+}
+</pre>
 
 			
 
@@ -490,8 +810,10 @@ RouterMaker gathers route and wrapper information to build a router
 
 			
 				
-				<h3 id="RouterMaker.NewRouter">func (*RouterMaker) <a href="pkg/infrastructure/router.go?s=889:938#L29">NewRouter</a>
+				<h3 id="RouterMaker.NewRouter">func (*RouterMaker) <a href="pkg/infrastructure/router.go?s=935:984#L31">NewRouter</a>
 					<a class="permalink" href="index.html#RouterMaker.NewRouter">&#xb6;</a>
+					
+					
 				</h3>
 				<pre>func (maker *<a href="index.html#RouterMaker">RouterMaker</a>) NewRouter() *mux.<a href="index.html#Router">Router</a></pre>
 				<p>
@@ -505,8 +827,10 @@ NewRouter setups a Router based on the provided routes
 		
 			
 			
-			<h2 id="Routes">type <a href="pkg/infrastructure/router.go?s=631:656#L19">Routes</a>
+			<h2 id="Routes">type <a href="pkg/infrastructure/router.go?s=651:676#L20">Routes</a>
 				<a class="permalink" href="index.html#Routes">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 Routes is an array of routes with a common prefix
@@ -528,16 +852,20 @@ Routes is an array of routes with a common prefix
 		
 			
 			
-			<h2 id="ServiceConf">type <a href="pkg/infrastructure/config.go?s=147:219#L3">ServiceConf</a>
-				<a class="permalink" href="index.html#ServiceConf">&#xb6;</a>
+			<h2 id="RuntimeConfig">type <a href="pkg/infrastructure/config.go?s=1360:1480#L36">RuntimeConfig</a>
+				<a class="permalink" href="index.html#RuntimeConfig">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
-ServiceConf holds configuration for this Service
+RuntimeConfig config to start the app
 </p>
 
-			<pre>type ServiceConf struct {
-<span id="ServiceConf.Host"></span>    Host <a href="http://localhost:30303/pkg/builtin/#string">string</a> `env:&#34;HOST&#34; envDefault:&#34;:8080&#34;`
-}</pre>
+			<pre>type RuntimeConfig struct {
+<span id="RuntimeConfig.Host"></span>    Host <a href="http://localhost:30303/pkg/builtin/#string">string</a> `env:&#34;HOST&#34; envDefault:&#34;0.0.0.0&#34;`
+<span id="RuntimeConfig.Port"></span>    Port <a href="http://localhost:30303/pkg/builtin/#int">int</a>    `env:&#34;PORT&#34; envDefault:&#34;8080&#34;`
+}
+</pre>
 
 			
 
@@ -553,8 +881,288 @@ ServiceConf holds configuration for this Service
 		
 			
 			
-			<h2 id="WrapperFunc">type <a href="pkg/infrastructure/router.go?s=496:576#L16">WrapperFunc</a>
+			<h2 id="Server">type <a href="pkg/infrastructure/server.go?s=272:338#L2">Server</a>
+				<a class="permalink" href="index.html#Server">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+Server struct that implements http server to routes incoming requests
+to be proccessed. Server also includes logger to log messages in case of error
+</p>
+
+			<pre>type Server struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewHTTPServer">func <a href="pkg/infrastructure/server.go?s=502:587#L9">NewHTTPServer</a>
+					<a class="permalink" href="index.html#NewHTTPServer">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewHTTPServer(addr <a href="http://localhost:30303/pkg/builtin/#string">string</a>,
+    routes <a href="http://localhost:30303/pkg/net/http/">http</a>.<a href="http://localhost:30303/pkg/net/http/#Handler">Handler</a>,
+    logger <a href="../interfaces/loggers/index.html">loggers</a>.<a href="../interfaces/loggers/index.html#Logger">Logger</a>) *<a href="index.html#Server">Server</a></pre>
+				<p>
+NewHTTPServer returns a new Server suitable for use http.server and loggerHandler
+methods. NewHttpServer also includes close method to implements io.closer
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Server.Close">func (*Server) <a href="pkg/infrastructure/server.go?s=1106:1136#L32">Close</a>
+					<a class="permalink" href="index.html#Server.Close">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (s *<a href="index.html#Server">Server</a>) Close() <a href="http://localhost:30303/pkg/builtin/#error">error</a></pre>
+				<p>
+Close shuts down http.server
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Server.ListenAndServe">func (*Server) <a href="pkg/infrastructure/server.go?s=883:916#L24">ListenAndServe</a>
+					<a class="permalink" href="index.html#Server.ListenAndServe">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (s *<a href="index.html#Server">Server</a>) ListenAndServe()</pre>
+				<p>
+ListenAndServe starts an HTTP server with a given address and handler.
+This method encapsulates *http.Server.ListenAndServe method and thus add
+close() method to Server struct
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ServiceConf">type <a href="pkg/infrastructure/config.go?s=147:421#L3">ServiceConf</a>
+				<a class="permalink" href="index.html#ServiceConf">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+ServiceConf holds configuration for this Service
+</p>
+
+			<pre>type ServiceConf struct {
+<span id="ServiceConf.Host"></span>    <span class="comment">// Host the host and port where the service will listen for requests</span>
+    Host <a href="http://localhost:30303/pkg/builtin/#string">string</a> `env:&#34;HOST&#34; envDefault:&#34;:8080&#34;`
+<span id="ServiceConf.Profiling"></span>    <span class="comment">// Profiling if the service should add profiling endpoints with net/http/pprof</span>
+    Profiling <a href="http://localhost:30303/pkg/builtin/#bool">bool</a> `env:&#34;PROFILING&#34; envDefault:&#34;true&#34;`
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="ShutdownSequence">type <a href="pkg/infrastructure/shutdownSequence.go?s=251:333#L3">ShutdownSequence</a>
+				<a class="permalink" href="index.html#ShutdownSequence">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+ShutdownSequence is a stack implementation to control the shutdown order of each
+infrastructure component needed. First process that starts is the last to be turned off
+</p>
+
+			<pre>type ShutdownSequence struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewShutdownSequence">func <a href="pkg/infrastructure/shutdownSequence.go?s=795:839#L25">NewShutdownSequence</a>
+					<a class="permalink" href="index.html#NewShutdownSequence">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewShutdownSequence() *<a href="index.html#ShutdownSequence">ShutdownSequence</a></pre>
+				<p>
+NewShutdownSequence creates a new ShutdownSequence
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="ShutdownSequence.Listen">func (*ShutdownSequence) <a href="pkg/infrastructure/shutdownSequence.go?s=1280:1315#L41">Listen</a>
+					<a class="permalink" href="index.html#ShutdownSequence.Listen">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (s *<a href="index.html#ShutdownSequence">ShutdownSequence</a>) Listen()</pre>
+				<p>
+Listen launches a go routines that waits for sigint and then stops each task in the stack.
+You need to call Listen before calling Wait, otherwise you risk waiting indefinitely
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ShutdownSequence.Push">func (*ShutdownSequence) <a href="pkg/infrastructure/shutdownSequence.go?s=399:446#L9">Push</a>
+					<a class="permalink" href="index.html#ShutdownSequence.Push">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (s *<a href="index.html#ShutdownSequence">ShutdownSequence</a>) Push(task <a href="http://localhost:30303/pkg/io/">io</a>.<a href="http://localhost:30303/pkg/io/#Closer">Closer</a>)</pre>
+				<p>
+Push pushes a new component into the stack to be turned off.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ShutdownSequence.Wait">func (*ShutdownSequence) <a href="pkg/infrastructure/shutdownSequence.go?s=1039:1072#L35">Wait</a>
+					<a class="permalink" href="index.html#ShutdownSequence.Wait">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (s *<a href="index.html#ShutdownSequence">ShutdownSequence</a>) Wait()</pre>
+				<p>
+Wait waits until the internal waitGroup counter is zero.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="TransConf">type <a href="pkg/infrastructure/config.go?s=1526:2283#L42">TransConf</a>
+				<a class="permalink" href="index.html#TransConf">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+TransConf transaction server connection.
+</p>
+
+			<pre>type TransConf struct {
+<span id="TransConf.AllowedCommands"></span>    <span class="comment">// AllowedCommands is a list with one or more trans commands, separated by &#39;|&#39;</span>
+    <span class="comment">// that indicates the allowed commands to be sent by this service</span>
+    AllowedCommands <a href="http://localhost:30303/pkg/builtin/#string">string</a> `env:&#34;COMMANDS&#34; envDefault:&#34;transinfo&#34;`
+<span id="TransConf.Host"></span>    <span class="comment">// Host is the host of the trans Server</span>
+    Host <a href="http://localhost:30303/pkg/builtin/#string">string</a> `env:&#34;HOST&#34; envDefault:&#34;jenna.schibsted.cl&#34;`
+<span id="TransConf.Port"></span>    <span class="comment">// Port is the port of the trans server</span>
+    Port <a href="http://localhost:30303/pkg/builtin/#int">int</a> `env:&#34;PORT&#34; envDefault:&#34;27205&#34;`
+<span id="TransConf.Timeout"></span>    <span class="comment">// Timeout wait time before a request times out</span>
+    Timeout <a href="http://localhost:30303/pkg/builtin/#int">int</a> `env:&#34;TIMEOUT&#34; envDefault:&#34;15&#34;`
+<span id="TransConf.RetryAfter"></span>    <span class="comment">// RetryAfter wait time between reconnection to the trans server</span>
+    RetryAfter <a href="http://localhost:30303/pkg/builtin/#int">int</a> `env:&#34;RETRY&#34; envDefault:&#34;5&#34;`
+<span id="TransConf.BuffSize"></span>    <span class="comment">// BuffSize size of the buffer in bytes when reading messages from the trans server</span>
+    BuffSize <a href="http://localhost:30303/pkg/builtin/#int">int</a> `env:&#34;BUFFSIZE&#34; envDefault:&#34;4096&#34;`
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="TransResponse">type <a href="pkg/infrastructure/transResponse.go?s=107:132#L1">TransResponse</a>
+				<a class="permalink" href="index.html#TransResponse">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+TransResponse a Trans response in bytes.
+</p>
+
+			<pre>type TransResponse []<a href="http://localhost:30303/pkg/builtin/#byte">byte</a></pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="TransResponse.Map">func (TransResponse) <a href="pkg/infrastructure/transResponse.go?s=176:231#L3">Map</a>
+					<a class="permalink" href="index.html#TransResponse.Map">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (r <a href="index.html#TransResponse">TransResponse</a>) Map() (map[<a href="http://localhost:30303/pkg/builtin/#string">string</a>]<a href="http://localhost:30303/pkg/builtin/#string">string</a>, <a href="http://localhost:30303/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Map returns a new map from a response.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="WrapperFunc">type <a href="pkg/infrastructure/router.go?s=516:596#L17">WrapperFunc</a>
 				<a class="permalink" href="index.html#WrapperFunc">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
 WrapperFunc defines a type for functions that wrap an http.HandlerFunc
@@ -586,7 +1194,7 @@ to modify its behaviour
 
 
 <div id="footer">
-Build version go1.10.1.<br>
+Build version go1.11.1.<br>
 Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
 the content of this page is licensed under the
 Creative Commons Attribution 3.0 License,
@@ -597,16 +1205,6 @@ and code is licensed under a <a href="http://localhost:30303/LICENSE">BSD licens
 
 </div><!-- .container -->
 </div><!-- #page -->
-
-<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
-<script type="text/javascript" src="../../lib/godoc/jquery.js"></script>
-<script type="text/javascript" src="../../lib/godoc/jquery.treeview.js"></script>
-<script type="text/javascript" src="../../lib/godoc/jquery.treeview.edit.js"></script>
-
-
-<script>var goVersion = "go1.10.1";</script>
-<script type="text/javascript" src="../../lib/godoc/godocs.js"></script>
-
 </body>
 </html>
 

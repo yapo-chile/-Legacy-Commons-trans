@@ -10,7 +10,14 @@
 <link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
 
 <link rel="stylesheet" href="../../lib/godoc/jquery.treeview.css">
-<script type="text/javascript">window.initFuncs = [];</script>
+<script>window.initFuncs = [];</script>
+<script src="../../lib/godoc/jquery.js" defer></script>
+<script src="../../lib/godoc/jquery.treeview.js" defer></script>
+<script src="../../lib/godoc/jquery.treeview.edit.js" defer></script>
+
+
+<script>var goVersion = "go1.11.1";</script>
+<script src="../../lib/godoc/godocs.js" defer></script>
 </head>
 <body>
 
@@ -120,9 +127,9 @@ is not possible then it can mean two things. Either the domain dissalows it and
 cannot be performed, or the domain is incomplete and needs extension.
 </p>
 
+				
 			</div>
 		</div>
-		
 
 		<div id="pkg-index" class="toggleVisible">
 		<div class="collapsed">
@@ -139,20 +146,20 @@ cannot be performed, or the domain is incomplete and needs extension.
 			
 			
 				
-				<dd><a href="index.html#FibonacciInteractor">type FibonacciInteractor</a></dd>
+				<dd><a href="index.html#ExecuteTransUsecase">type ExecuteTransUsecase</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#TransInteractor">type TransInteractor</a></dd>
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="index.html#FibonacciInteractor.GetNth">func (interactor *FibonacciInteractor) GetNth(n int) (domain.Fibonacci, error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="index.html#TransInteractor.ExecuteCommand">func (interactor TransInteractor) ExecuteCommand(command domain.TransCommand) (domain.TransResponse, error)</a></dd>
 				
 			
 				
-				<dd><a href="index.html#FibonacciInteractorLogger">type FibonacciInteractorLogger</a></dd>
-				
-				
-			
-				
-				<dd><a href="index.html#GetNthFibonacciUsecase">type GetNthFibonacciUsecase</a></dd>
+				<dd><a href="index.html#TransInteractorLogger">type TransInteractorLogger</a></dd>
 				
 				
 			
@@ -169,7 +176,7 @@ cannot be performed, or the domain is incomplete and needs extension.
 			
 				<a href="pkg/usecases/doc.go">doc.go</a>
 			
-				<a href="pkg/usecases/getNthFibonacci.go">getNthFibonacci.go</a>
+				<a href="pkg/usecases/executeTransCommand.go">executeTransCommand.go</a>
 			
 			</span>
 			</p>
@@ -220,17 +227,19 @@ cannot be performed, or the domain is incomplete and needs extension.
 		
 			
 			
-			<h2 id="FibonacciInteractor">type <a href="pkg/usecases/getNthFibonacci.go?s=731:843#L14">FibonacciInteractor</a>
-				<a class="permalink" href="index.html#FibonacciInteractor">&#xb6;</a>
+			<h2 id="ExecuteTransUsecase">type <a href="pkg/usecases/executeTransCommand.go?s=310:423#L2">ExecuteTransUsecase</a>
+				<a class="permalink" href="index.html#ExecuteTransUsecase">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
-FibonacciInteractor implements GetNthFibonacciUsecase by using Repository
-to store new Fibonacci as required and to retrieve the final answer.
+ExecuteTransUsecase states:
+As a User, I would like to execute my TransCommand on a Trans server and get the corresponding response
+ExecuteTrans should return a response, or an appropiate error if there was a problem.
 </p>
 
-			<pre>type FibonacciInteractor struct {
-<span id="FibonacciInteractor.Logger"></span>    Logger     <a href="index.html#FibonacciInteractorLogger">FibonacciInteractorLogger</a>
-<span id="FibonacciInteractor.Repository"></span>    Repository <a href="../domain/index.html">domain</a>.<a href="../domain/index.html#FibonacciRepository">FibonacciRepository</a>
+			<pre>type ExecuteTransUsecase interface {
+    ExecuteCommand(command <a href="../domain/index.html">domain</a>.<a href="../domain/index.html#TransCommand">TransCommand</a>) (<a href="../domain/index.html">domain</a>.<a href="../domain/index.html#TransResponse">TransResponse</a>, <a href="http://localhost:30303/pkg/builtin/#error">error</a>)
 }</pre>
 
 			
@@ -244,14 +253,47 @@ to store new Fibonacci as required and to retrieve the final answer.
 			
 
 			
+		
+			
+			
+			<h2 id="TransInteractor">type <a href="pkg/usecases/executeTransCommand.go?s=781:881#L15">TransInteractor</a>
+				<a class="permalink" href="index.html#TransInteractor">&#xb6;</a>
 				
-				<h3 id="FibonacciInteractor.GetNth">func (*FibonacciInteractor) <a href="pkg/usecases/getNthFibonacci.go?s=975:1053#L21">GetNth</a>
-					<a class="permalink" href="index.html#FibonacciInteractor.GetNth">&#xb6;</a>
+				
+			</h2>
+			<p>
+TransInteractor implements ExecuteTransUsecase by using Repository
+to execute the Trans and to retrieve the response.
+</p>
+
+			<pre>type TransInteractor struct {
+<span id="TransInteractor.Logger"></span>    Logger     <a href="index.html#TransInteractorLogger">TransInteractorLogger</a>
+<span id="TransInteractor.Repository"></span>    Repository <a href="../domain/index.html">domain</a>.<a href="../domain/index.html#TransRepository">TransRepository</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="TransInteractor.ExecuteCommand">func (TransInteractor) <a href="pkg/usecases/executeTransCommand.go?s=978:1089#L21">ExecuteCommand</a>
+					<a class="permalink" href="index.html#TransInteractor.ExecuteCommand">&#xb6;</a>
+					
+					
 				</h3>
-				<pre>func (interactor *<a href="index.html#FibonacciInteractor">FibonacciInteractor</a>) GetNth(n <a href="http://localhost:30303/pkg/builtin/#int">int</a>) (<a href="../domain/index.html">domain</a>.<a href="../domain/index.html#Fibonacci">Fibonacci</a>, <a href="http://localhost:30303/pkg/builtin/#error">error</a>)</pre>
+				<pre>func (interactor <a href="index.html#TransInteractor">TransInteractor</a>) ExecuteCommand(
+    command <a href="../domain/index.html">domain</a>.<a href="../domain/index.html#TransCommand">TransCommand</a>,
+) (<a href="../domain/index.html">domain</a>.<a href="../domain/index.html#TransResponse">TransResponse</a>, <a href="http://localhost:30303/pkg/builtin/#error">error</a>)</pre>
 				<p>
-GetNth finds the nth Fibonacci Number by recursively generating one more
-from the last know pair. The running time is O(n).
+ExecuteCommand executes the given TransCommand and returns the corresponding TransResponse.
 </p>
 
 				
@@ -261,44 +303,19 @@ from the last know pair. The running time is O(n).
 		
 			
 			
-			<h2 id="FibonacciInteractorLogger">type <a href="pkg/usecases/getNthFibonacci.go?s=468:580#L7">FibonacciInteractorLogger</a>
-				<a class="permalink" href="index.html#FibonacciInteractorLogger">&#xb6;</a>
+			<h2 id="TransInteractorLogger">type <a href="pkg/usecases/executeTransCommand.go?s=533:655#L8">TransInteractorLogger</a>
+				<a class="permalink" href="index.html#TransInteractorLogger">&#xb6;</a>
+				
+				
 			</h2>
 			<p>
-FibonacciInteractorLogger defines all the events a FibonacciInteractor may
+TransInteractorLogger defines all the events a TransInteractor may
 need/like to report as they happen
 </p>
 
-			<pre>type FibonacciInteractorLogger interface {
-    LogBadInput(<a href="http://localhost:30303/pkg/builtin/#int">int</a>)
-    LogRepositoryError(<a href="http://localhost:30303/pkg/builtin/#int">int</a>, <a href="../domain/index.html">domain</a>.<a href="../domain/index.html#Fibonacci">Fibonacci</a>, <a href="http://localhost:30303/pkg/builtin/#error">error</a>)
-}</pre>
-
-			
-
-			
-
-			
-			
-			
-
-			
-
-			
-		
-			
-			
-			<h2 id="GetNthFibonacciUsecase">type <a href="pkg/usecases/getNthFibonacci.go?s=268:350#L1">GetNthFibonacciUsecase</a>
-				<a class="permalink" href="index.html#GetNthFibonacciUsecase">&#xb6;</a>
-			</h2>
-			<p>
-GetNthFibonacciUsecase states:
-As a User, I would like to know which the Nth Fibonacci Number is.
-GetNth should return that number to me, or an appropiate error if not possible.
-</p>
-
-			<pre>type GetNthFibonacciUsecase interface {
-    GetNth(n <a href="http://localhost:30303/pkg/builtin/#int">int</a>) (<a href="../domain/index.html">domain</a>.<a href="../domain/index.html#Fibonacci">Fibonacci</a>, <a href="http://localhost:30303/pkg/builtin/#error">error</a>)
+			<pre>type TransInteractorLogger interface {
+    LogBadInput(<a href="../domain/index.html">domain</a>.<a href="../domain/index.html#TransCommand">TransCommand</a>)
+    LogRepositoryError(<a href="../domain/index.html">domain</a>.<a href="../domain/index.html#TransCommand">TransCommand</a>, <a href="http://localhost:30303/pkg/builtin/#error">error</a>)
 }</pre>
 
 			
@@ -324,7 +341,7 @@ GetNth should return that number to me, or an appropiate error if not possible.
 
 
 <div id="footer">
-Build version go1.10.1.<br>
+Build version go1.11.1.<br>
 Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
 the content of this page is licensed under the
 Creative Commons Attribution 3.0 License,
@@ -335,16 +352,6 @@ and code is licensed under a <a href="http://localhost:30303/LICENSE">BSD licens
 
 </div><!-- .container -->
 </div><!-- #page -->
-
-<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
-<script type="text/javascript" src="../../lib/godoc/jquery.js"></script>
-<script type="text/javascript" src="../../lib/godoc/jquery.treeview.js"></script>
-<script type="text/javascript" src="../../lib/godoc/jquery.treeview.edit.js"></script>
-
-
-<script>var goVersion = "go1.10.1";</script>
-<script type="text/javascript" src="../../lib/godoc/godocs.js"></script>
-
 </body>
 </html>
 
