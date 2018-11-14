@@ -160,6 +160,7 @@ func TestSendCommandOK(t *testing.T) {
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
+	logger.On("Debug")
 	expectedResponse := make(map[string]string)
 	expectedResponse["status"] = "TRANS_OK"
 	cmd := "test"
