@@ -132,8 +132,16 @@ No request parameters
 Sends the specified command to a trans server with the given params in the JSON body
 
 #### Request
-A JSON object, where the fields are the name of trans params (lowercase), and the values are the values required
+params: A JSON object, where the fields are the name of trans params (lowercase), and the values are the values required
 by the trans command
+```javascript
+{
+	"params":{
+		"param1":"value1",
+		...
+	}
+}
+```
 
 #### Response
 
