@@ -61,6 +61,7 @@ func (handler *trans) SendCommand(cmd string, params map[string]string) (map[str
 			"Invalid Command. Valid commands: %s",
 			handler.allowedCommands,
 		)
+		respMap["error"] = err.Error()
 		handler.logger.Debug(err.Error())
 		return respMap, err
 	}

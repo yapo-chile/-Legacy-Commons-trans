@@ -59,7 +59,6 @@ func TestExecuteError(t *testing.T) {
 
 	response, err := repo.Execute(command)
 	expectedResponse := domain.TransResponse{
-		Status: "TRANS_ERROR",
 		Params: make(map[string]string),
 	}
 	expectedResponse.Params["error"] = "trans error"

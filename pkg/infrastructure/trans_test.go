@@ -44,6 +44,7 @@ func TestSendCommandInvalidCommand(t *testing.T) {
 	logger := MockLoggerInfrastructure{}
 	logger.On("Debug")
 	expectedResponse := make(map[string]string)
+	expectedResponse["error"] = "Invalid Command. Valid commands: [test]"
 	cmd := "transinfo"
 	params := make(map[string]string)
 	params["param1"] = "ok"

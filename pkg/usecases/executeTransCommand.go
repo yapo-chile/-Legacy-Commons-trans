@@ -52,5 +52,12 @@ func (interactor TransInteractor) ExecuteCommand(
 			err = fmt.Errorf("error during execution")
 		}
 	}
+	// if the command sent doesn´t exists in the server
+	if response.Status == "TRANS_ERROR_NO_SUCH_COMMAND:Err no such command" {
+		err = fmt.Errorf("error command doesn't exists")
+		response.Status = "TRANS_ERROR"
+		response.Params["error"] = err.Error()
+	}
+
 	return response, err
 }

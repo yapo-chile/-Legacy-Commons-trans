@@ -154,7 +154,7 @@ by the trans command
 }
 ```
 
-#### Error response
+#### Error responses
 ```javascript
 400 Bad Request
 {
@@ -162,6 +162,13 @@ by the trans command
 	"response": {
 		"error" - An error message
 	}
+}
+```
+
+```javascript
+500 Internal Server Error
+{
+	"ErrorMessage" - An error message
 }
 ```
 
