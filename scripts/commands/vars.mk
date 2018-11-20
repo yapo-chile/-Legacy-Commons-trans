@@ -27,8 +27,15 @@ export SERVER_ROOT=${PWD}
 export BASE_URL="http://${SERVICE_HOST}"
 export MAIN_FILE=cmd/${APPNAME}/main.go
 export LOGGER_SYSLOG_ENABLED=false
+export LOGGER_SYSLOG_IDENTITY=trans
 export LOGGER_STDLOG_ENABLED=true
 export LOGGER_LOG_LEVEL=0
+
+
+# Trans variables 
+# Change to target a trans server,i.e.:
+# TRANS_HOST=jenna.schibsted.cl
+# TRANS_PORT=27205
 
 # Pact test variables
 export PACT_MAIN_FILE=cmd/${APPNAME}-pact/main.go

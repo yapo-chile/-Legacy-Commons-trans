@@ -1,6 +1,10 @@
-hash: 31b8ec67f11455d14a527581ee278ae71ff6f57c6c737605c887c0cfb301f390
-updated: 2018-10-24T12:16:42.783096-03:00
+hash: 90f8487bcf7e6670096c5df251cd619b5845a215ac953a5722f687e0f481be5f
+updated: 2018-11-06T09:45:54.893581-03:00
 imports:
+- name: github.com/eapache/go-resiliency
+  version: ef9aaa7ea8bd2448429af1a77cf41b2b3b34bdd6
+  subpackages:
+  - retrier
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/newrelic/go-agent

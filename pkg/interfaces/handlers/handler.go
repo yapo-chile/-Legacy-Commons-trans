@@ -2,8 +2,10 @@ package handlers
 
 import (
 	"net/http"
+	"reflect"
 
 	"github.com/Yapo/goutils"
+	mux "gopkg.in/gorilla/mux.v1"
 )
 
 // HandlerInput is a placeholder for whatever input a handler may need.
@@ -59,8 +61,16 @@ func (jh *jsonHandler) run(w http.ResponseWriter, r *http.Request) {
 	// Function the request can call to retrieve its input
 	inputGetter := func() (HandlerInput, *goutils.Response) {
 		input := jh.handler.Input()
-		resp := goutils.ParseJSONBody(r, input)
-		return input, resp
+		// Parse the get params
+		getParams := mux.Vars(r)
+		response = fillGet(getParams, input)
+		if response != nil {
+			return input, response
+		}
+
+		// Parse the body params
+		response = goutils.ParseJSONBody(r, &input)
+		return input, response
 	}
 	// Format the output and send it down the writer
 	outputWriter := func() {
@@ -79,4 +89,26 @@ func (jh *jsonHandler) run(w http.ResponseWriter, r *http.Request) {
 	// Do the Harlem Shake
 	response = jh.handler.Execute(inputGetter)
 	jh.logger.LogRequestEnd(r, response)
+}
+
+// fillGet set variables into the corresponding get param
+func fillGet(vars map[string]string, input interface{}) *goutils.Response {
+	v := reflect.ValueOf(input)
+	reflectedInput := reflect.Indirect(v)
+	// Only attempt to set writeable variables
+	if reflectedInput.IsValid() && reflectedInput.CanSet() && reflectedInput.Kind() == reflect.Struct {
+		// Recursively load inner struct fields
+		for i := 0; i < reflectedInput.NumField(); i++ {
+			if tag, ok := reflectedInput.Type().Field(i).Tag.Lookup("get"); ok {
+				reflectedInput.Field(i).Set(reflect.ValueOf(vars[tag]))
+			}
+		}
+		return nil
+	}
+	return &goutils.Response{
+		Code: http.StatusBadRequest,
+		Body: goutils.GenericError{
+			ErrorMessage: "Is not a valid struct",
+		},
+	}
 }

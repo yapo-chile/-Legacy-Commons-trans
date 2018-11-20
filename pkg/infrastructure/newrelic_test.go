@@ -50,3 +50,26 @@ func TestNewrelicStartOk(t *testing.T) {
 	assert.Equal(t, "been there", w.Body.String())
 	mlogger.AssertExpectations(t)
 }
+
+func TestNewrelicStartOkOn(t *testing.T) {
+	mlogger := MockLoggerInfrastructure{}
+	mlogger.On("Info").Return(nil)
+	nr := NewRelicHandler{
+		Appname: "Test",
+		Key:     "1234567891234567891234567891234567891234",
+		Enabled: true,
+		Logger:  &mlogger,
+	}
+	err := nr.Start()
+	assert.NoError(t, err)
+
+	m := MockHandlerFunc
+	handler := nr.TrackHandlerFunc("test", m)
+
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", "/someurl", strings.NewReader("{}"))
+	handler(w, r)
+
+	assert.Equal(t, "been there", w.Body.String())
+	mlogger.AssertExpectations(t)
+}

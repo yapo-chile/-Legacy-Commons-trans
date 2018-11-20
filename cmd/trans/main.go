@@ -8,6 +8,9 @@ import (
 
 	"github.schibsted.io/Yapo/trans/pkg/infrastructure"
 	"github.schibsted.io/Yapo/trans/pkg/interfaces/handlers"
+	"github.schibsted.io/Yapo/trans/pkg/interfaces/loggers"
+	"github.schibsted.io/Yapo/trans/pkg/interfaces/repository/services"
+	"github.schibsted.io/Yapo/trans/pkg/usecases"
 )
 
 var shutdownSequence = infrastructure.NewShutdownSequence()
@@ -16,7 +19,7 @@ func main() {
 	var conf infrastructure.Config
 	shutdownSequence.Listen()
 	infrastructure.LoadFromEnv(&conf)
-	if jconf, err := json.MarshalIndent(conf, "", "    "); err != nil {
+	if jconf, err := json.MarshalIndent(conf, "", "    "); err == nil {
 		fmt.Printf("Config: \n%s\n", jconf)
 	}
 
@@ -45,6 +48,18 @@ func main() {
 	// HealthHandler
 	var healthHandler handlers.HealthHandler
 
+	// transHandler
+	transFactory := infrastructure.NewTextProtocolTransFactory(conf.Trans, logger)
+	transRepository := services.NewTransRepo(transFactory)
+	transLogger := loggers.MakeTransInteractorLogger(logger)
+	transInteractor := usecases.TransInteractor{
+		Repository: transRepository,
+		Logger:     transLogger,
+	}
+
+	transHandler := handlers.TransHandler{
+		Interactor: transInteractor,
+	}
 	// Setting up router
 	maker := infrastructure.RouterMaker{
 		Logger:        logger,
@@ -60,6 +75,12 @@ func main() {
 						Method:  "GET",
 						Pattern: "/healthcheck",
 						Handler: &healthHandler,
+					},
+					{
+						Name:    "Execute a trans request",
+						Method:  "POST",
+						Pattern: "/execute/{command}",
+						Handler: &transHandler,
 					},
 				},
 			},

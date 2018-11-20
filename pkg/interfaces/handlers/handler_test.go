@@ -1,13 +1,14 @@
 package handlers
 
 import (
-	"github.com/Yapo/goutils"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/Yapo/goutils"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 type MockHandler struct {
@@ -58,6 +59,11 @@ type DummyInput struct {
 	X int
 }
 
+type DummyInputGet struct {
+	Method string `get:"method"`
+	X      int
+}
+
 type DummyOutput struct {
 	Y string
 }
@@ -85,6 +91,62 @@ func TestJsonHandlerFuncOK(t *testing.T) {
 
 	assert.Equal(t, 42, w.Code)
 	assert.Equal(t, `{"Y":"That's some bad hat, Harry"}`+"\n", w.Body.String())
+	h.AssertExpectations(t)
+	l.AssertExpectations(t)
+}
+func TestJsonHandlerFillGet(t *testing.T) {
+	h := MockHandler{}
+	l := MockLogger{}
+	input := &DummyInputGet{}
+	response := &goutils.Response{
+		Code: 42,
+		Body: DummyOutput{"That's some bad hat, Harry"},
+	}
+	getter := mock.AnythingOfType("handlers.InputGetter")
+	h.On("Execute", getter).Return(response).Once()
+	h.On("Input").Return(input).Once()
+
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", "/someurl", strings.NewReader("{\"x\":12}"))
+
+	l.On("LogRequestStart", r)
+	l.On("LogRequestEnd", r, response)
+
+	fn := MakeJSONHandlerFunc(&h, &l)
+	fn(w, r)
+
+	assert.Equal(t, 42, w.Code)
+	assert.Equal(t, `{"Y":"That's some bad hat, Harry"}`+"\n", w.Body.String())
+	h.AssertExpectations(t)
+	l.AssertExpectations(t)
+}
+
+func TestJsonHandlerFillGetInvalidStruct(t *testing.T) {
+	h := MockHandler{}
+	l := MockLogger{}
+	input := 6
+	response := &goutils.Response{
+		Code: 400,
+		Body: goutils.GenericError{
+			ErrorMessage: "Is not a valid struct",
+		},
+	}
+
+	getter := mock.AnythingOfType("handlers.InputGetter")
+	h.On("Execute", getter).Return(response).Once()
+	h.On("Input").Return(input).Once()
+
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", "/someurl", strings.NewReader("{\"x\":12}"))
+
+	l.On("LogRequestStart", r)
+	l.On("LogRequestEnd", r, response)
+
+	fn := MakeJSONHandlerFunc(&h, &l)
+	fn(w, r)
+
+	assert.Equal(t, 400, w.Code)
+	assert.Equal(t, `{"ErrorMessage":"Is not a valid struct"}`+"\n", w.Body.String())
 	h.AssertExpectations(t)
 	l.AssertExpectations(t)
 }
