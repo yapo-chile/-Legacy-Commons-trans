@@ -9,43 +9,8 @@
 [![Badger](https://badger.spt-engprod-pro.schibsted.io/badge/engprod/Yapo/trans)](https://github.schibsted.io/spt-engprod/badger)
 <!-- Badger end badges -->
 
-trans needs a description here.
+This microservice acts as a proxy between other microservices and a Trans server. The params are passed in a JSON body, and it can be configured to limit what commands can be executed.
 
-## Checklist: Is my service ready?
-
-* [ ] Configure your github repository
-  - Open https://github.schibsted.io/Yapo/trans/settings
-  - Features: Wikis, Restrict editing, Issues, Projects
-  - Merge button: Only allow merge commits
-  - GitHub Pages: master branch / docs folder
-  - Open https://github.schibsted.io/Yapo/trans/settings/branches
-  - Default branch: master
-  - Protected branches: choose master
-  - Protect this branch
-    + Require pull request reviews
-      - Dismiss stale pull request
-    + Require status checks before merging
-      - Require branches to be up to date
-      - Quality gate code analysis
-      - Quality gate coverage
-      - Travis-ci
-    + Include administrators
-* [ ] Enable TravisCI
-  - Go to your service's github settings -> Hooks & Services -> Add Service -> Travis CI
-  - Fill in the form with the credentials you obtain from https://travis.schibsted.io/profile/
-  - Sync your repos and organizations on Travis
-  - Create a pull request and make a push on it
-  - The push should trigger a build. If it didn't, ensure that it is enabled on the travis service list
-  - Enjoy! This should automatically enable quality-gate reports and a few other goodies
-* [ ] Get your first PR merged
-  - Master should be a protected branch, so the only way to get commits there is via pull request
-  - Once the travis build is ok, and you got approval merge it back to master
-  - This will allow for the broken badges on top of this readme to display correctly
-  - Should them not display after some time, please report it
-* [ ] Delete this section
-  - It's time for me to leave, I've done my part
-  - It's time for you to start coding your new service and documenting your endpoints below
-  - Seriously, document your endpoints and delete this section
 
 ## How to run trans
 
