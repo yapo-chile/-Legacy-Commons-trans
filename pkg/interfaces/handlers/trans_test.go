@@ -118,13 +118,38 @@ func TestTransHandlerExecuteError(t *testing.T) {
 	response := domain.TransResponse{
 		Status: "TRANS_ERROR",
 	}
-	m.On("ExecuteCommand", command).Return(response, errors.New("Error")).Once()
+	m.On("ExecuteCommand", command).Return(response, nil).Once()
 	h := TransHandler{Interactor: &m}
 
 	expectedResponse := &goutils.Response{
 		Code: http.StatusBadRequest,
 		Body: TransRequestOutput{
 			Status: "TRANS_ERROR",
+		},
+	}
+
+	getter := MakeMockInputTransGetter(&input, nil)
+	r := h.Execute(getter)
+	assert.Equal(t, expectedResponse, r)
+
+	m.AssertExpectations(t)
+}
+
+func TestTransHandlerExecuteInternalError(t *testing.T) {
+	m := MockTransInteractor{}
+	input := TransHandlerInput{Command: "get_account"}
+	command := domain.TransCommand{
+		Command: "get_account",
+		Params:  make([]domain.TransParams, 0),
+	}
+	response := domain.TransResponse{}
+	m.On("ExecuteCommand", command).Return(response, errors.New("Error")).Once()
+	h := TransHandler{Interactor: &m}
+
+	expectedResponse := &goutils.Response{
+		Code: http.StatusInternalServerError,
+		Body: &goutils.GenericError{
+			ErrorMessage: "Error",
 		},
 	}
 

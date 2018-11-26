@@ -42,8 +42,9 @@ func TestSendCommandInvalidCommand(t *testing.T) {
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
-	logger.On("Debug")
+	logger.On("Error")
 	expectedResponse := make(map[string]string)
+	expectedResponse["error"] = "Invalid Command. Valid commands: [test]"
 	cmd := "transinfo"
 	params := make(map[string]string)
 	params["param1"] = "ok"
@@ -85,7 +86,7 @@ func TestSendCommandTimeout(t *testing.T) {
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
-	logger.On("Debug")
+	logger.On("Error")
 	var expectedResponse map[string]string
 	cmd := "test"
 	params := make(map[string]string)
@@ -118,7 +119,7 @@ func TestSendCommandBusyServer(t *testing.T) {
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
-	logger.On("Debug")
+	logger.On("Error")
 	var expectedResponse map[string]string
 	cmd := "test"
 	params := make(map[string]string)

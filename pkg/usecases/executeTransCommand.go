@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"fmt"
+	"strings"
 
 	"github.schibsted.io/Yapo/trans/pkg/domain"
 )
@@ -52,5 +53,18 @@ func (interactor TransInteractor) ExecuteCommand(
 			err = fmt.Errorf("error during execution")
 		}
 	}
+	// if the command sent doesn´t exists in the server
+	if response.Status == "TRANS_ERROR_NO_SUCH_COMMAND:Err no such command" {
+		err = fmt.Errorf("error command doesn't exists")
+		response.Status = "TRANS_ERROR"
+		response.Params["error"] = err.Error()
+	}
+	// if the error is a database error
+	if strings.Contains(response.Status, "TRANS_DATABASE_ERROR") {
+		err = fmt.Errorf(response.Status)
+		interactor.Logger.LogRepositoryError(command, err)
+		response.Status = "TRANS_DATABASE_ERROR"
+	}
+
 	return response, err
 }
