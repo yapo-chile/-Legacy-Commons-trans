@@ -62,16 +62,16 @@ func (handler *trans) SendCommand(cmd string, params map[string]string) (map[str
 			handler.allowedCommands,
 		)
 		respMap["error"] = err.Error()
-		handler.logger.Debug(err.Error())
+		handler.logger.Error(err.Error())
 		return respMap, err
 	}
 	conn, err := handler.connect()
+	if err != nil {
+		handler.logger.Error("Error connecting to trans: %s\n", err.Error())
+		return respMap, fmt.Errorf("Error connecting with trans server")
+	}
 	defer conn.Close() //nolint: errcheck, megacheck
 
-	if err != nil {
-		handler.logger.Debug("Error connecting to trans: %s\n", err.Error())
-		return respMap, err
-	}
 	// initiate the context so the request can timeout
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
@@ -81,7 +81,7 @@ func (handler *trans) SendCommand(cmd string, params map[string]string) (map[str
 
 	respMap, err = handler.sendWithContext(ctx, conn, cmd, params)
 	if err != nil {
-		handler.logger.Debug("Error Sending command %s: %s\n", cmd, err)
+		handler.logger.Error("Error Sending command %s: %s\n", cmd, err)
 	}
 
 	return respMap, err
@@ -147,7 +147,7 @@ func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteClos
 		// is waiting on reading from or writing to the connection.
 		err := conn.Close()
 		if err != nil {
-			handler.logger.Debug("Error Closing connection to trans after ctx done: %s\n", err.Error())
+			handler.logger.Error("Error Closing connection to trans after ctx done: %s\n", err.Error())
 		}
 		// wait for the goroutine to return and ignore the error
 		<-errChan

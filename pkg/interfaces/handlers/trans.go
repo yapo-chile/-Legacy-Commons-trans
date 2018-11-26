@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/Yapo/goutils"
 	"github.schibsted.io/Yapo/trans/pkg/domain"
@@ -46,6 +45,16 @@ func (t *TransHandler) Execute(ig InputGetter) *goutils.Response {
 	command := parseInput(in)
 	var val domain.TransResponse
 	val, err := t.Interactor.ExecuteCommand(command)
+	// handle database errors
+	if val.Status == "TRANS_DATABASE_ERROR" {
+		response = &goutils.Response{
+			Code: http.StatusInternalServerError,
+			Body: &goutils.GenericError{
+				ErrorMessage: val.Status,
+			},
+		}
+		return response
+	}
 	// handle errors given by the interactor
 	if err != nil {
 		response = &goutils.Response{
@@ -63,16 +72,6 @@ func (t *TransHandler) Execute(ig InputGetter) *goutils.Response {
 			Body: TransRequestOutput{
 				Status:   val.Status,
 				Response: val.Params,
-			},
-		}
-		return response
-	}
-	// handle database errors
-	if strings.Contains(val.Status, "TRANS_DATABASE_ERROR") {
-		response = &goutils.Response{
-			Code: http.StatusInternalServerError,
-			Body: &goutils.GenericError{
-				ErrorMessage: val.Status,
 			},
 		}
 		return response
