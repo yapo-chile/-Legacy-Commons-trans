@@ -45,16 +45,20 @@ func (t *TransHandler) Execute(ig InputGetter) *goutils.Response {
 	command := parseInput(in)
 	var val domain.TransResponse
 	val, err := t.Interactor.ExecuteCommand(command)
-	// handle database errors
-	if val.Status == "TRANS_DATABASE_ERROR" {
+	// handle trans errors, database errors, or general reported errors by trans
+	if _, ok := val.Params["error"]; ok ||
+		val.Status == "TRANS_ERROR" ||
+		val.Status == "TRANS_DATABASE_ERROR" {
 		response = &goutils.Response{
-			Code: http.StatusInternalServerError,
-			Body: &goutils.GenericError{
-				ErrorMessage: val.Status,
+			Code: http.StatusBadRequest,
+			Body: TransRequestOutput{
+				Status:   val.Status,
+				Response: val.Params,
 			},
 		}
 		return response
 	}
+
 	// handle errors given by the interactor
 	if err != nil {
 		response = &goutils.Response{
@@ -65,17 +69,7 @@ func (t *TransHandler) Execute(ig InputGetter) *goutils.Response {
 		}
 		return response
 	}
-	// handle trans errors or general reported errors by trans
-	if _, ok := val.Params["error"]; ok || val.Status == "TRANS_ERROR" {
-		response = &goutils.Response{
-			Code: http.StatusBadRequest,
-			Body: TransRequestOutput{
-				Status:   val.Status,
-				Response: val.Params,
-			},
-		}
-		return response
-	}
+
 	response = &goutils.Response{
 		Code: http.StatusOK,
 		Body: TransRequestOutput{
