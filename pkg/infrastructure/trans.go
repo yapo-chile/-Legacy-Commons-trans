@@ -174,6 +174,7 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 	buf := make([]byte, 0)
 	// Send command to Trans.
 	buf = appendCmd(buf, cmd, args)
+	fmt.Printf("content request:\ncmd:%s\nargs:%+v\nbytes:%+v\n", cmd, args, buf)
 	if _, err = conn.Write(buf); err != nil {
 		return nil, err
 	}
