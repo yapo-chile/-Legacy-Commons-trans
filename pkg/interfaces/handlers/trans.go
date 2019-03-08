@@ -47,8 +47,8 @@ func (t *TransHandler) Execute(ig InputGetter) *goutils.Response {
 	val, err := t.Interactor.ExecuteCommand(command)
 	// handle trans errors, database errors, or general reported errors by trans
 	if _, ok := val.Params["error"]; ok ||
-		val.Status == "TRANS_ERROR" ||
-		val.Status == "TRANS_DATABASE_ERROR" {
+		val.Status == usecases.TransError ||
+		val.Status == usecases.TransDatabaseError {
 		response = &goutils.Response{
 			Code: http.StatusBadRequest,
 			Body: TransRequestOutput{
