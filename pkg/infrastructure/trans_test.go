@@ -1,12 +1,14 @@
 package infrastructure
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.schibsted.io/Yapo/trans/pkg/usecases"
 )
 
 func TestIsAllowedCommand(t *testing.T) {
@@ -60,7 +62,7 @@ func TestSendCommandInvalidCommand(t *testing.T) {
 
 func TestSendCommandTimeout(t *testing.T) {
 	command := "cmd:test\nparam1:ok\ncommit:1\nend\n"
-	response := "status:TRANS_OK\n"
+	response := fmt.Sprintf("status:%s\n", usecases.TransOK)
 	//define the function that will receive the message
 	handlerFunc := func(input []byte) []byte {
 		time.Sleep(2 * time.Second)
@@ -135,6 +137,7 @@ func TestSendCommandBusyServer(t *testing.T) {
 }
 
 func TestSendCommandOK(t *testing.T) {
+
 	command := "cmd:test\nparam1:ok\xc1\ncommit:1\nend\n"
 	response := "status:TRANS_OK\n"
 
@@ -162,7 +165,7 @@ func TestSendCommandOK(t *testing.T) {
 	}
 	logger := MockLoggerInfrastructure{}
 	expectedResponse := make(map[string]string)
-	expectedResponse["status"] = "TRANS_OK"
+	expectedResponse["status"] = usecases.TransOK
 	cmd := "test"
 	params := make(map[string]string)
 	params["param1"] = "okÁ"

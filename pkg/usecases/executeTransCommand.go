@@ -7,6 +7,9 @@ import (
 	"github.schibsted.io/Yapo/trans/pkg/domain"
 )
 
+// TransOK Status returned when a trans command executes successfully
+const TransOK = "TRANS_OK"
+
 // TransError Error while executing a trans error
 const TransError = "TRANS_ERROR"
 
@@ -42,7 +45,7 @@ func (interactor TransInteractor) ExecuteCommand(
 	command domain.TransCommand,
 ) (domain.TransResponse, error) {
 	response := domain.TransResponse{
-		Status: "TRANS_ERROR",
+		Status: TransError,
 		Params: make(map[string]string),
 	}
 	// Ensure correct input

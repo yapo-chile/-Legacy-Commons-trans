@@ -75,7 +75,7 @@ func TestTransInteractorExecuteCommandOK(t *testing.T) {
 		Command: "command 1",
 	}
 	response := domain.TransResponse{
-		Status: "TRANS_OK",
+		Status: TransOK,
 	}
 	logger := &MockTransInteractorLogger{}
 	repo := &MockTransRepository{}

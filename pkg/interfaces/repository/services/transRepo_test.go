@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.schibsted.io/Yapo/trans/pkg/domain"
+	"github.schibsted.io/Yapo/trans/pkg/usecases"
 )
 
 type MockTransHandler struct {
@@ -75,7 +76,7 @@ func TestExecuteOK(t *testing.T) {
 	params["param 2"] = "value 2"
 
 	responseParams := make(map[string]string)
-	responseParams["status"] = "TRANS_OK"
+	responseParams["status"] = usecases.TransOK
 	responseParams["response 1"] = "response 1"
 	command := domain.TransCommand{
 		Command: cmd,
@@ -101,7 +102,7 @@ func TestExecuteOK(t *testing.T) {
 
 	response, err := repo.Execute(command)
 	expectedResponse := domain.TransResponse{
-		Status: "TRANS_OK",
+		Status: usecases.TransOK,
 		Params: make(map[string]string),
 	}
 	expectedResponse.Params["response 1"] = "response 1"
@@ -117,7 +118,7 @@ func TestExecuteOKNumbers(t *testing.T) {
 	params["param 1"] = "1980"
 
 	responseParams := make(map[string]string)
-	responseParams["status"] = "TRANS_OK"
+	responseParams["status"] = usecases.TransOK
 	responseParams["response 1"] = "response 1"
 	command := domain.TransCommand{
 		Command: cmd,
@@ -141,7 +142,7 @@ func TestExecuteOKNumbers(t *testing.T) {
 
 	response, err := repo.Execute(command)
 	expectedResponse := domain.TransResponse{
-		Status: "TRANS_OK",
+		Status: usecases.TransOK,
 		Params: make(map[string]string),
 	}
 	expectedResponse.Params["response 1"] = "response 1"

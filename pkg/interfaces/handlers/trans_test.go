@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.schibsted.io/Yapo/trans/pkg/domain"
+	"github.schibsted.io/Yapo/trans/pkg/usecases"
 )
 
 type MockTransInteractor struct {
@@ -43,7 +44,7 @@ func TestTransHandlerExecuteOK(t *testing.T) {
 		Params:  make([]domain.TransParams, 0),
 	}
 	response := domain.TransResponse{
-		Status: "TRANS_OK",
+		Status: usecases.TransOK,
 	}
 	m.On("ExecuteCommand", command).Return(response, nil).Once()
 	h := TransHandler{Interactor: &m}
@@ -51,7 +52,7 @@ func TestTransHandlerExecuteOK(t *testing.T) {
 	expectedResponse := &goutils.Response{
 		Code: http.StatusOK,
 		Body: TransRequestOutput{
-			Status: "TRANS_OK",
+			Status: usecases.TransOK,
 		},
 	}
 
@@ -80,7 +81,7 @@ func TestTransHandlerParseInput(t *testing.T) {
 	command.Params = append(command.Params, param)
 
 	response := domain.TransResponse{
-		Status: "TRANS_OK",
+		Status: usecases.TransOK,
 		Params: make(map[string]string),
 	}
 	response.Params["account_id"] = "1"
@@ -90,7 +91,7 @@ func TestTransHandlerParseInput(t *testing.T) {
 	h := TransHandler{Interactor: &m}
 
 	requestOutput := TransRequestOutput{
-		Status:   "TRANS_OK",
+		Status:   usecases.TransOK,
 		Response: make(map[string]string),
 	}
 	requestOutput.Response["account_id"] = "1"
@@ -116,7 +117,7 @@ func TestTransHandlerExecuteError(t *testing.T) {
 		Params:  make([]domain.TransParams, 0),
 	}
 	response := domain.TransResponse{
-		Status: "TRANS_ERROR",
+		Status: usecases.TransError,
 	}
 	m.On("ExecuteCommand", command).Return(response, nil).Once()
 	h := TransHandler{Interactor: &m}
@@ -124,7 +125,7 @@ func TestTransHandlerExecuteError(t *testing.T) {
 	expectedResponse := &goutils.Response{
 		Code: http.StatusBadRequest,
 		Body: TransRequestOutput{
-			Status: "TRANS_ERROR",
+			Status: usecases.TransError,
 		},
 	}
 
