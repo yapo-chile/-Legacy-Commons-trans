@@ -176,7 +176,10 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 	buf := make([]byte, 0)
 	// Send command to Trans.
 	buf = appendCmd(buf, cmd, args)
-	bufLatin, _ := charmap.ISO8859_1.NewEncoder().Bytes(buf)
+	bufLatin, encodingErr := charmap.ISO8859_1.NewEncoder().Bytes(buf)
+	if encodingErr != nil {
+		handler.logger.Error("Encoding error: %s\n", encodingErr.Error())
+	}
 	if _, err = conn.Write(bufLatin); err != nil {
 		return nil, err
 	}
