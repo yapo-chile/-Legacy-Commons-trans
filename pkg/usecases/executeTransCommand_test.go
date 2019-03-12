@@ -70,6 +70,75 @@ func TestTransInteractorRepositoryError(t *testing.T) {
 	logger.AssertExpectations(t)
 }
 
+func TestTransInteractorTransNoCommand(t *testing.T) {
+	command := domain.TransCommand{
+		Command: "command 1",
+	}
+	err := errors.New("error command doesn't exists")
+	response := domain.TransResponse{
+		Status: TransNoCommand,
+		Params: make(map[string]string),
+	}
+
+	logger := &MockTransInteractorLogger{}
+	repo := &MockTransRepository{}
+	repo.On("Execute", command).Return(response, err).Once()
+	interactor := TransInteractor{
+		Logger:     logger,
+		Repository: repo,
+	}
+	logger.On("LogRepositoryError", command, err).Once()
+	expectedErr := fmt.Errorf("error command doesn't exists")
+	expectedResponse := domain.TransResponse{
+		Status: TransError,
+		Params: make(map[string]string),
+	}
+	expectedResponse.Params["error"] = expectedErr.Error()
+	returnResp, returnErr := interactor.ExecuteCommand(command)
+	assert.Error(t, returnErr)
+	assert.Equal(t, expectedErr, returnErr)
+	assert.Equal(t, expectedResponse, returnResp)
+	repo.AssertExpectations(t)
+	logger.AssertExpectations(t)
+}
+
+func TestTransInteractorTransDatabaseError(t *testing.T) {
+	command := domain.TransCommand{
+		Command: "command 1",
+	}
+	errorStringDB := "ERROR EXECUTING QUERY"
+	errorString := "Trans Database error"
+	err := errors.New(errorString)
+	errDB := errors.New(errorStringDB)
+	response := domain.TransResponse{
+		Status: fmt.Sprintf("%s:%s", TransDatabaseError, errorStringDB),
+		Params: make(map[string]string),
+	}
+
+	logger := MockTransInteractorLogger{}
+	repo := &MockTransRepository{}
+	repo.On("Execute", command).Return(response, err).Once()
+	interactor := TransInteractor{
+		Logger:     &logger,
+		Repository: repo,
+	}
+	logger.On("LogRepositoryError", command, err).Once()
+	logger.On("LogRepositoryError", command, errDB).Once()
+
+	expectedResponse := domain.TransResponse{
+		Status: TransDatabaseError,
+		Params: make(map[string]string),
+	}
+	expectedResponse.Params["error"] = errorStringDB
+	returnResp, returnErr := interactor.ExecuteCommand(command)
+
+	assert.Error(t, returnErr)
+	assert.Equal(t, errDB, returnErr)
+	assert.Equal(t, expectedResponse, returnResp)
+	repo.AssertExpectations(t)
+	logger.AssertExpectations(t)
+}
+
 func TestTransInteractorExecuteCommandOK(t *testing.T) {
 	command := domain.TransCommand{
 		Command: "command 1",

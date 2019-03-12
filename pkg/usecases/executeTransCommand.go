@@ -74,7 +74,9 @@ func (interactor TransInteractor) ExecuteCommand(
 	// if the error is a database error
 	if strings.Contains(response.Status, TransDatabaseError) {
 		//get the specific error message from the status response
-		err = fmt.Errorf(strings.Replace(response.Status, TransDatabaseError, "", 1))
+		errorString := strings.Replace(response.Status, TransDatabaseError, "", 1)
+		errorString = strings.Replace(errorString, ":", "", 1)
+		err = fmt.Errorf(errorString)
 		interactor.Logger.LogRepositoryError(command, err)
 		response.Status = TransDatabaseError
 		response.Params["error"] = err.Error()
