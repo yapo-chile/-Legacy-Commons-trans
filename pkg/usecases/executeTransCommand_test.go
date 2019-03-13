@@ -115,11 +115,11 @@ func TestTransInteractorTransDatabaseError(t *testing.T) {
 		Params: make(map[string]string),
 	}
 
-	logger := MockTransInteractorLogger{}
+	logger := &MockTransInteractorLogger{}
 	repo := &MockTransRepository{}
 	repo.On("Execute", command).Return(response, err).Once()
 	interactor := TransInteractor{
-		Logger:     &logger,
+		Logger:     logger,
 		Repository: repo,
 	}
 	logger.On("LogRepositoryError", command, err).Once()
