@@ -179,6 +179,7 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 	bufLatin, encodingErr := charmap.ISO8859_1.NewEncoder().Bytes(buf)
 	if encodingErr != nil {
 		handler.logger.Error("Encoding error: %s\n", encodingErr.Error())
+		return nil, encodingErr
 	}
 	if _, err = conn.Write(bufLatin); err != nil {
 		return nil, err

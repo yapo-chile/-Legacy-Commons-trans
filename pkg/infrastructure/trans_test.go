@@ -175,3 +175,41 @@ func TestSendCommandOK(t *testing.T) {
 	assert.Equal(t, expectedResponse, resp)
 	logger.AssertExpectations(t)
 }
+
+func TestSendCommandErrEnc(t *testing.T) {
+	//define the function that will receive the message
+	handlerFunc := func(input []byte) []byte {
+		var response []byte
+		return response
+	}
+	//initiate the server
+	server := NewMockTransServer()
+	defer server.Close()
+	server.SetHandler(handlerFunc)
+
+	//initiate the conf
+	addr := strings.Split(server.Address, ":")
+	host := addr[0]
+	port, _ := strconv.Atoi(addr[1])
+	conf := TransConf{
+		Host:            host,
+		Port:            port,
+		Timeout:         15,
+		RetryAfter:      5,
+		BuffSize:        4096,
+		AllowedCommands: "test",
+	}
+	logger := MockLoggerInfrastructure{}
+	logger.On("Error")
+	cmd := "test"
+	params := make(map[string]string)
+	params["param1"] = "ok我"
+
+	transFactory := NewTextProtocolTransFactory(conf, &logger)
+	transHandler := transFactory.MakeTransHandler()
+
+	resp, err := transHandler.SendCommand(cmd, params)
+	assert.Error(t, err)
+	assert.Nil(t, resp)
+	logger.AssertExpectations(t)
+}
