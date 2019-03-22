@@ -1,5 +1,5 @@
-hash: 90f8487bcf7e6670096c5df251cd619b5845a215ac953a5722f687e0f481be5f
-updated: 2018-11-06T09:45:54.893581-03:00
+hash: 116a54930ee1b769f3a98050b6acc3a66337a53f791f89a385cde6753ce2ae85
+updated: 2019-03-12T16:09:20.51933944-03:00
 imports:
 - name: github.com/eapache/go-resiliency
   version: ef9aaa7ea8bd2448429af1a77cf41b2b3b34bdd6
@@ -20,6 +20,14 @@ imports:
   version: 721ca4146b6a61457bd15254c0fc1d6f6bcbce20
 - name: github.com/Yapo/logger
   version: 91855e974718b8c68dd00e63817568f1f512a4cc
+- name: golang.org/x/text
+  version: 5d731a35f4867878fc89f7744f7b6debb3beded6
+  subpackages:
+  - encoding
+  - encoding/charmap
+  - encoding/internal
+  - encoding/internal/identifier
+  - transform
 - name: gopkg.in/gorilla/mux.v1
   version: e3702bed27f0d39777b0b37b664b6280e8ef8fbf
 testImports:

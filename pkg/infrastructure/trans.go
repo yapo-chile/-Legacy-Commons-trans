@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"golang.org/x/text/encoding/charmap"
+
 	"github.com/eapache/go-resiliency/retrier"
 	"github.schibsted.io/Yapo/trans/pkg/interfaces/loggers"
 	"github.schibsted.io/Yapo/trans/pkg/interfaces/repository/services"
@@ -174,7 +176,12 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 	buf := make([]byte, 0)
 	// Send command to Trans.
 	buf = appendCmd(buf, cmd, args)
-	if _, err = conn.Write(buf); err != nil {
+	bufLatin, encodingErr := charmap.ISO8859_1.NewEncoder().Bytes(buf)
+	if encodingErr != nil {
+		handler.logger.Error("UTF-8 expected, encoding error: %s\n", encodingErr.Error())
+		return nil, encodingErr
+	}
+	if _, err = conn.Write(bufLatin); err != nil {
 		return nil, err
 	}
 

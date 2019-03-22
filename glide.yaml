@@ -7,6 +7,7 @@ import:
   - retrier
 - package: github.com/newrelic/go-agent
 - package: gopkg.in/gorilla/mux.v1
+- package: golang.org/x/text/encoding/charmap
 testImport:
 - package: github.com/stretchr/testify
   subpackages:
