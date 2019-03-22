@@ -7,6 +7,18 @@ import (
 	"github.schibsted.io/Yapo/trans/pkg/domain"
 )
 
+// TransOK Status returned when a trans command executes successfully
+const TransOK = "TRANS_OK"
+
+// TransError Error while executing a trans error
+const TransError = "TRANS_ERROR"
+
+// TransDatabaseError Error while executing a database request inside a trans
+const TransDatabaseError = "TRANS_DATABASE_ERROR"
+
+// TransNoCommand Error when the provided command doesn't exists
+const TransNoCommand = "TRANS_ERROR_NO_SUCH_COMMAND:Err no such command"
+
 // ExecuteTransUsecase states:
 // As a User, I would like to execute my TransCommand on a Trans server and get the corresponding response
 // ExecuteTrans should return a response, or an appropiate error if there was a problem.
@@ -33,7 +45,7 @@ func (interactor TransInteractor) ExecuteCommand(
 	command domain.TransCommand,
 ) (domain.TransResponse, error) {
 	response := domain.TransResponse{
-		Status: "TRANS_ERROR",
+		Status: TransError,
 		Params: make(map[string]string),
 	}
 	// Ensure correct input
@@ -54,16 +66,20 @@ func (interactor TransInteractor) ExecuteCommand(
 		}
 	}
 	// if the command sent doesn´t exists in the server
-	if response.Status == "TRANS_ERROR_NO_SUCH_COMMAND:Err no such command" {
+	if response.Status == TransNoCommand {
 		err = fmt.Errorf("error command doesn't exists")
-		response.Status = "TRANS_ERROR"
+		response.Status = TransError
 		response.Params["error"] = err.Error()
 	}
 	// if the error is a database error
-	if strings.Contains(response.Status, "TRANS_DATABASE_ERROR") {
-		err = fmt.Errorf(response.Status)
+	if strings.Contains(response.Status, TransDatabaseError) {
+		//get the specific error message from the status response
+		errorString := strings.Replace(response.Status, TransDatabaseError, "", 1)
+		errorString = strings.Replace(errorString, ":", "", 1)
+		err = fmt.Errorf(errorString)
 		interactor.Logger.LogRepositoryError(command, err)
-		response.Status = "TRANS_DATABASE_ERROR"
+		response.Status = TransDatabaseError
+		response.Params["error"] = err.Error()
 	}
 
 	return response, err
