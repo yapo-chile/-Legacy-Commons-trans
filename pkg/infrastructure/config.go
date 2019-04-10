@@ -35,7 +35,7 @@ type LoggerConf struct {
 // TODO: You need to set the defaults according to your service
 type NewRelicConf struct {
 	// Key the key to authenticate with NewRelic
-	Key string `env:"KEY" envDefault:"923864cba2f12410aff39279cddfd339a07f13a3"`
+	Key string `env:"KEY" envDefault:"f54b15d5702ec12a1df9b9b11960313427f27aae"`
 	// Appname name of the service inside NewRelic
 	Appname string `env:"APPNAME" envDefault:"yapo-trans-poya"`
 	// Enabled if we should enable reporting to NewRelic
