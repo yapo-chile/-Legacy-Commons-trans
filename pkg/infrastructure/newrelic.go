@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/newrelic/go-agent"
-	"github.schibsted.io/Yapo/trans/pkg/interfaces/loggers"
+	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/loggers"
 )
 
 // NewRelicHandler struct representing a NewRelic handler with the new relic app

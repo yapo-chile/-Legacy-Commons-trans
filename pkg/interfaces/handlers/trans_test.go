@@ -8,8 +8,8 @@ import (
 	"github.com/Yapo/goutils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.schibsted.io/Yapo/trans/pkg/domain"
-	"github.schibsted.io/Yapo/trans/pkg/usecases"
+	"github.mpi-internal.com/Yapo/trans/pkg/domain"
+	"github.mpi-internal.com/Yapo/trans/pkg/usecases"
 )
 
 type MockTransInteractor struct {

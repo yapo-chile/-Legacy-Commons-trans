@@ -1,4 +1,4 @@
-package: github.schibsted.io/Yapo/trans
+package: github.mpi-internal.com/Yapo/trans
 import:
 - package: github.com/Yapo/goutils
 - package: github.com/Yapo/logger

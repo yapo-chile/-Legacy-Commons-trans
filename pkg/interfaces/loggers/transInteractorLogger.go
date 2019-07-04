@@ -1,8 +1,8 @@
 package loggers
 
 import (
-	"github.schibsted.io/Yapo/trans/pkg/domain"
-	"github.schibsted.io/Yapo/trans/pkg/usecases"
+	"github.mpi-internal.com/Yapo/trans/pkg/domain"
+	"github.mpi-internal.com/Yapo/trans/pkg/usecases"
 )
 
 // TransInteractorDefaultLogger logger user in the TransInteractor

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.schibsted.io/Yapo/trans/pkg/usecases"
+	"github.mpi-internal.com/Yapo/trans/pkg/usecases"
 )
 
 func TestIsAllowedCommand(t *testing.T) {

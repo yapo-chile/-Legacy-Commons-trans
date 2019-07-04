@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.schibsted.io/Yapo/trans/pkg/domain"
+	"github.mpi-internal.com/Yapo/trans/pkg/domain"
 )
 
 // TransHandler is an interface to use Trans functions

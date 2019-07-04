@@ -2,7 +2,7 @@
 docker-build:
 	@scripts/commands/docker-build.sh
 
-## Push docker image to containers.schibsted.io
+## Push docker image to containers.mpi-internal.com
 docker-publish:
 	@scripts/commands/docker-publish.sh
 

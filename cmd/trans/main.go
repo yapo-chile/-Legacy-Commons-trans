@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"os"
 
-	"github.schibsted.io/Yapo/trans/pkg/infrastructure"
-	"github.schibsted.io/Yapo/trans/pkg/interfaces/handlers"
-	"github.schibsted.io/Yapo/trans/pkg/interfaces/loggers"
-	"github.schibsted.io/Yapo/trans/pkg/interfaces/repository/services"
-	"github.schibsted.io/Yapo/trans/pkg/usecases"
+	"github.mpi-internal.com/Yapo/trans/pkg/infrastructure"
+	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/handlers"
+	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/loggers"
+	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/repository/services"
+	"github.mpi-internal.com/Yapo/trans/pkg/usecases"
 )
 
 var shutdownSequence = infrastructure.NewShutdownSequence()
