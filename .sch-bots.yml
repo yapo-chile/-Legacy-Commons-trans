@@ -1,7 +1,7 @@
 qualityGate:
   coverage:
     acceptedDeltaPercentage: 5
-    enabled: true
+    enabled: false
   codeAnalysis:
     highsLimit: 0
     mediumsLimit: 0
