@@ -36,7 +36,3 @@ deploy:
     script: make docker-publish
     on:
       all_branches: true
-
-notifications:
-  webhooks:
-    - https://devhose.spt-engprod-pro.schibsted.io/devhose/travis

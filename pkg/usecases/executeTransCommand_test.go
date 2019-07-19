@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.schibsted.io/Yapo/trans/pkg/domain"
+	"github.mpi-internal.com/Yapo/trans/pkg/domain"
 )
 
 type MockTransRepository struct {

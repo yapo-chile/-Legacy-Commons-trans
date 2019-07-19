@@ -5,7 +5,7 @@ import (
 
 	"github.com/Yapo/goutils"
 
-	"github.schibsted.io/Yapo/trans/pkg/interfaces/handlers"
+	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/handlers"
 )
 
 type jsonHandlerDefaultLogger struct {

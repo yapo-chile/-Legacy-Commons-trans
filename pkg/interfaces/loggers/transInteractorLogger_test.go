@@ -3,7 +3,7 @@ package loggers
 import (
 	"testing"
 
-	"github.schibsted.io/Yapo/trans/pkg/domain"
+	"github.mpi-internal.com/Yapo/trans/pkg/domain"
 )
 
 // There are no return values to assert on, as logger only cause side effects

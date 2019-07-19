@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.schibsted.io/Yapo/trans/pkg/domain"
+	"github.mpi-internal.com/Yapo/trans/pkg/domain"
 )
 
 // TransOK Status returned when a trans command executes successfully

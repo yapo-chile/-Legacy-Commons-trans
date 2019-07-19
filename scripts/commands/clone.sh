@@ -7,8 +7,8 @@ if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 
 TEMPLATE=trans
 BRANCH=master
-GITHUB_ORG=github.schibsted.io/Yapo
-GITHUB_URL=git@github.schibsted.io:Yapo
+GITHUB_ORG=github.mpi-internal.com/Yapo
+GITHUB_URL=git@github.mpi-internal.com:Yapo
 BASEPATH=${GOPATH}/src/${GITHUB_ORG}
 GITHUB_NAME=$(git config user.name)
 GITHUB_EMAIL=$(git config user.email)
