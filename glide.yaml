@@ -6,8 +6,14 @@ import:
   subpackages:
   - retrier
 - package: github.com/newrelic/go-agent
+- package: github.com/prometheus/client_golang
+  subpackages:
+  - prometheus
+  - prometheus/promhttp
+- package: golang.org/x/text
+  subpackages:
+  - encoding/charmap
 - package: gopkg.in/gorilla/mux.v1
-- package: golang.org/x/text/encoding/charmap
 testImport:
 - package: github.com/stretchr/testify
   subpackages:

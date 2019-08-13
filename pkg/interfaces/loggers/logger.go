@@ -7,4 +7,5 @@ type Logger interface {
 	Warn(format string, params ...interface{})
 	Error(format string, params ...interface{})
 	Crit(format string, params ...interface{})
+	Success(format string, params ...interface{})
 }

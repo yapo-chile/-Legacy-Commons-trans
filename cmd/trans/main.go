@@ -23,13 +23,23 @@ func main() {
 		fmt.Printf("Config: \n%s\n", jconf)
 	}
 
+	fmt.Printf("Setting up Prometheus\n")
+	prometheus := infrastructure.MakePrometheusExporter(
+		conf.PrometheusConf.Port,
+		conf.PrometheusConf.Enabled,
+	)
+
 	fmt.Printf("Setting up logger\n")
-	logger, err := infrastructure.MakeYapoLogger(&conf.LoggerConf)
+	logger, err := infrastructure.MakeYapoLogger(&conf.LoggerConf,
+		prometheus.NewEventsCollector(
+			"trans_service_events_total",
+			"events tracker counter for trans service",
+		),
+	)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(2)
 	}
-
 	logger.Info("Setting up New Relic")
 	newrelic := infrastructure.NewRelicHandler{
 		Appname: conf.NewRelicConf.Appname,
@@ -62,8 +72,11 @@ func main() {
 	}
 	// Setting up router
 	maker := infrastructure.RouterMaker{
-		Logger:        logger,
-		WrapperFunc:   newrelic.TrackHandlerFunc,
+		Logger: logger,
+		WrapperFuncs: []infrastructure.WrapperFunc{
+			newrelic.TrackHandlerFunc,
+			prometheus.TrackHandlerFunc,
+		},
 		WithProfiling: conf.ServiceConf.Profiling,
 		Routes: infrastructure.Routes{
 			{
