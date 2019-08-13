@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/http/pprof"
 
+	"github.com/gorilla/context"
 	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/handlers"
 	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/loggers"
 	"gopkg.in/gorilla/mux.v1"
@@ -32,21 +33,21 @@ type Routes []routeGroups
 // RouterMaker gathers route and wrapper information to build a router
 type RouterMaker struct {
 	Logger        loggers.Logger
-	WrapperFunc   WrapperFunc
+	WrapperFuncs  []WrapperFunc
 	WithProfiling bool
 	Routes        Routes
 }
 
 // NewRouter setups a Router based on the provided routes
-func (maker *RouterMaker) NewRouter() *mux.Router {
+func (maker *RouterMaker) NewRouter() http.Handler {
 	router := mux.NewRouter()
 	for _, routeGroup := range maker.Routes {
 		subRouter := router.PathPrefix(routeGroup.Prefix).Subrouter()
 		for _, route := range routeGroup.Groups {
 			hLogger := loggers.MakeJSONHandlerLogger(maker.Logger)
 			handler := handlers.MakeJSONHandlerFunc(route.Handler, hLogger)
-			if maker.WrapperFunc != nil {
-				handler = maker.WrapperFunc(route.Pattern, handler)
+			for _, wrapFunc := range maker.WrapperFuncs {
+				handler = wrapFunc(route.Pattern, handler)
 			}
 			subRouter.
 				Methods(route.Method).
@@ -68,5 +69,5 @@ func (maker *RouterMaker) NewRouter() *mux.Router {
 		router.Handle("/debug/pprof/mutex", pprof.Handler("mutex"))
 		router.Handle("/debug/pprof/threadcreate", pprof.Handler("threadcreate"))
 	}
-	return router
+	return context.ClearHandler(router)
 }

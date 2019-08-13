@@ -1,12 +1,24 @@
-hash: 116a54930ee1b769f3a98050b6acc3a66337a53f791f89a385cde6753ce2ae85
-updated: 2019-03-12T16:09:20.51933944-03:00
+hash: f0cf9b00b7826987bd9b13b0ce00add5003412c0ccc011620b02f887037e8d7d
+updated: 2019-08-13T09:50:41.388465-04:00
 imports:
+- name: github.com/beorn7/perks
+  version: 3a771d992973f24aa725d07868b467d1ddfceafb
+  subpackages:
+  - quantile
 - name: github.com/eapache/go-resiliency
   version: ef9aaa7ea8bd2448429af1a77cf41b2b3b34bdd6
   subpackages:
   - retrier
+- name: github.com/golang/protobuf
+  version: b27b920f9e71b439b873b17bf99f56467623814a
+  subpackages:
+  - proto
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
+- name: github.com/matttproud/golang_protobuf_extensions
+  version: c12348ce28de40eed0136aa2b644d0ee0650e56c
+  subpackages:
+  - pbutil
 - name: github.com/newrelic/go-agent
   version: f5bce3387232559bcbe6a5f8227c4bf508dac1ba
   subpackages:
@@ -16,6 +28,28 @@ imports:
   - internal/logger
   - internal/sysinfo
   - internal/utilization
+- name: github.com/prometheus/client_golang
+  version: d5f63107bfcac90d692baa94bd0064132e1f1d0d
+  subpackages:
+  - prometheus
+  - prometheus/internal
+  - prometheus/promhttp
+- name: github.com/prometheus/client_model
+  version: 5c3871d89910bfb32f5fcab2aa4b9ec68e65a99f
+  subpackages:
+  - go
+- name: github.com/prometheus/common
+  version: c7de2306084e37d54b8be01f3541a8464345e9a5
+  subpackages:
+  - expfmt
+  - internal/bitbucket.org/ww/goautoneg
+  - model
+- name: github.com/prometheus/procfs
+  version: 05ee40e3a273f7245e8777337fc7b46e533a9a92
+  subpackages:
+  - internal/util
+  - nfs
+  - xfs
 - name: github.com/Yapo/goutils
   version: 721ca4146b6a61457bd15254c0fc1d6f6bcbce20
 - name: github.com/Yapo/logger

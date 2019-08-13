@@ -31,6 +31,12 @@ type LoggerConf struct {
 	LogLevel       int    `env:"LOG_LEVEL" envDefault:"0"`
 }
 
+// PrometheusConf holds configuration to report to Prometheus
+type PrometheusConf struct {
+	Port    string `env:"PORT" envDefault:"8877"`
+	Enabled bool   `env:"ENABLED" envDefault:"false"`
+}
+
 // NewRelicConf holds configuration to report to New Relic
 // TODO: You need to set the defaults according to your service
 type NewRelicConf struct {
@@ -67,11 +73,12 @@ type TransConf struct {
 
 // Config holds all configuration for the service
 type Config struct {
-	Trans        TransConf     `env:"TRANS_"`
-	ServiceConf  ServiceConf   `env:"SERVICE_"`
-	NewRelicConf NewRelicConf  `env:"NEWRELIC_"`
-	LoggerConf   LoggerConf    `env:"LOGGER_"`
-	Runtime      RuntimeConfig `env:"APP_"`
+	Trans          TransConf      `env:"TRANS_"`
+	ServiceConf    ServiceConf    `env:"SERVICE_"`
+	PrometheusConf PrometheusConf `env:"PROMETHEUS_"`
+	NewRelicConf   NewRelicConf   `env:"NEWRELIC_"`
+	LoggerConf     LoggerConf     `env:"LOGGER_"`
+	Runtime        RuntimeConfig  `env:"APP_"`
 }
 
 // LoadFromEnv loads the config data from the environment variables
