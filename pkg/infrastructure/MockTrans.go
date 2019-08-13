@@ -61,9 +61,7 @@ func (srv *MockTransServer) Serve(l net.Listener) error {
 		if err != nil {
 			return err
 		}
-		go func(conn net.Conn) {
-			srv.handleRequest(conn)
-		}(conn)
+		go srv.handleRequest(conn)
 	}
 }
 

@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSanetizePrometheusMetricName(t *testing.T) {
+func TestSanitizePrometheusMetricName(t *testing.T) {
 	cases := map[string]string{
 		"test-1":                           "test_1",
 		"testTest2":                        "test_test2",

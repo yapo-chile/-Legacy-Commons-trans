@@ -77,5 +77,5 @@ func TestMockTransServerBusy(t *testing.T) {
 
 	res, err := bufio.NewReader(conn).ReadString('\n')
 	assert.Error(t, err)
-	assert.Equal(t, "", res)
+	assert.Empty(t, res)
 }
