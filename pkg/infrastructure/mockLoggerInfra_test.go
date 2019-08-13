@@ -33,3 +33,8 @@ func (m *MockLoggerInfrastructure) Error(message string, params ...interface{}) 
 func (m *MockLoggerInfrastructure) Warn(message string, params ...interface{}) {
 	m.Called()
 }
+
+// Success simulate Success Logger
+func (m *MockLoggerInfrastructure) Success(message string, params ...interface{}) {
+	m.Called()
+}

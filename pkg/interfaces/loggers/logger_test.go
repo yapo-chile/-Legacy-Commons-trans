@@ -27,3 +27,6 @@ func (m *loggerMock) Error(format string, params ...interface{}) {
 func (m *loggerMock) Crit(format string, params ...interface{}) {
 	fmt.Sprintf(format, params...) // nolint: vet,megacheck
 }
+func (m *loggerMock) Success(format string, params ...interface{}) {
+	fmt.Sprintf(format, params...) // nolint: vet,megacheck
+}
