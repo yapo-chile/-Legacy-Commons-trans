@@ -143,14 +143,14 @@ dev@schibsted.cl
 ## Kubernetes
 
 Kubernetes and Helm have to be installed in your machine.
-If you haven't done, you need to create a secret to reach Artifactory.
-`kubectl create secret docker-registry containers-mpi-internal-com -n <namespace> --docker-server=containers.mpi-internal.com --docker-username=<okta_username> --docker-password=<okta_password> --docker-email=<your_email>`
+If you haven't done it yet, you need to create a secret to reach Artifactory.
+`kubectl create secret docker-registry containers-mpi-internal-com -n <namespace> --docker-server=containers.mpi-internal.com --docker-username=<okta_username> --docker-password=<artifactory_api_key> --docker-email=<your_email>`
 
 ### Helm Charts
 
-1. You need to fill out the ENV variables in the k8s/search-ms/templates/deployment.yaml file.
+1. You need to fill out the ENV variables in the k8s/trans/templates/deployment.yaml file.
 2. You should fill out the *tag*, and *host* under hosts to your namespace.
 3. Add this host name to your /etc/hosts file with the correct IP address (127.21.5.11)
-4. You run `helm install -n <name_of_your_release> k8s/search-ms`
-5. Check you pod is running with `kubectl get pods`
+4. You run `helm install -n <name_of_your_release> k8s/trans`
+5. Check your pod is running with `kubectl get pods`
 6. If you want to check your request log `kubectl logs <name_of_your_pod>`
