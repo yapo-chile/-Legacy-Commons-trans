@@ -6,13 +6,24 @@ replicaCount: 1
 
 image:
   repository: containers.mpi-internal.com/yapo/trans
-  tag: # Should it pass from the command line
+  tag: "" # Should it pass from the command line
   pullPolicy: IfNotPresent
   pullSecret: containers-mpi-internal-com
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+
+newrelic:
+  enabled: "false"
+
+trans:
+  commands: "transinfo|get_account|newad|clear|loadad|set_ad_evaluation|bump_target_advertisement"
+  host: "172.21.10.62"
+  port: "5656"
+
+prometeus:
+  enabled: "true"
 
 service:
   type: ClusterIP
@@ -24,5 +35,5 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: # Should it pass from the command line
+    - host: "" # Should it pass from the command line
       paths: ['/']

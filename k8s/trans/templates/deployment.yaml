@@ -26,19 +26,19 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/v1/healthcheck
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /api/v1/healthcheck
+              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          env:
-            - name: NEWRELIC_ENABLED
-              value: # "false"
-            - name: TRANS_COMMANDS
-              value: # "transinfo|get_account|newad|clear|loadad|set_ad_evaluation|bump_target_advertisement"
-            - name: TRANS_HOST
-              value: # "172.21.10.62"
-            - name: TRANS_PORT
-              value: # "5656"
-            - name: PROMETHEUS_ENABLED
-              value: # "true"
+          envFrom:
+            - configMapRef:
+                name: {{.Release.Name}}-trans-configmap
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
