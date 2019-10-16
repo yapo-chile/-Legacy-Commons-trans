@@ -13,6 +13,7 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+dontUseReleaseName: true
 
 newrelic:
   enabled: "false"
