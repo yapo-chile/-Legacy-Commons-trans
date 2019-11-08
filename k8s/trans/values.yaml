@@ -3,7 +3,8 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-
+globals:
+  env: reg
 image:
   repository: containers.mpi-internal.com/yapo/trans
   tag: "20190813_215755" # Should it pass from the command line
@@ -36,5 +37,5 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: "trans.dobosi-norbert.yapo.cl" # Should it pass from the command line
+    - host: "yapo.cl" # Should it pass from the command line
       paths: ['/']

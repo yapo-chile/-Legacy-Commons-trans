@@ -45,3 +45,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{/*
+Generate the host prefix using the env global var
+*/}}
+{{- define "trans.hostPrefix" -}}
+{{- if eq "reg" .Values.globals.env -}}
+{{- printf "%s.%s.%s" .Chart.Name .Release.Namespace .Values.globals.env -}}
+{{- else -}}
+{{- printf "%s.%s" .Chart.Name .Values.globals.env -}}
+{{- end -}}
+{{- end -}}
