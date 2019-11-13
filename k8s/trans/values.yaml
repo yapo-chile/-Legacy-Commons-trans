@@ -7,7 +7,7 @@ globals:
   env: reg
 image:
   repository: containers.mpi-internal.com/yapo/trans
-  tag: "20190813_215755" # Should it pass from the command line
+  tag: "" # Should it pass from the command line
   pullPolicy: IfNotPresent
   pullSecret: containers-mpi-internal-com
 
