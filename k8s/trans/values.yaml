@@ -7,7 +7,7 @@ globals:
   env: reg
 image:
   repository: containers.mpi-internal.com/yapo/trans
-  tag: "" # Should it pass from the command line
+  tag: "feat_add_prom_k8s" # Should it pass from the command line
   pullPolicy: IfNotPresent
   pullSecret: containers-mpi-internal-com
 
@@ -24,12 +24,22 @@ trans:
   host: "172.21.10.62"
   port: "5656"
 
-prometeus:
+prometheus:
   enabled: "true"
+  port: "8877"
 
 service:
   type: ClusterIP
   port: 80
+  prometheus_port: 8877
+
+healthcheck:
+  readiness:
+    initialDelaySeconds: 5
+    periodSeconds: 60
+  liveness:
+    initialDelaySeconds: 5
+    periodSeconds: 3600
 
 ingress:
   enabled: true
