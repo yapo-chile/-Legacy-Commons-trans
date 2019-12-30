@@ -19,6 +19,10 @@ dontUseReleaseName: true
 newrelic:
   enabled: "false"
 
+prometheus:
+  enabled: "true"
+  port: "8877"
+
 trans:
   commands: "transinfo|get_account|newad|clear|loadad|set_ad_evaluation|bump_target_advertisement"
   host: "172.21.10.62"
@@ -47,5 +51,5 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: "yapo.cl" # Should it pass from the command line
+    - host: "yapo.cl" # this is the base host
       paths: ['/']
