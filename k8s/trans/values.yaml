@@ -27,6 +27,7 @@ trans:
   commands: "transinfo|get_account|newad|clear|loadad|set_ad_evaluation|bump_target_advertisement"
   host: "172.21.10.62"
   port: "5656"
+  timeout: "30"
 
 prometheus:
   enabled: "true"
