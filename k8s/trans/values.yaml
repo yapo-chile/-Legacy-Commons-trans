@@ -29,15 +29,6 @@ trans:
   port: "5656"
   timeout: "30"
 
-prometheus:
-  enabled: "true"
-  port: "8877"
-
-service:
-  type: ClusterIP
-  port: 80
-  prometheus_port: 8877
-
 healthcheck:
   readiness:
     initialDelaySeconds: 5
@@ -45,6 +36,11 @@ healthcheck:
   liveness:
     initialDelaySeconds: 5
     periodSeconds: 3600
+
+service:
+  type: ClusterIP
+  port: 80
+  prometheus_port: 8877
 
 ingress:
   enabled: true
