@@ -28,14 +28,21 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+            - name: prom
+              containerPort: 8877
+              protocol: TCP
           livenessProbe:
             httpGet:
               path: /api/v1/healthcheck
               port: http
+            initialDelaySeconds: {{ .Values.healthcheck.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.healthcheck.liveness.periodSeconds }}
           readinessProbe:
             httpGet:
               path: /api/v1/healthcheck
               port: http
+            initialDelaySeconds: {{ .Values.healthcheck.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.healthcheck.readiness.periodSeconds }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom:

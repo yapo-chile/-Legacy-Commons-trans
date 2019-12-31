@@ -9,4 +9,4 @@ data:
   TRANS_COMMANDS: "{{ .Values.trans.commands }}"
   TRANS_HOST: "{{ .Values.trans.host }}"
   TRANS_PORT: "{{ .Values.trans.port }}"
-  PROMETHEUS_ENABLED: "{{ .Values.prometeus.enabled }}"
+  PROMETHEUS_ENABLED: "{{ .Values.prometheus.enabled }}"
