@@ -202,6 +202,10 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 
 		buf = append(buf, line...)
 	}
+	buf, encodingErr = charmap.ISO8859_1.NewDecoder().Bytes(buf)
+	if encodingErr != nil {
+		handler.logger.Debug("Latin 1 expected, encoding error: %s\n", encodingErr.Error())
+	}
 	respMap, err := TransResponse(buf).Map()
 	if err != nil {
 		return respMap, fmt.Errorf("error parsing response: %s", err.Error())
