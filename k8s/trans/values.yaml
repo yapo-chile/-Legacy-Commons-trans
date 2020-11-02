@@ -40,7 +40,6 @@ healthcheck:
 service:
   type: ClusterIP
   port: 80
-  prometheus_port: 8877
 
 ingress:
   enabled: true
