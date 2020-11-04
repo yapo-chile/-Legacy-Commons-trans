@@ -40,7 +40,6 @@ func TestSendCommandInvalidCommand(t *testing.T) {
 		Port:            port,
 		Timeout:         15,
 		RetryAfter:      5,
-		BuffSize:        4096,
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
@@ -84,7 +83,6 @@ func TestSendCommandTimeout(t *testing.T) {
 		Port:            port,
 		Timeout:         1,
 		RetryAfter:      5,
-		BuffSize:        4096,
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
@@ -117,7 +115,6 @@ func TestSendCommandBusyServer(t *testing.T) {
 		Port:            port,
 		Timeout:         15,
 		RetryAfter:      5,
-		BuffSize:        4096,
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
@@ -160,7 +157,6 @@ func TestSendCommandOK(t *testing.T) {
 		Port:            port,
 		Timeout:         15,
 		RetryAfter:      5,
-		BuffSize:        4096,
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
@@ -199,7 +195,6 @@ func TestSendCommandErrEnc(t *testing.T) {
 		Port:            port,
 		Timeout:         15,
 		RetryAfter:      5,
-		BuffSize:        4096,
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
@@ -237,7 +232,6 @@ func TestISO8859Input(t *testing.T) {
 		Port:            port,
 		Timeout:         15,
 		RetryAfter:      5,
-		BuffSize:        4096,
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
