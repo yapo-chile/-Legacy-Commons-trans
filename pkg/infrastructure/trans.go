@@ -192,10 +192,14 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 			if err == io.EOF {
 				break
 			}
-			if err == io.ErrShortBuffer {
+			if err == io.ErrShortBuffer || err == bufio.ErrBufferFull {
 				buffer.Grow(bytes.MinRead)
+				goto write
 			}
+			break
 		}
+		goto write
+	write:
 		buffer.Write(line)
 	}
 
