@@ -186,24 +186,9 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 	}
 
 	var buffer bytes.Buffer
-	for {
-		line, err = reader.ReadSlice('\n')
-		if err != nil {
-			if err == io.EOF {
-				break
-			}
-			if err == io.ErrShortBuffer || err == bufio.ErrBufferFull {
-				buffer.Grow(bytes.MinRead)
-				goto write
-			}
-			break
-		}
-		goto write
-	write:
-		_, err = buffer.Write(line)
-		if err != nil {
-			return nil, err
-		}
+	_, err = buffer.ReadFrom(reader)
+	if err != nil {
+		return nil, err
 	}
 
 	buf, encodingErr = charmap.ISO8859_1.NewDecoder().Bytes(bytes.TrimSuffix(buffer.Bytes(), []byte("end\n")))
