@@ -67,8 +67,6 @@ type TransConf struct {
 	Timeout int `env:"TIMEOUT" envDefault:"15"`
 	// RetryAfter wait time between reconnection to the trans server
 	RetryAfter int `env:"RETRY" envDefault:"5"`
-	// BuffSize size of the buffer in bytes when reading messages from the trans server
-	BuffSize int `env:"BUFFSIZE" envDefault:"4096"`
 }
 
 // Config holds all configuration for the service

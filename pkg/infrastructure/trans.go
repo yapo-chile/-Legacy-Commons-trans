@@ -164,8 +164,8 @@ func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteClos
 
 func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]string) (map[string]string, error) {
 	// Check greeting.
-	br := bufio.NewReaderSize(conn, handler.conf.BuffSize)
-	line, err := br.ReadSlice('\n')
+	reader := bufio.NewReader(conn)
+	line, err := reader.ReadSlice('\n')
 	if err != nil {
 		return nil, err
 	}
@@ -185,24 +185,13 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 		return nil, err
 	}
 
-	// Get response.
-	buf = nil
-	for {
-		line, err = br.ReadSlice('\n')
-		if err != nil {
-			if err != io.EOF {
-				return nil, err
-			}
-			if !bytes.HasSuffix(buf, []byte("end\n")) {
-				return nil, fmt.Errorf("trans: response truncated: %q", line)
-			}
-			buf = buf[:len(buf)-4] // Remove "end".
-			break
-		}
-
-		buf = append(buf, line...)
+	var buffer bytes.Buffer
+	_, err = buffer.ReadFrom(reader)
+	if err != nil {
+		return nil, err
 	}
-	buf, encodingErr = charmap.ISO8859_1.NewDecoder().Bytes(buf)
+
+	buf, encodingErr = charmap.ISO8859_1.NewDecoder().Bytes(bytes.TrimSuffix(buffer.Bytes(), []byte("end\n")))
 	if encodingErr != nil {
 		handler.logger.Debug("Latin 1 expected, encoding error: %s\n", encodingErr.Error())
 	}
