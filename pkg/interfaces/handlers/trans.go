@@ -87,12 +87,35 @@ func parseInput(input *TransHandlerInput) domain.TransCommand {
 
 	params := make([]domain.TransParams, 0)
 
-	for key, val := range input.Params {
-		param := domain.TransParams{
-			Key:   key,
-			Value: val,
+	for key, value := range input.Params {
+		switch value.(type) {
+		case []interface{}:
+			for _, val := range value.([]interface{}) {
+				switch val.(type) {
+				case map[string]interface{}:
+					for k, v := range val.(map[string]interface{}) {
+						param := domain.TransParams{
+							Key:   k,
+							Value: v,
+							Blob:  key == "blobs",
+						}
+						params = append(params, param)
+					}
+				case string:
+					param := domain.TransParams{
+						Key:   key,
+						Value: val,
+					}
+					params = append(params, param)
+				}
+			}
+		default:
+			param := domain.TransParams{
+				Key:   key,
+				Value: value,
+			}
+			params = append(params, param)
 		}
-		params = append(params, param)
 	}
 	command.Params = params
 	return command
