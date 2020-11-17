@@ -9,7 +9,6 @@ import (
 	"io"
 	"net"
 	"strconv"
-	_ "strconv"
 	"strings"
 	"time"
 
@@ -222,8 +221,14 @@ func appendCmd(buf []byte, cmd string, args []domain.TransParams) []byte {
 			}
 			continue
 		}
-		key, _ = charmap.ISO8859_1.NewEncoder().String(key)
-		value, _ = charmap.ISO8859_1.NewEncoder().String(value)
+		key, err := charmap.ISO8859_1.NewEncoder().String(key)
+		if err != nil {
+			continue
+		}
+		value, err = charmap.ISO8859_1.NewEncoder().String(value)
+		if err != nil {
+			continue
+		}
 		buf = append(buf, key...)
 		buf = append(buf, ':')
 		buf = append(buf, value...)
