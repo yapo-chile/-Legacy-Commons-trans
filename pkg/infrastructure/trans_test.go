@@ -187,6 +187,52 @@ func TestSendCommandOK(t *testing.T) {
 	logger.AssertExpectations(t)
 }
 
+func TestSendCommandBlobOK(t *testing.T) {
+
+	command := "cmd:test\nblob:5:body\nedgar\ncommit:1\nend\n"
+	response := "status:TRANS_OK\n"
+
+	//define the function that will receive the message
+	handlerFunc := func(input []byte) []byte {
+		assert.Equal(t, command, string(input))
+		return []byte(response)
+	}
+	//initiate the server
+	server := NewMockTransServer()
+	defer server.Close()
+	server.SetHandler(handlerFunc)
+
+	//initiate the conf
+	addr := strings.Split(server.Address, ":")
+	host := addr[0]
+	port, _ := strconv.Atoi(addr[1])
+	conf := TransConf{
+		Host:            host,
+		Port:            port,
+		Timeout:         15,
+		RetryAfter:      5,
+		AllowedCommands: "test",
+	}
+	logger := MockLoggerInfrastructure{}
+	expectedResponse := make(map[string]string)
+	expectedResponse["status"] = usecases.TransOK
+	cmd := "test"
+	params := []domain.TransParams{
+		domain.TransParams{
+			Key:   "body",
+			Value: "ZWRnYXI=",
+			Blob:  true,
+		},
+	}
+
+	transFactory := NewTextProtocolTransFactory(conf, &logger)
+	transHandler := transFactory.MakeTransHandler()
+
+	resp, err := transHandler.SendCommand(cmd, params)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedResponse, resp)
+	logger.AssertExpectations(t)
+}
 func TestISO8859Input(t *testing.T) {
 	//define the function that will receive the message
 	handlerFunc := func(input []byte) []byte {
