@@ -14,7 +14,7 @@ type MockTransHandler struct {
 	mock.Mock
 }
 
-func (m *MockTransHandler) SendCommand(command string, params map[string]string) (map[string]string, error) {
+func (m *MockTransHandler) SendCommand(command string, params []domain.TransParams) (map[string]string, error) {
 	ret := m.Called(command, params)
 	return ret.Get(0).(map[string]string), ret.Error(1)
 }
@@ -41,7 +41,7 @@ func TestNewTransRepo(t *testing.T) {
 
 func TestExecuteError(t *testing.T) {
 	cmd := "command1"
-	params := make(map[string]string)
+	params := []domain.TransParams{}
 	expectedErr := errors.New("trans error")
 	responseParams := make(map[string]string)
 
@@ -71,25 +71,17 @@ func TestExecuteError(t *testing.T) {
 
 func TestExecuteOK(t *testing.T) {
 	cmd := "command1"
-	params := make(map[string]string)
-	params["param 1"] = "value 1"
-	params["param 2"] = "value 2"
+	params := []domain.TransParams{
+		domain.TransParams{Key: "param 1", Value: "value 1"},
+		domain.TransParams{Key: "param 2", Value: "value 2"},
+	}
 
 	responseParams := make(map[string]string)
 	responseParams["status"] = usecases.TransOK
 	responseParams["response 1"] = "response 1"
 	command := domain.TransCommand{
 		Command: cmd,
-		Params:  make([]domain.TransParams, 0),
-	}
-	for key, val := range params {
-		command.Params = append(
-			command.Params,
-			domain.TransParams{
-				Key:   key,
-				Value: val,
-			},
-		)
+		Params:  params,
 	}
 
 	handler := MockTransHandler{}
@@ -114,8 +106,9 @@ func TestExecuteOK(t *testing.T) {
 
 func TestExecuteOKNumbers(t *testing.T) {
 	cmd := "command1"
-	params := make(map[string]string)
-	params["param 1"] = "1980"
+	params := []domain.TransParams{
+		domain.TransParams{Key: "param 1", Value: 1980},
+	}
 
 	responseParams := make(map[string]string)
 	responseParams["status"] = usecases.TransOK

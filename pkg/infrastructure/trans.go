@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"context"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"net"
@@ -14,6 +15,7 @@ import (
 	"golang.org/x/text/encoding/charmap"
 
 	"github.com/eapache/go-resiliency/retrier"
+	"github.mpi-internal.com/Yapo/trans/pkg/domain"
 	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/loggers"
 	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/repository/services"
 )
@@ -54,7 +56,7 @@ func (t *textProtocolTransFactory) MakeTransHandler() services.TransHandler {
 }
 
 // SendCommand use a socket connection to send commands to trans port
-func (handler *trans) SendCommand(cmd string, params map[string]string) (map[string]string, error) {
+func (handler *trans) SendCommand(cmd string, transParams []domain.TransParams) (map[string]string, error) {
 	respMap := make(map[string]string)
 	// check if the command is allowed; if not, return error
 	valid := handler.isAllowedCommand(cmd)
@@ -81,7 +83,7 @@ func (handler *trans) SendCommand(cmd string, params map[string]string) (map[str
 	)
 	defer cancel()
 
-	respMap, err = handler.sendWithContext(ctx, conn, cmd, params)
+	respMap, err = handler.sendWithContext(ctx, conn, cmd, transParams)
 	if err != nil {
 		handler.logger.Error("Error Sending command %s: %s\n", cmd, err)
 	}
@@ -129,7 +131,7 @@ func (handler *trans) connect() (net.Conn, error) {
 // sendWithContext sends the message to trans but is cancelable via a context.
 // The context timeout specified how long the caller can wait
 // for the trans to respond
-func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteCloser, cmd string, args map[string]string) (map[string]string, error) {
+func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteCloser, cmd string, args []domain.TransParams) (map[string]string, error) {
 	var resp map[string]string
 	errChan := make(chan error, 1)
 
@@ -162,7 +164,7 @@ func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteClos
 	}
 }
 
-func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]string) (map[string]string, error) {
+func (handler *trans) send(conn io.ReadWriter, cmd string, args []domain.TransParams) (map[string]string, error) {
 	// Check greeting.
 	reader := bufio.NewReader(conn)
 	line, err := reader.ReadSlice('\n')
@@ -176,12 +178,7 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 	buf := make([]byte, 0)
 	// Send command to Trans.
 	buf = appendCmd(buf, cmd, args)
-	bufLatin, encodingErr := charmap.ISO8859_1.NewEncoder().Bytes(buf)
-	if encodingErr != nil {
-		handler.logger.Error("UTF-8 expected, encoding error: %s\n", encodingErr.Error())
-		return nil, encodingErr
-	}
-	if _, err = conn.Write(bufLatin); err != nil {
+	if _, err = conn.Write(buf); err != nil {
 		return nil, err
 	}
 
@@ -191,7 +188,7 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 		return nil, err
 	}
 
-	buf, encodingErr = charmap.ISO8859_1.NewDecoder().Bytes(bytes.TrimSuffix(buffer.Bytes(), []byte("end\n")))
+	buf, encodingErr := charmap.ISO8859_1.NewDecoder().Bytes(bytes.TrimSuffix(buffer.Bytes(), []byte("end\n")))
 	if encodingErr != nil {
 		handler.logger.Debug("Latin 1 expected, encoding error: %s\n", encodingErr.Error())
 	}
@@ -204,32 +201,40 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args map[string]strin
 
 // appendCmd Appends the command to the buffer. For the command format, see:
 // https://scmcoord.com/wiki/Trans#Protocol
-func appendCmd(buf []byte, cmd string, args map[string]string) []byte {
+func appendCmd(buf []byte, cmd string, args []domain.TransParams) []byte {
 	buf = append(buf, "cmd:"...)
 	buf = append(buf, cmd...)
 	buf = append(buf, '\n')
-	for key, value := range args {
-		isBlob := isBlob(value)
-		if isBlob {
-			buf = append(buf, "blob:"...)
-			buf = strconv.AppendInt(buf, int64(len(value)), 10)
-			buf = append(buf, ':')
+	for _, param := range args {
+		key := param.Key
+		value := param.Value.(string)
+		if param.Blob {
+			if decoded, err := base64.StdEncoding.DecodeString(value); err == nil {
+				value = string(decoded)
+				buf = append(buf, "blob:"...)
+				buf = strconv.AppendInt(buf, int64(len(value)), 10)
+				buf = append(buf, ':')
+				buf = append(buf, key...)
+				buf = append(buf, '\n')
+				buf = append(buf, value...)
+				buf = append(buf, '\n')
+			}
+			continue
+		}
+		key, err := charmap.ISO8859_1.NewEncoder().String(key)
+		if err != nil {
+			continue
+		}
+		value, err = charmap.ISO8859_1.NewEncoder().String(value)
+		if err != nil {
+			continue
 		}
 		buf = append(buf, key...)
-		if isBlob {
-			buf = append(buf, '\n')
-		} else {
-			buf = append(buf, ':')
-		}
+		buf = append(buf, ':')
 		buf = append(buf, value...)
 		buf = append(buf, '\n')
 	}
 	buf = append(buf, "commit:1"...)
 	buf = append(buf, "\nend\n"...)
 	return buf
-}
-
-//isBlob returns if the value is a blob (contains \n)
-func isBlob(value string) bool {
-	return strings.Contains(value, "\n")
 }

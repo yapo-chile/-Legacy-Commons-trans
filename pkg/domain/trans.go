@@ -4,6 +4,7 @@ package domain
 type TransParams struct {
 	Key   string
 	Value interface{}
+	Blob  bool
 }
 
 // TransCommand represents a trans command with params to be executed on a trans server
