@@ -9,7 +9,7 @@ import (
 
 // TransHandler is an interface to use Trans functions
 type TransHandler interface {
-	SendCommand(string, []domain.TransParams) (map[string]string, error)
+	SendCommand(string, []domain.TransParams) (domain.TransResponse, error)
 }
 
 // TransFactory is an interface that abstracts the Factory Pattern for creating TransHandler objects
@@ -31,25 +31,10 @@ func NewTransRepo(transFactory TransFactory) *TransRepo {
 
 // Execute executes the specified trans command
 func (repo *TransRepo) Execute(command domain.TransCommand) (domain.TransResponse, error) {
-	response := domain.TransResponse{
-		Params: make(map[string]string),
-	}
-	resp, err := repo.transaction(command.Command, command.Params)
-	if err != nil {
-		response.Params["error"] = err.Error()
-		return response, err
-	}
-	if status, ok := resp["status"]; ok {
-		response.Status = status
-		delete(resp, "status")
-	}
-	for key, val := range resp {
-		response.Params[key] = val
-	}
-	return response, nil
+	return repo.transaction(command.Command, command.Params)
 }
 
-func (repo *TransRepo) transaction(method string, transParams []domain.TransParams) (map[string]string, error) {
+func (repo *TransRepo) transaction(method string, transParams []domain.TransParams) (domain.TransResponse, error) {
 	trans := repo.transFactory.MakeTransHandler()
 	for _, transParam := range transParams {
 		if reflect.TypeOf(transParam.Value).Kind() == reflect.Int {

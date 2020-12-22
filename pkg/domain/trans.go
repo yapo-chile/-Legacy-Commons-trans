@@ -15,12 +15,17 @@ type TransCommand struct {
 	Params []TransParams
 }
 
-//TransResponse represents the response given to the execution of a TransCommand
-type TransResponse struct {
+// TransResponse represents the response given to the execution of a TransCommand
+type TransResponse interface {
 	// Status the status of the response (normally TRANS_OK or TRANS_ERROR)
-	Status string
-	// Params additional params returned
-	Params map[string]string
+	Status() string
+	SetStatus(string)
+	// Map returns response as map format
+	Map() (map[string]string, error)
+	// Slice returns response as slice format
+	Slice() ([]map[string]string, error)
+	Error() error
+	SetError(error)
 }
 
 // TransRepository defines a storage for the trans commands

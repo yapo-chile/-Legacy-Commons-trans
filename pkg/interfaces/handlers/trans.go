@@ -19,12 +19,19 @@ type TransHandler struct {
 type TransHandlerInput struct {
 	Command string                 `get:"command"`
 	Params  map[string]interface{} `json:"params"`
+	Format  string                 `json:"format"`
 }
 
 // TransRequestOutput struct that represents the output
 type TransRequestOutput struct {
 	Status   string            `json:"status"`
 	Response map[string]string `json:"response"`
+}
+
+// TransRequestSliceOutput struct that represents the output slice
+type TransRequestSliceOutput struct {
+	Status   string              `json:"status"`
+	Response []map[string]string `json:"response"`
 }
 
 // Input returns a fresh, empty instance of transHandlerInput
@@ -43,22 +50,7 @@ func (t *TransHandler) Execute(ig InputGetter) *goutils.Response {
 	}
 	in := input.(*TransHandlerInput)
 	command := parseInput(in)
-	var val domain.TransResponse
-	val, err := t.Interactor.ExecuteCommand(command)
-	// handle trans errors, database errors, or general reported errors by trans
-	if _, ok := val.Params["error"]; ok ||
-		val.Status == usecases.TransError ||
-		val.Status == usecases.TransDatabaseError {
-		response = &goutils.Response{
-			Code: http.StatusBadRequest,
-			Body: TransRequestOutput{
-				Status:   val.Status,
-				Response: val.Params,
-			},
-		}
-		return response
-	}
-
+	transResp, err := t.Interactor.ExecuteCommand(command)
 	// handle errors given by the interactor
 	if err != nil {
 		response = &goutils.Response{
@@ -70,14 +62,44 @@ func (t *TransHandler) Execute(ig InputGetter) *goutils.Response {
 		return response
 	}
 
-	response = &goutils.Response{
-		Code: http.StatusOK,
-		Body: TransRequestOutput{
-			Status:   val.Status,
-			Response: val.Params,
-		},
+	// handle trans errors, database errors, or general reported errors by trans
+	if transResp.Error() != nil ||
+		transResp.Status() == usecases.TransError ||
+		transResp.Status() == usecases.TransDatabaseError {
+		mapResp, _ := transResp.Map()
+		response = &goutils.Response{
+			Code: http.StatusBadRequest,
+			Body: TransRequestOutput{
+				Status:   transResp.Status(),
+				Response: mapResp,
+			},
+		}
+		return response
 	}
-	return response
+
+	switch in.Format {
+	case "slice":
+		sliceResp, _ := transResp.Slice()
+		response = &goutils.Response{
+			Code: http.StatusOK,
+			Body: TransRequestSliceOutput{
+				Status:   transResp.Status(),
+				Response: sliceResp,
+			},
+		}
+		return response
+	default:
+		mapRes, _ := transResp.Map()
+		response = &goutils.Response{
+			Code: http.StatusOK,
+			Body: TransRequestOutput{
+				Status:   transResp.Status(),
+				Response: mapRes,
+			},
+		}
+		return response
+	}
+
 }
 
 func parseInput(input *TransHandlerInput) domain.TransCommand {

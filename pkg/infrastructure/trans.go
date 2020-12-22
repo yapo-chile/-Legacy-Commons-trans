@@ -56,8 +56,7 @@ func (t *textProtocolTransFactory) MakeTransHandler() services.TransHandler {
 }
 
 // SendCommand use a socket connection to send commands to trans port
-func (handler *trans) SendCommand(cmd string, transParams []domain.TransParams) (map[string]string, error) {
-	respMap := make(map[string]string)
+func (handler *trans) SendCommand(cmd string, transParams []domain.TransParams) (domain.TransResponse, error) {
 	// check if the command is allowed; if not, return error
 	valid := handler.isAllowedCommand(cmd)
 	if !valid {
@@ -65,14 +64,13 @@ func (handler *trans) SendCommand(cmd string, transParams []domain.TransParams) 
 			"Invalid Command. Valid commands: %s",
 			handler.allowedCommands,
 		)
-		respMap["error"] = err.Error()
 		handler.logger.Error(err.Error())
-		return respMap, err
+		return nil, err
 	}
 	conn, err := handler.connect()
 	if err != nil {
 		handler.logger.Error("Error connecting to trans: %s\n", err.Error())
-		return respMap, fmt.Errorf("Error connecting with trans server")
+		return nil, fmt.Errorf("Error connecting with trans server")
 	}
 	defer conn.Close() //nolint: errcheck, megacheck
 
@@ -83,12 +81,7 @@ func (handler *trans) SendCommand(cmd string, transParams []domain.TransParams) 
 	)
 	defer cancel()
 
-	respMap, err = handler.sendWithContext(ctx, conn, cmd, transParams)
-	if err != nil {
-		handler.logger.Error("Error Sending command %s: %s\n", cmd, err)
-	}
-
-	return respMap, err
+	return handler.sendWithContext(ctx, conn, cmd, transParams)
 }
 
 // isAllowedCommand checks if the given command can be sent to trans
@@ -131,8 +124,8 @@ func (handler *trans) connect() (net.Conn, error) {
 // sendWithContext sends the message to trans but is cancelable via a context.
 // The context timeout specified how long the caller can wait
 // for the trans to respond
-func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteCloser, cmd string, args []domain.TransParams) (map[string]string, error) {
-	var resp map[string]string
+func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteCloser, cmd string, args []domain.TransParams) (domain.TransResponse, error) {
+	var resp domain.TransResponse
 	errChan := make(chan error, 1)
 
 	// starts the go routine that sends the message and retrieves the response and error, if any.
@@ -164,7 +157,7 @@ func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteClos
 	}
 }
 
-func (handler *trans) send(conn io.ReadWriter, cmd string, args []domain.TransParams) (map[string]string, error) {
+func (handler *trans) send(conn io.ReadWriter, cmd string, args []domain.TransParams) (domain.TransResponse, error) {
 	// Check greeting.
 	reader := bufio.NewReader(conn)
 	line, err := reader.ReadSlice('\n')
@@ -192,11 +185,7 @@ func (handler *trans) send(conn io.ReadWriter, cmd string, args []domain.TransPa
 	if encodingErr != nil {
 		handler.logger.Debug("Latin 1 expected, encoding error: %s\n", encodingErr.Error())
 	}
-	respMap, err := TransResponse(buf).Map()
-	if err != nil {
-		return respMap, fmt.Errorf("error parsing response: %s", err.Error())
-	}
-	return respMap, nil
+	return &transResponse{body: buf}, nil
 }
 
 // appendCmd Appends the command to the buffer. For the command format, see:

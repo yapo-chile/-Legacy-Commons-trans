@@ -44,43 +44,32 @@ type TransInteractor struct {
 func (interactor TransInteractor) ExecuteCommand(
 	command domain.TransCommand,
 ) (domain.TransResponse, error) {
-	response := domain.TransResponse{
-		Status: TransError,
-		Params: make(map[string]string),
-	}
 	// Ensure correct input
 	if command.Command == "" {
 		interactor.Logger.LogBadInput(command)
-		return response, fmt.Errorf("invalid command %+v", command)
+		return nil, fmt.Errorf("invalid command %+v", command)
 	}
-
 	// Execute the command and retrieve the response
 	response, err := interactor.Repository.Execute(command)
 	if err != nil {
-		// Report the error
 		interactor.Logger.LogRepositoryError(command, err)
-		if transErr, ok := response.Params["error"]; ok {
-			err = fmt.Errorf(transErr)
-		} else {
-			err = fmt.Errorf("error during execution")
-		}
+		return nil, err
 	}
 	// if the command sent doesn´t exists in the server
-	if response.Status == TransNoCommand {
+	if response.Status() == TransNoCommand {
 		err = fmt.Errorf("error command doesn't exists")
-		response.Status = TransError
-		response.Params["error"] = err.Error()
+		response.SetStatus(TransError)
+		response.SetError(err)
 	}
 	// if the error is a database error
-	if strings.Contains(response.Status, TransDatabaseError) {
+	if strings.Contains(response.Status(), TransDatabaseError) {
 		//get the specific error message from the status response
-		errorString := strings.Replace(response.Status, TransDatabaseError, "", 1)
+		errorString := strings.Replace(response.Status(), TransDatabaseError, "", 1)
 		errorString = strings.Replace(errorString, ":", "", 1)
 		err = fmt.Errorf(errorString)
 		interactor.Logger.LogRepositoryError(command, err)
-		response.Status = TransDatabaseError
-		response.Params["error"] = err.Error()
+		response.SetStatus(TransDatabaseError)
+		response.SetError(err)
 	}
-
-	return response, err
+	return response, nil
 }
