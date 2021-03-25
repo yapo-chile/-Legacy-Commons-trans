@@ -54,7 +54,7 @@ func (t *TransHandler) Execute(ig InputGetter) *goutils.Response {
 			Code: http.StatusBadRequest,
 			Body: TransRequestOutput{
 				Status:   val.Status,
-				Response: val.Params,
+				Response: val.Params[0],
 			},
 		}
 		return response
