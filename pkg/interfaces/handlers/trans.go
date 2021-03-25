@@ -19,12 +19,13 @@ type TransHandler struct {
 type TransHandlerInput struct {
 	Command string                 `get:"command"`
 	Params  map[string]interface{} `json:"params"`
+	Multi   bool                   `json:"multi"`
 }
 
 // TransRequestOutput struct that represents the output
 type TransRequestOutput struct {
-	Status   string            `json:"status"`
-	Response map[string]string `json:"response"`
+	Status   string      `json:"status"`
+	Response interface{} `json:"response"`
 }
 
 // Input returns a fresh, empty instance of transHandlerInput
@@ -46,7 +47,7 @@ func (t *TransHandler) Execute(ig InputGetter) *goutils.Response {
 	var val domain.TransResponse
 	val, err := t.Interactor.ExecuteCommand(command)
 	// handle trans errors, database errors, or general reported errors by trans
-	if _, ok := val.Params["error"]; ok ||
+	if _, ok := val.Params[0]["error"]; ok ||
 		val.Status == usecases.TransError ||
 		val.Status == usecases.TransDatabaseError {
 		response = &goutils.Response{
@@ -70,11 +71,17 @@ func (t *TransHandler) Execute(ig InputGetter) *goutils.Response {
 		return response
 	}
 
+	var responseBody interface{}
+	responseBody = val.Params
+	if !in.Multi {
+		responseBody = val.Params[0]
+	}
+
 	response = &goutils.Response{
 		Code: http.StatusOK,
 		Body: TransRequestOutput{
 			Status:   val.Status,
-			Response: val.Params,
+			Response: responseBody,
 		},
 	}
 	return response

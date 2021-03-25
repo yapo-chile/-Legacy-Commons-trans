@@ -10,12 +10,22 @@ import (
 type TransResponse []byte
 
 // Map returns a new map from a response.
-func (r TransResponse) Map() (map[string]string, error) {
-	m := make(map[string]string)
+func (r TransResponse) Map() ([]map[string]string, error) {
+	m := make(map[string][]string)
 	err := r.apply(func(key, value string) {
-		m[key] = value
+		m[key] = append(m[key], value)
 	})
-	return m, err
+	mAux := []map[string]string{}
+	for key, values := range m {
+		for i, value := range values {
+			if len(mAux) <= i {
+				mAux = append(mAux, map[string]string{key: value})
+			} else {
+				mAux[i][key] = value
+			}
+		}
+	}
+	return mAux, err
 }
 
 // apply applies the given function on all key-value pairs of the response.

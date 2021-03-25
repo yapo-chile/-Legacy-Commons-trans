@@ -9,7 +9,7 @@ import (
 
 // TransHandler is an interface to use Trans functions
 type TransHandler interface {
-	SendCommand(string, []domain.TransParams) (map[string]string, error)
+	SendCommand(string, []domain.TransParams) ([]map[string]string, error)
 }
 
 // TransFactory is an interface that abstracts the Factory Pattern for creating TransHandler objects
@@ -32,24 +32,24 @@ func NewTransRepo(transFactory TransFactory) *TransRepo {
 // Execute executes the specified trans command
 func (repo *TransRepo) Execute(command domain.TransCommand) (domain.TransResponse, error) {
 	response := domain.TransResponse{
-		Params: make(map[string]string),
+		Params: make([]map[string]string, 0),
 	}
 	resp, err := repo.transaction(command.Command, command.Params)
 	if err != nil {
-		response.Params["error"] = err.Error()
+		response.Params[0]["error"] = err.Error()
 		return response, err
 	}
-	if status, ok := resp["status"]; ok {
+	if status, ok := resp[0]["status"]; ok {
 		response.Status = status
-		delete(resp, "status")
+		delete(resp[0], "status")
 	}
-	for key, val := range resp {
-		response.Params[key] = val
+	for _, val := range resp {
+		response.Params = append(response.Params, val)
 	}
 	return response, nil
 }
 
-func (repo *TransRepo) transaction(method string, transParams []domain.TransParams) (map[string]string, error) {
+func (repo *TransRepo) transaction(method string, transParams []domain.TransParams) ([]map[string]string, error) {
 	trans := repo.transFactory.MakeTransHandler()
 	for _, transParam := range transParams {
 		if reflect.TypeOf(transParam.Value).Kind() == reflect.Int {
