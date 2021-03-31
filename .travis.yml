@@ -1,4 +1,4 @@
-dist: trusty
+dist: bionic
 language: go
 
 # Only current version is considered given limitations to publish more than one
@@ -11,7 +11,7 @@ if: tags IS blank
 
 before_install:
   - configure_jfrog_client
-  - helm init --client-only
+  - helm init --client-only --stable-repo-url https://charts.helm.sh/stable
 
 # Anything in install that returns a nonzero exit code will
 # flunk the build and immediately stop. It's sorta like having
