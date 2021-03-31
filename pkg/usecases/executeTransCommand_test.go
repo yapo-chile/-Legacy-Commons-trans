@@ -51,7 +51,9 @@ func TestTransInteractorRepositoryError(t *testing.T) {
 	command := domain.TransCommand{
 		Command: "command 1",
 	}
-	response := domain.TransResponse{}
+	response := domain.TransResponse{
+		Params: make([]map[string]string, 1),
+	}
 	err := errors.New("error")
 	logger := &MockTransInteractorLogger{}
 	repo := &MockTransRepository{}
@@ -77,7 +79,11 @@ func TestTransInteractorTransNoCommand(t *testing.T) {
 	err := errors.New("error command doesn't exists")
 	response := domain.TransResponse{
 		Status: TransNoCommand,
-		Params: make(map[string]string),
+		Params: []map[string]string{
+			{
+				"error": err.Error(),
+			},
+		},
 	}
 
 	logger := &MockTransInteractorLogger{}
@@ -91,9 +97,12 @@ func TestTransInteractorTransNoCommand(t *testing.T) {
 	expectedErr := fmt.Errorf("error command doesn't exists")
 	expectedResponse := domain.TransResponse{
 		Status: TransError,
-		Params: make(map[string]string),
+		Params: []map[string]string{
+			{
+				"error": expectedErr.Error(),
+			},
+		},
 	}
-	expectedResponse.Params["error"] = expectedErr.Error()
 	returnResp, returnErr := interactor.ExecuteCommand(command)
 	assert.Error(t, returnErr)
 	assert.Equal(t, expectedErr, returnErr)
@@ -112,7 +121,11 @@ func TestTransInteractorTransDatabaseError(t *testing.T) {
 	errDB := errors.New(errorStringDB)
 	response := domain.TransResponse{
 		Status: fmt.Sprintf("%s:%s", TransDatabaseError, errorStringDB),
-		Params: make(map[string]string),
+		Params: []map[string]string{
+			{
+				"error": errorStringDB,
+			},
+		},
 	}
 
 	logger := &MockTransInteractorLogger{}
@@ -127,9 +140,12 @@ func TestTransInteractorTransDatabaseError(t *testing.T) {
 
 	expectedResponse := domain.TransResponse{
 		Status: TransDatabaseError,
-		Params: make(map[string]string),
+		Params: []map[string]string{
+			{
+				"error": errorStringDB,
+			},
+		},
 	}
-	expectedResponse.Params["error"] = errorStringDB
 	returnResp, returnErr := interactor.ExecuteCommand(command)
 
 	assert.Error(t, returnErr)

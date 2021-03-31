@@ -57,7 +57,7 @@ func (t *textProtocolTransFactory) MakeTransHandler() services.TransHandler {
 
 // SendCommand use a socket connection to send commands to trans port
 func (handler *trans) SendCommand(cmd string, transParams []domain.TransParams) ([]map[string]string, error) {
-	respMap := make([]map[string]string, 0)
+	respMap := make([]map[string]string, 1)
 	// check if the command is allowed; if not, return error
 	valid := handler.isAllowedCommand(cmd)
 	if !valid {
@@ -65,7 +65,7 @@ func (handler *trans) SendCommand(cmd string, transParams []domain.TransParams) 
 			"Invalid Command. Valid commands: %s",
 			handler.allowedCommands,
 		)
-		respMap[0]["error"] = err.Error()
+		respMap[0] = map[string]string{"error": err.Error()}
 		handler.logger.Error(err.Error())
 		return respMap, err
 	}

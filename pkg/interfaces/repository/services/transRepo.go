@@ -36,7 +36,7 @@ func (repo *TransRepo) Execute(command domain.TransCommand) (domain.TransRespons
 	}
 	resp, err := repo.transaction(command.Command, command.Params)
 	if err != nil {
-		response.Params[0]["error"] = err.Error()
+		response.Params = append(response.Params, map[string]string{"error": err.Error()})
 		return response, err
 	}
 	if status, ok := resp[0]["status"]; ok {

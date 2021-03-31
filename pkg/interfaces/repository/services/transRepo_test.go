@@ -14,9 +14,9 @@ type MockTransHandler struct {
 	mock.Mock
 }
 
-func (m *MockTransHandler) SendCommand(command string, params []domain.TransParams) (map[string]string, error) {
+func (m *MockTransHandler) SendCommand(command string, params []domain.TransParams) ([]map[string]string, error) {
 	ret := m.Called(command, params)
-	return ret.Get(0).(map[string]string), ret.Error(1)
+	return ret.Get(0).([]map[string]string), ret.Error(1)
 }
 
 type MockTransFactory struct {
@@ -43,8 +43,9 @@ func TestExecuteError(t *testing.T) {
 	cmd := "command1"
 	params := []domain.TransParams{}
 	expectedErr := errors.New("trans error")
-	responseParams := make(map[string]string)
-
+	responseParams := []map[string]string{
+		{"error": "trans error"},
+	}
 	command := domain.TransCommand{
 		Command: cmd,
 		Params:  make([]domain.TransParams, 0),
@@ -60,9 +61,8 @@ func TestExecuteError(t *testing.T) {
 
 	response, err := repo.Execute(command)
 	expectedResponse := domain.TransResponse{
-		Params: make(map[string]string),
+		Params: []map[string]string{{"error": "trans error"}},
 	}
-	expectedResponse.Params["error"] = "trans error"
 	assert.Equal(t, expectedErr, err)
 	assert.Equal(t, expectedResponse, response)
 	factory.AssertExpectations(t)
@@ -72,13 +72,16 @@ func TestExecuteError(t *testing.T) {
 func TestExecuteOK(t *testing.T) {
 	cmd := "command1"
 	params := []domain.TransParams{
-		domain.TransParams{Key: "param 1", Value: "value 1"},
-		domain.TransParams{Key: "param 2", Value: "value 2"},
+		{Key: "param 1", Value: "value 1"},
+		{Key: "param 2", Value: "value 2"},
 	}
 
-	responseParams := make(map[string]string)
-	responseParams["status"] = usecases.TransOK
-	responseParams["response 1"] = "response 1"
+	responseParams := []map[string]string{
+		{
+			"status":     usecases.TransOK,
+			"response 1": "response 1",
+		},
+	}
 	command := domain.TransCommand{
 		Command: cmd,
 		Params:  params,
@@ -95,9 +98,8 @@ func TestExecuteOK(t *testing.T) {
 	response, err := repo.Execute(command)
 	expectedResponse := domain.TransResponse{
 		Status: usecases.TransOK,
-		Params: make(map[string]string),
+		Params: responseParams,
 	}
-	expectedResponse.Params["response 1"] = "response 1"
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, response)
 	factory.AssertExpectations(t)
@@ -110,9 +112,11 @@ func TestExecuteOKNumbers(t *testing.T) {
 		domain.TransParams{Key: "param 1", Value: 1980},
 	}
 
-	responseParams := make(map[string]string)
-	responseParams["status"] = usecases.TransOK
-	responseParams["response 1"] = "response 1"
+	responseParams := make([]map[string]string, 1)
+	responseParams[0] = map[string]string{
+		"status":     usecases.TransOK,
+		"response 1": "response 1",
+	}
 	command := domain.TransCommand{
 		Command: cmd,
 		Params:  make([]domain.TransParams, 0),
@@ -136,9 +140,10 @@ func TestExecuteOKNumbers(t *testing.T) {
 	response, err := repo.Execute(command)
 	expectedResponse := domain.TransResponse{
 		Status: usecases.TransOK,
-		Params: make(map[string]string),
+		Params: []map[string]string{
+			{"response 1": "response 1"},
+		},
 	}
-	expectedResponse.Params["response 1"] = "response 1"
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, response)
 	factory.AssertExpectations(t)
