@@ -71,8 +71,7 @@ func (t *TransHandler) Execute(ig InputGetter) *goutils.Response {
 		return response
 	}
 
-	var responseBody interface{}
-	responseBody = val.Params
+	var responseBody interface{} = val.Params
 	if !in.Multi {
 		responseBody = val.Params[0]
 	}

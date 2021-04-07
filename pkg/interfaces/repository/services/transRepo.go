@@ -43,8 +43,8 @@ func (repo *TransRepo) Execute(command domain.TransCommand) (domain.TransRespons
 		response.Status = status
 		delete(resp[0], "status")
 	}
-	for _, val := range resp {
-		response.Params = append(response.Params, val)
+	for k := range resp {
+		response.Params = append(response.Params, resp[k])
 	}
 	return response, nil
 }
