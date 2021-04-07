@@ -32,7 +32,7 @@ func NewTransRepo(transFactory TransFactory) *TransRepo {
 // Execute executes the specified trans command
 func (repo *TransRepo) Execute(command domain.TransCommand) (domain.TransResponse, error) {
 	response := domain.TransResponse{
-		Params: make([]map[string]string, 0),
+		Params: []map[string]string{},
 	}
 	resp, err := repo.transaction(command.Command, command.Params)
 	if err != nil {

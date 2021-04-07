@@ -40,8 +40,8 @@ func TestSendCommandInvalidCommand(t *testing.T) {
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Error")
-	expectedResponse := make([]map[string]string, 1)
-	expectedResponse[0] = map[string]string{"error": "Invalid Command. Valid commands: [test]"}
+	expectedResponse := []map[string]string{}
+	expectedResponse = append(expectedResponse, map[string]string{"error": "Invalid Command. Valid commands: [test]"})
 	cmd := "transinfo"
 	params := []domain.TransParams{
 		{
@@ -168,11 +168,11 @@ func TestSendCommandOK(t *testing.T) {
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
-	expectedResponse := make([]map[string]string, 1)
-	expectedResponse[0] = map[string]string{"status": usecases.TransOK}
+	expectedResponse := []map[string]string{}
+	expectedResponse = append(expectedResponse, map[string]string{"status": usecases.TransOK})
 	cmd := "test"
 	params := []domain.TransParams{
-		domain.TransParams{
+		{
 			Key:   "param1",
 			Value: "okÁ",
 		},
@@ -214,11 +214,11 @@ func TestSendCommandBlobOK(t *testing.T) {
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
-	expectedResponse := make([]map[string]string, 1)
-	expectedResponse[0] = map[string]string{"status": usecases.TransOK}
+	expectedResponse := []map[string]string{}
+	expectedResponse = append(expectedResponse, map[string]string{"status": usecases.TransOK})
 	cmd := "test"
 	params := []domain.TransParams{
-		domain.TransParams{
+		{
 			Key:   "body",
 			Value: "ZWRnYXI=",
 			Blob:  true,

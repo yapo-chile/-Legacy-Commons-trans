@@ -46,7 +46,7 @@ func (interactor TransInteractor) ExecuteCommand(
 ) (domain.TransResponse, error) {
 	response := domain.TransResponse{
 		Status: TransError,
-		Params: make([]map[string]string, 0),
+		Params: []map[string]string{},
 	}
 	// Ensure correct input
 	if command.Command == "" {
