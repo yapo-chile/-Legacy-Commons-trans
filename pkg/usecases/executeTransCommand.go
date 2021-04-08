@@ -59,8 +59,12 @@ func (interactor TransInteractor) ExecuteCommand(
 	if err != nil {
 		// Report the error
 		interactor.Logger.LogRepositoryError(command, err)
-		if transErr, ok := response.Params[0]["error"]; ok {
-			err = fmt.Errorf(transErr)
+		if len(response.Params) > 1 {
+			if transErr, ok := response.Params[0]["error"]; ok {
+				err = fmt.Errorf(transErr)
+			} else {
+				err = fmt.Errorf("error during execution")
+			}
 		} else {
 			err = fmt.Errorf("error during execution")
 		}

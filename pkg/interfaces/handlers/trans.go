@@ -47,17 +47,19 @@ func (t *TransHandler) Execute(ig InputGetter) *goutils.Response {
 	var val domain.TransResponse
 	val, err := t.Interactor.ExecuteCommand(command)
 	// handle trans errors, database errors, or general reported errors by trans
-	if _, ok := val.Params[0]["error"]; ok ||
-		val.Status == usecases.TransError ||
-		val.Status == usecases.TransDatabaseError {
-		response = &goutils.Response{
-			Code: http.StatusBadRequest,
-			Body: TransRequestOutput{
-				Status:   val.Status,
-				Response: val.Params[0],
-			},
+	if len(val.Params) > 0 {
+		if _, ok := val.Params[0]["error"]; ok ||
+			val.Status == usecases.TransError ||
+			val.Status == usecases.TransDatabaseError {
+			response = &goutils.Response{
+				Code: http.StatusBadRequest,
+				Body: TransRequestOutput{
+					Status:   val.Status,
+					Response: val.Params[0],
+				},
+			}
+			return response
 		}
-		return response
 	}
 
 	// handle errors given by the interactor

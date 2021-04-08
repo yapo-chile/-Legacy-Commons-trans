@@ -40,8 +40,7 @@ func TestSendCommandInvalidCommand(t *testing.T) {
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Error")
-	expectedResponse := []map[string]string{}
-	expectedResponse = append(expectedResponse, map[string]string{"error": "Invalid Command. Valid commands: [test]"})
+	expectedResponse := []map[string]string{{"error": "Invalid Command. Valid commands: [test]"}}
 	cmd := "transinfo"
 	params := []domain.TransParams{
 		{
