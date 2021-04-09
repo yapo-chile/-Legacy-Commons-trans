@@ -17,18 +17,8 @@ type ShutdownSequence struct {
 
 // Push pushes a new component into the stack to be turned off.
 func (s *ShutdownSequence) Push(task io.Closer) {
-	s.sequence = append(s.sequence, task)
+	s.sequence = append([]io.Closer{task}, s.sequence...)
 	s.waitGroup.Add(1)
-}
-
-// Pop removes the last component pushed
-func (s *ShutdownSequence) pop() io.Closer {
-	if len(s.sequence) > 0 {
-		task := s.sequence[len(s.sequence)-1]
-		s.sequence = s.sequence[:len(s.sequence)-1]
-		return task
-	}
-	return nil
 }
 
 // NewShutdownSequence creates a new ShutdownSequence
@@ -46,23 +36,32 @@ func (s *ShutdownSequence) Wait() {
 	s.waitGroup.Wait()
 }
 
+// close does the actual closing of things
+func (s *ShutdownSequence) close() {
+	for i := range s.sequence {
+		if err := s.sequence[i].Close(); err != nil {
+			fmt.Printf("Error closing the task of type %T: %+v\n", s.sequence[i].Close(), err)
+		}
+		s.waitGroup.Done()
+	}
+}
+
 // Listen launches a go routines that waits for sigint and then stops each task in the stack.
 // You need to call Listen before calling Wait, otherwise you risk waiting indefinitely
 func (s *ShutdownSequence) Listen() {
 	go func() {
 		sigint := make(chan os.Signal, 1)
 		signal.Notify(sigint)
-		<-sigint
-		// We received an interrupt signal, shut down.
-		for i := 0; i <= len(s.sequence); i++ {
-			if task := s.pop(); task != nil {
-				if err := task.Close(); err != nil {
-					fmt.Printf("Error closing the task of type %T: %+v\n", task, err)
-				}
-				s.waitGroup.Done()
+		loop := true
+		for loop {
+			sig := <-sigint
+			fmt.Printf("Received signal: %s\n", sig)
+			if sig == os.Interrupt {
+				// We received an interrupt signal, shut down.
+				fmt.Printf("Proceeding to shut down\n")
+				loop = false
 			}
 		}
-		// At this point all processes must be done
-		fmt.Printf("Proceeding to shut down")
+		s.close()
 	}()
 }
