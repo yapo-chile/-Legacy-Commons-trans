@@ -59,7 +59,7 @@ func (interactor TransInteractor) ExecuteCommand(
 	if err != nil {
 		// Report the error
 		interactor.Logger.LogRepositoryError(command, err)
-		if len(response.Params) > 1 {
+		if len(response.Params) > 0 {
 			if transErr, ok := response.Params[0]["error"]; ok {
 				err = fmt.Errorf(transErr)
 			} else {
@@ -73,7 +73,13 @@ func (interactor TransInteractor) ExecuteCommand(
 	if response.Status == TransNoCommand {
 		err = fmt.Errorf("error command doesn't exists")
 		response.Status = TransError
-		response.Params[0]["error"] = err.Error()
+		if len(response.Params) > 0 {
+			if _, exists := response.Params[0]["error"]; !exists {
+				response.Params[0]["error"] = err.Error()
+			}
+		} else {
+			response.Params = append(response.Params, map[string]string{"error": err.Error()})
+		}
 	}
 	// if the error is a database error
 	if strings.Contains(response.Status, TransDatabaseError) {
@@ -83,7 +89,13 @@ func (interactor TransInteractor) ExecuteCommand(
 		err = fmt.Errorf(errorString)
 		interactor.Logger.LogRepositoryError(command, err)
 		response.Status = TransDatabaseError
-		response.Params[0]["error"] = err.Error()
+		if len(response.Params) > 0 {
+			if _, exists := response.Params[0]["error"]; !exists {
+				response.Params[0]["error"] = err.Error()
+			}
+		} else {
+			response.Params = append(response.Params, map[string]string{"error": err.Error()})
+		}
 	}
 
 	return response, err
