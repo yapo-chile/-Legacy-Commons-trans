@@ -40,11 +40,10 @@ func TestSendCommandInvalidCommand(t *testing.T) {
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Error")
-	expectedResponse := make(map[string]string)
-	expectedResponse["error"] = "Invalid Command. Valid commands: [test]"
+	expectedResponse := []map[string]string{{"error": "Invalid Command. Valid commands: [test]"}}
 	cmd := "transinfo"
 	params := []domain.TransParams{
-		domain.TransParams{
+		{
 			Key:   "param1",
 			Value: "ok",
 		},
@@ -87,7 +86,7 @@ func TestSendCommandTimeout(t *testing.T) {
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Error")
-	var expectedResponse map[string]string
+	var expectedResponse []map[string]string
 	cmd := "test"
 	params := []domain.TransParams{
 		domain.TransParams{
@@ -123,7 +122,7 @@ func TestSendCommandBusyServer(t *testing.T) {
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Error")
-	var expectedResponse map[string]string
+	var expectedResponse []map[string]string
 	cmd := "test"
 	params := []domain.TransParams{
 		domain.TransParams{
@@ -168,11 +167,11 @@ func TestSendCommandOK(t *testing.T) {
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
-	expectedResponse := make(map[string]string)
-	expectedResponse["status"] = usecases.TransOK
+	expectedResponse := []map[string]string{}
+	expectedResponse = append(expectedResponse, map[string]string{"status": usecases.TransOK})
 	cmd := "test"
 	params := []domain.TransParams{
-		domain.TransParams{
+		{
 			Key:   "param1",
 			Value: "okÁ",
 		},
@@ -214,11 +213,11 @@ func TestSendCommandBlobOK(t *testing.T) {
 		AllowedCommands: "test",
 	}
 	logger := MockLoggerInfrastructure{}
-	expectedResponse := make(map[string]string)
-	expectedResponse["status"] = usecases.TransOK
+	expectedResponse := []map[string]string{}
+	expectedResponse = append(expectedResponse, map[string]string{"status": usecases.TransOK})
 	cmd := "test"
 	params := []domain.TransParams{
-		domain.TransParams{
+		{
 			Key:   "body",
 			Value: "ZWRnYXI=",
 			Blob:  true,
@@ -258,7 +257,7 @@ func TestISO8859Input(t *testing.T) {
 	logger := MockLoggerInfrastructure{}
 	cmd := "test"
 	params := []domain.TransParams{
-		domain.TransParams{
+		{
 			Key:   "param1",
 			Value: "ok\xc1",
 		},
@@ -269,6 +268,6 @@ func TestISO8859Input(t *testing.T) {
 
 	resp, err := transHandler.SendCommand(cmd, params)
 	assert.NoError(t, err)
-	assert.Equal(t, map[string]string{}, resp)
+	assert.Equal(t, []map[string]string{}, resp)
 	logger.AssertExpectations(t)
 }

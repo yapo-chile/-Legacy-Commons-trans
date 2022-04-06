@@ -20,7 +20,7 @@ type TransResponse struct {
 	// Status the status of the response (normally TRANS_OK or TRANS_ERROR)
 	Status string
 	// Params additional params returned
-	Params map[string]string
+	Params []map[string]string
 }
 
 // TransRepository defines a storage for the trans commands

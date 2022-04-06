@@ -56,8 +56,8 @@ func (t *textProtocolTransFactory) MakeTransHandler() services.TransHandler {
 }
 
 // SendCommand use a socket connection to send commands to trans port
-func (handler *trans) SendCommand(cmd string, transParams []domain.TransParams) (map[string]string, error) {
-	respMap := make(map[string]string)
+func (handler *trans) SendCommand(cmd string, transParams []domain.TransParams) ([]map[string]string, error) {
+	respMap := []map[string]string{}
 	// check if the command is allowed; if not, return error
 	valid := handler.isAllowedCommand(cmd)
 	if !valid {
@@ -65,7 +65,7 @@ func (handler *trans) SendCommand(cmd string, transParams []domain.TransParams) 
 			"Invalid Command. Valid commands: %s",
 			handler.allowedCommands,
 		)
-		respMap["error"] = err.Error()
+		respMap = append(respMap, map[string]string{"error": err.Error()})
 		handler.logger.Error(err.Error())
 		return respMap, err
 	}
@@ -131,8 +131,8 @@ func (handler *trans) connect() (net.Conn, error) {
 // sendWithContext sends the message to trans but is cancelable via a context.
 // The context timeout specified how long the caller can wait
 // for the trans to respond
-func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteCloser, cmd string, args []domain.TransParams) (map[string]string, error) {
-	var resp map[string]string
+func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteCloser, cmd string, args []domain.TransParams) ([]map[string]string, error) {
+	var resp []map[string]string
 	errChan := make(chan error, 1)
 
 	// starts the go routine that sends the message and retrieves the response and error, if any.
@@ -164,7 +164,7 @@ func (handler *trans) sendWithContext(ctx context.Context, conn io.ReadWriteClos
 	}
 }
 
-func (handler *trans) send(conn io.ReadWriter, cmd string, args []domain.TransParams) (map[string]string, error) {
+func (handler *trans) send(conn io.ReadWriter, cmd string, args []domain.TransParams) ([]map[string]string, error) {
 	// Check greeting.
 	reader := bufio.NewReader(conn)
 	line, err := reader.ReadSlice('\n')

@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"os"
 
 	"github.mpi-internal.com/Yapo/trans/pkg/infrastructure"
@@ -29,6 +28,7 @@ func main() {
 		conf.PrometheusConf.Enabled,
 	)
 
+	shutdownSequence.Push(prometheus)
 	fmt.Printf("Setting up logger\n")
 	logger, err := infrastructure.MakeYapoLogger(&conf.LoggerConf,
 		prometheus.NewEventsCollector(
@@ -105,9 +105,9 @@ func main() {
 		logger,
 	)
 	shutdownSequence.Push(server)
+	logger.Info("Starting request serving")
 	go server.ListenAndServe()
 	shutdownSequence.Wait()
 
-	logger.Info("Starting request serving")
-	logger.Crit("%s\n", http.ListenAndServe(conf.ServiceConf.Host, maker.NewRouter()))
+	logger.Info("Server exited normally")
 }

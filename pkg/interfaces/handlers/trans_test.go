@@ -45,6 +45,7 @@ func TestTransHandlerExecuteOK(t *testing.T) {
 	}
 	response := domain.TransResponse{
 		Status: usecases.TransOK,
+		Params: make([]map[string]string, 1),
 	}
 	m.On("ExecuteCommand", command).Return(response, nil).Once()
 	h := TransHandler{Interactor: &m}
@@ -52,7 +53,8 @@ func TestTransHandlerExecuteOK(t *testing.T) {
 	expectedResponse := &goutils.Response{
 		Code: http.StatusOK,
 		Body: TransRequestOutput{
-			Status: usecases.TransOK,
+			Status:   usecases.TransOK,
+			Response: response.Params[0],
 		},
 	}
 
@@ -82,21 +84,26 @@ func TestTransHandlerParseInput(t *testing.T) {
 
 	response := domain.TransResponse{
 		Status: usecases.TransOK,
-		Params: make(map[string]string),
+		Params: make([]map[string]string, 1),
 	}
-	response.Params["account_id"] = "1"
-	response.Params["email"] = "user@test.com"
-	response.Params["is_company"] = "true"
+	response.Params = []map[string]string{
+		{
+			"account_id": "1",
+			"email":      "user@test.com",
+			"is_company": "true",
+		},
+	}
 	m.On("ExecuteCommand", command).Return(response, nil).Once()
 	h := TransHandler{Interactor: &m}
 
 	requestOutput := TransRequestOutput{
-		Status:   usecases.TransOK,
-		Response: make(map[string]string),
+		Status: usecases.TransOK,
+		Response: map[string]string{
+			"account_id": "1",
+			"email":      "user@test.com",
+			"is_company": "true",
+		},
 	}
-	requestOutput.Response["account_id"] = "1"
-	requestOutput.Response["email"] = "user@test.com"
-	requestOutput.Response["is_company"] = "true"
 	expectedResponse := &goutils.Response{
 		Code: http.StatusOK,
 		Body: requestOutput,
@@ -118,6 +125,7 @@ func TestTransHandlerExecuteError(t *testing.T) {
 	}
 	response := domain.TransResponse{
 		Status: usecases.TransError,
+		Params: make([]map[string]string, 1),
 	}
 	m.On("ExecuteCommand", command).Return(response, nil).Once()
 	h := TransHandler{Interactor: &m}
@@ -125,7 +133,8 @@ func TestTransHandlerExecuteError(t *testing.T) {
 	expectedResponse := &goutils.Response{
 		Code: http.StatusBadRequest,
 		Body: TransRequestOutput{
-			Status: usecases.TransError,
+			Status:   usecases.TransError,
+			Response: response.Params[0],
 		},
 	}
 
@@ -143,7 +152,9 @@ func TestTransHandlerExecuteInternalError(t *testing.T) {
 		Command: "get_account",
 		Params:  make([]domain.TransParams, 0),
 	}
-	response := domain.TransResponse{}
+	response := domain.TransResponse{
+		Params: []map[string]string{{}},
+	}
 	m.On("ExecuteCommand", command).Return(response, errors.New("Error")).Once()
 	h := TransHandler{Interactor: &m}
 
