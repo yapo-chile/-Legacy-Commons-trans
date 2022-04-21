@@ -13,7 +13,6 @@ docker-attach:
 ## Start all required docker containers for this service
 docker-compose-up:
 	@scripts/commands/docker-compose-up.sh
-	@scripts/commands/docker-attach.sh
 
 ## Stop all running docker containers for this service
 docker-compose-down:

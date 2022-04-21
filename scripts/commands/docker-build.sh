@@ -37,19 +37,6 @@ CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -o app.docker ./${MAIN_FILE}
 
 set +e
 
-#In case it is not Travis we make sure docker is running
-if ! [[ -n "$TRAVIS" ]]; then
-    echoTitle "Starting Docker Engine"
-    if [[ $OSTYPE == "darwin"* ]]; then
-        echoTitle "Starting Mac OSX Docker Daemon"
-        $DIR/docker-start-macosx.sh
-    elif [[ "$OSTYPE" == "linux-gnu" ]]; then
-        echoTitle "Starting Linux Docker Daemon"
-        sudo start-docker-daemon
-    else
-        echoError "Platform not supported"
-    fi
-fi
 
 echoTitle "Building docker image for ${DOCKER_IMAGE}"
 echo "GIT BRANCH: ${GIT_BRANCH}"
