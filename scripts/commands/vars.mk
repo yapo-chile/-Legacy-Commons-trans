@@ -42,8 +42,9 @@ export PACT_MAIN_FILE=cmd/${APPNAME}-pact/main.go
 export PACT_BINARY=${APPNAME}-pact
 
 # DOCKER variables
-export DOCKER_REGISTRY=containers.mpi-internal.com
-export DOCKER_IMAGE=${DOCKER_REGISTRY}/yapo/${APPNAME}
+export DOCKER_REGISTRY=gitlab.com/yapo_team/legacy/commons/${APPNAME}
+export DOCKER_TAG=$(echo ${GIT_BRANCH} | tr '[:upper:]' '[:lower:]' | sed 's,/,_,g')
+export DOCKER_IMAGE=${DOCKER_REGISTRY}
 export DOCKER_PORT=$(call genport,1)
 
 # Documentation variables

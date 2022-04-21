@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/Yapo/goutils"
-	"github.mpi-internal.com/Yapo/trans/pkg/domain"
-	"github.mpi-internal.com/Yapo/trans/pkg/usecases"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/domain"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/usecases"
 )
 
 // TransHandler implements the handler interface and responds to /execute

@@ -15,9 +15,9 @@ import (
 	"golang.org/x/text/encoding/charmap"
 
 	"github.com/eapache/go-resiliency/retrier"
-	"github.mpi-internal.com/Yapo/trans/pkg/domain"
-	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/loggers"
-	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/repository/services"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/domain"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/interfaces/loggers"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/interfaces/repository/services"
 )
 
 // trans struct definition

@@ -7,10 +7,10 @@ import (
 	"testing"
 	"time"
 
-	"github.mpi-internal.com/Yapo/trans/pkg/domain"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/domain"
 
 	"github.com/stretchr/testify/assert"
-	"github.mpi-internal.com/Yapo/trans/pkg/usecases"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/usecases"
 )
 
 func TestIsAllowedCommand(t *testing.T) {

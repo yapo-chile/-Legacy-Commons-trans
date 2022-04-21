@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.mpi-internal.com/Yapo/trans/pkg/domain"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/domain"
 )
 
 // TransOK Status returned when a trans command executes successfully

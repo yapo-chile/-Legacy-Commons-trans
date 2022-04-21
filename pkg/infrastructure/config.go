@@ -37,17 +37,6 @@ type PrometheusConf struct {
 	Enabled bool   `env:"ENABLED" envDefault:"false"`
 }
 
-// NewRelicConf holds configuration to report to New Relic
-// TODO: You need to set the defaults according to your service
-type NewRelicConf struct {
-	// Key the key to authenticate with NewRelic
-	Key string `env:"KEY" envDefault:"f54b15d5702ec12a1df9b9b11960313427f27aae"`
-	// Appname name of the service inside NewRelic
-	Appname string `env:"APPNAME" envDefault:"yapo-trans-poya"`
-	// Enabled if we should enable reporting to NewRelic
-	Enabled bool `env:"ENABLED" envDefault:"false"`
-}
-
 // RuntimeConfig config to start the app
 type RuntimeConfig struct {
 	Host string `env:"HOST" envDefault:"0.0.0.0"`
@@ -60,9 +49,9 @@ type TransConf struct {
 	// that indicates the allowed commands to be sent by this service
 	AllowedCommands string `env:"COMMANDS" envDefault:"transinfo"`
 	// Host is the host of the trans Server
-	Host string `env:"HOST" envDefault:"jenna.schibsted.cl"`
+	Host string `env:"HOST" envDefault:"localhost"`
 	// Port is the port of the trans server
-	Port int `env:"PORT" envDefault:"27205"`
+	Port int `env:"PORT" envDefault:"20005"`
 	// Timeout wait time before a request times out
 	Timeout int `env:"TIMEOUT" envDefault:"15"`
 	// RetryAfter wait time between reconnection to the trans server
@@ -74,7 +63,6 @@ type Config struct {
 	Trans          TransConf      `env:"TRANS_"`
 	ServiceConf    ServiceConf    `env:"SERVICE_"`
 	PrometheusConf PrometheusConf `env:"PROMETHEUS_"`
-	NewRelicConf   NewRelicConf   `env:"NEWRELIC_"`
 	LoggerConf     LoggerConf     `env:"LOGGER_"`
 	Runtime        RuntimeConfig  `env:"APP_"`
 }
