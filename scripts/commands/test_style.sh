@@ -13,21 +13,11 @@ CHECKSTYLE_FILE=${REPORT_ARTIFACTS}/checkstyle-report.xml
 
 echoHeader "Running Checkstyle Tests"
 
-COMMAND='gometalinter.v2 ./... --config ".gometalinter.json"'
+COMMAND="golangci-lint -c .golangci.yml"
 if [[ $@ == **display** ]]; then
-    COMMAND="${COMMAND}"
+    COMMAND="${COMMAND} run ./... | tee /dev/tty > ${CHECKSTYLE_FILE} && echo"
 else
-    COMMAND="${COMMAND} --checkstyle | tee /dev/tty > ${CHECKSTYLE_FILE}"
+    COMMAND="${COMMAND} --out-format \"colored-line-number\" run ./..."
 fi
-
 eval ${COMMAND}
-status=${PIPESTATUS[0]}
 
-# We need to catch error codes that are bigger then 2,
-# they signal that gometalinter exited because of underlying error.
-if [ ${status} -ge 2 ]; then
-    echo "gometalinter exited with code ${status}, check gometalinter errors"
-    exit ${status}
-fi
-
-exit 0

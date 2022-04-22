@@ -1,0 +1,78 @@
+---
+variables:
+  GO_PROJECT: gitlab.com/yapo_team/legacy/sellers/go-ms-account-proxy
+  CHART_DIR: k8s/$CI_PROJECT_NAME
+  CI_JOB_TIMESTAMP: date-tag
+
+include:
+  - project: 'yapo_team/yotf/sre-team/sre-services/ci-templates/golang-pipeline-template'
+    ref: main
+    file: 'gitlab-ci.yml'
+  - project: 'yapo_team/yotf/sre-team/sre-services/ci-templates/docker-pipeline-template'
+    ref: main
+    file: 'gitlab-ci.yml'
+  - project: 'yapo_team/yotf/sre-team/sre-services/ci-templates/helm-pipeline-template'
+    ref: main
+    file: 'gitlab-ci.yml'
+
+stages:
+  - install
+  - test
+  - build
+  - build-docker
+  - helm
+  - update-chart
+  - deploy
+
+install:
+  extends: .install
+
+test:
+  extends: .test
+  image: registry.gitlab.com/yapo_team/yotf/sellers/back/go-testing:latest
+
+build:
+  extends: .build
+  only:
+    - dev
+    - pre
+    - main
+
+docker:
+  extends: .docker-push-release
+  only:
+    - dev
+    - pre
+    - main
+
+helm:
+  extends: .helm
+  only:
+    - dev
+    - pre
+    - main
+
+update-chart-dev:
+  extends: .update-chart-dev
+  only:
+    - dev
+
+update-chart-pre:
+  extends: .update-chart-pre
+  only:
+    - pre
+
+update-chart-pro:
+  extends: .update-chart-prod
+  only:
+    - main
+
+deploy-k8s-pre:
+  extends: .deploy-k8s-pre
+  only:
+    - pre
+
+deploy-k8s-pro:
+  extends: .deploy-k8s-prod
+  only:
+    - main
