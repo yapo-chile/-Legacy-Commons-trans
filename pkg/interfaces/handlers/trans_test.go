@@ -12,6 +12,10 @@ import (
 	"gitlab.com/yapo_team/legacy/commons/trans/pkg/usecases"
 )
 
+const (
+	fakeEmail = "user@test.com"
+)
+
 type MockTransInteractor struct {
 	mock.Mock
 }
@@ -69,14 +73,14 @@ func TestTransHandlerParseInput(t *testing.T) {
 		Command: "get_account",
 		Params:  make(map[string]interface{}),
 	}
-	input.Params["email"] = "user@test.com"
+	input.Params["email"] = fakeEmail
 	command := domain.TransCommand{
 		Command: "get_account",
 		Params:  make([]domain.TransParams, 0),
 	}
 	param := domain.TransParams{
 		Key:   "email",
-		Value: "user@test.com",
+		Value: fakeEmail,
 	}
 	command.Params = append(command.Params, param)
 
@@ -85,7 +89,7 @@ func TestTransHandlerParseInput(t *testing.T) {
 		Params: make(map[string]string),
 	}
 	response.Params["account_id"] = "1"
-	response.Params["email"] = "user@test.com"
+	response.Params["email"] = fakeEmail
 	response.Params["is_company"] = "true"
 	m.On("ExecuteCommand", command).Return(response, nil).Once()
 	h := TransHandler{Interactor: &m}
@@ -95,7 +99,7 @@ func TestTransHandlerParseInput(t *testing.T) {
 		Response: make(map[string]string),
 	}
 	requestOutput.Response["account_id"] = "1"
-	requestOutput.Response["email"] = "user@test.com"
+	requestOutput.Response["email"] = fakeEmail
 	requestOutput.Response["is_company"] = "true"
 	expectedResponse := &goutils.Response{
 		Code: http.StatusOK,

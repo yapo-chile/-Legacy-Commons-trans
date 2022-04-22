@@ -88,11 +88,9 @@ func parseInput(input *TransHandlerInput) domain.TransCommand {
 	params := make([]domain.TransParams, 0)
 
 	for key, value := range input.Params {
-		switch value.(type) {
-		case []interface{}:
+		if _, ok := value.([]interface{}); ok {
 			for _, val := range value.([]interface{}) {
-				switch val.(type) {
-				case map[string]interface{}:
+				if _, ok := val.(map[string]interface{}); ok {
 					for k, v := range val.(map[string]interface{}) {
 						param := domain.TransParams{
 							Key:   k,
@@ -101,7 +99,7 @@ func parseInput(input *TransHandlerInput) domain.TransCommand {
 						}
 						params = append(params, param)
 					}
-				case string:
+				} else if _, ok := val.(string); ok {
 					param := domain.TransParams{
 						Key:   key,
 						Value: val,
@@ -109,7 +107,7 @@ func parseInput(input *TransHandlerInput) domain.TransCommand {
 					params = append(params, param)
 				}
 			}
-		default:
+		} else {
 			param := domain.TransParams{
 				Key:   key,
 				Value: value,

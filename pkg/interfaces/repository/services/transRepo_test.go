@@ -10,6 +10,11 @@ import (
 	"gitlab.com/yapo_team/legacy/commons/trans/pkg/usecases"
 )
 
+const (
+	command1  = "command1"
+	response1 = "response 1"
+)
+
 type MockTransHandler struct {
 	mock.Mock
 }
@@ -40,7 +45,7 @@ func TestNewTransRepo(t *testing.T) {
 }
 
 func TestExecuteError(t *testing.T) {
-	cmd := "command1"
+	cmd := command1
 	params := []domain.TransParams{}
 	expectedErr := errors.New("trans error")
 	responseParams := make(map[string]string)
@@ -70,15 +75,15 @@ func TestExecuteError(t *testing.T) {
 }
 
 func TestExecuteOK(t *testing.T) {
-	cmd := "command1"
+	cmd := command1
 	params := []domain.TransParams{
-		domain.TransParams{Key: "param 1", Value: "value 1"},
-		domain.TransParams{Key: "param 2", Value: "value 2"},
+		{Key: "param 1", Value: "value 1"},
+		{Key: "param 2", Value: "value 2"},
 	}
 
 	responseParams := make(map[string]string)
 	responseParams["status"] = usecases.TransOK
-	responseParams["response 1"] = "response 1"
+	responseParams[response1] = response1
 	command := domain.TransCommand{
 		Command: cmd,
 		Params:  params,
@@ -97,7 +102,7 @@ func TestExecuteOK(t *testing.T) {
 		Status: usecases.TransOK,
 		Params: make(map[string]string),
 	}
-	expectedResponse.Params["response 1"] = "response 1"
+	expectedResponse.Params[response1] = response1
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, response)
 	factory.AssertExpectations(t)
@@ -105,14 +110,14 @@ func TestExecuteOK(t *testing.T) {
 }
 
 func TestExecuteOKNumbers(t *testing.T) {
-	cmd := "command1"
+	cmd := command1
 	params := []domain.TransParams{
-		domain.TransParams{Key: "param 1", Value: 1980},
+		{Key: "param 1", Value: 1980},
 	}
 
 	responseParams := make(map[string]string)
 	responseParams["status"] = usecases.TransOK
-	responseParams["response 1"] = "response 1"
+	responseParams[response1] = response1
 	command := domain.TransCommand{
 		Command: cmd,
 		Params:  make([]domain.TransParams, 0),
@@ -138,7 +143,7 @@ func TestExecuteOKNumbers(t *testing.T) {
 		Status: usecases.TransOK,
 		Params: make(map[string]string),
 	}
-	expectedResponse.Params["response 1"] = "response 1"
+	expectedResponse.Params[response1] = response1
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, response)
 	factory.AssertExpectations(t)

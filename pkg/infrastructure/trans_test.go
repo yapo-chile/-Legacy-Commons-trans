@@ -13,6 +13,10 @@ import (
 	"gitlab.com/yapo_team/legacy/commons/trans/pkg/usecases"
 )
 
+const (
+	test = "test"
+)
+
 func TestIsAllowedCommand(t *testing.T) {
 	transHandler := trans{
 		allowedCommands: []string{"transinfo", "get_account", "newad"},
@@ -28,23 +32,23 @@ func TestIsAllowedCommand(t *testing.T) {
 }
 
 func TestSendCommandInvalidCommand(t *testing.T) {
-	//initiate the conf
-	host := "" //shouldn't try to connect with the server
+	// initiate the conf
+	host := "" // shouldn't try to connect with the server
 	port := 0
 	conf := TransConf{
 		Host:            host,
 		Port:            port,
 		Timeout:         15,
 		RetryAfter:      5,
-		AllowedCommands: "test",
+		AllowedCommands: test,
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Error")
-	expectedResponse := make(map[string]string)
+	expectedResponse := map[string]string{}
 	expectedResponse["error"] = "Invalid Command. Valid commands: [test]"
 	cmd := "transinfo"
 	params := []domain.TransParams{
-		domain.TransParams{
+		{
 			Key:   "param1",
 			Value: "ok",
 		},
@@ -62,19 +66,17 @@ func TestSendCommandInvalidCommand(t *testing.T) {
 func TestSendCommandTimeout(t *testing.T) {
 	command := "cmd:test\nparam1:ok\ncommit:1\nend\n"
 	response := fmt.Sprintf("status:%s\n", usecases.TransOK)
-	//define the function that will receive the message
+	// define the function that will receive the message
 	handlerFunc := func(input []byte) []byte {
 		time.Sleep(2 * time.Second)
 		// in case the request reaches after the sleep
 		assert.Equal(t, command, string(input))
 		return []byte(response)
 	}
-	//initiate the mock server
 	server := NewMockTransServer()
 	defer server.Close()
 	server.SetHandler(handlerFunc)
 
-	//initiate the conf
 	addr := strings.Split(server.Address, ":")
 	host := addr[0]
 	port, _ := strconv.Atoi(addr[1])
@@ -83,14 +85,14 @@ func TestSendCommandTimeout(t *testing.T) {
 		Port:            port,
 		Timeout:         1,
 		RetryAfter:      5,
-		AllowedCommands: "test",
+		AllowedCommands: test,
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Error")
 	var expectedResponse map[string]string
-	cmd := "test"
+	cmd := test
 	params := []domain.TransParams{
-		domain.TransParams{
+		{
 			Key:   "param1",
 			Value: "ok",
 		},
@@ -105,12 +107,10 @@ func TestSendCommandTimeout(t *testing.T) {
 }
 
 func TestSendCommandBusyServer(t *testing.T) {
-	//initiate the mock server
 	server := NewMockTransServer()
 	defer server.Close()
 	server.SetBusy(true)
 
-	//initiate the conf
 	addr := strings.Split(server.Address, ":")
 	host := addr[0]
 	port, _ := strconv.Atoi(addr[1])
@@ -119,14 +119,14 @@ func TestSendCommandBusyServer(t *testing.T) {
 		Port:            port,
 		Timeout:         15,
 		RetryAfter:      5,
-		AllowedCommands: "test",
+		AllowedCommands: test,
 	}
 	logger := MockLoggerInfrastructure{}
 	logger.On("Error")
 	var expectedResponse map[string]string
-	cmd := "test"
+	cmd := test
 	params := []domain.TransParams{
-		domain.TransParams{
+		{
 			Key:   "param1",
 			Value: "ok",
 		},
@@ -142,21 +142,17 @@ func TestSendCommandBusyServer(t *testing.T) {
 }
 
 func TestSendCommandOK(t *testing.T) {
-
 	command := "cmd:test\nparam1:ok\xc1\ncommit:1\nend\n"
 	response := "status:TRANS_OK\n"
 
-	//define the function that will receive the message
 	handlerFunc := func(input []byte) []byte {
 		assert.Equal(t, command, string(input))
 		return []byte(response)
 	}
-	//initiate the server
 	server := NewMockTransServer()
 	defer server.Close()
 	server.SetHandler(handlerFunc)
 
-	//initiate the conf
 	addr := strings.Split(server.Address, ":")
 	host := addr[0]
 	port, _ := strconv.Atoi(addr[1])
@@ -165,14 +161,14 @@ func TestSendCommandOK(t *testing.T) {
 		Port:            port,
 		Timeout:         15,
 		RetryAfter:      5,
-		AllowedCommands: "test",
+		AllowedCommands: test,
 	}
 	logger := MockLoggerInfrastructure{}
 	expectedResponse := make(map[string]string)
 	expectedResponse["status"] = usecases.TransOK
-	cmd := "test"
+	cmd := test
 	params := []domain.TransParams{
-		domain.TransParams{
+		{
 			Key:   "param1",
 			Value: "okÁ",
 		},
@@ -188,21 +184,17 @@ func TestSendCommandOK(t *testing.T) {
 }
 
 func TestSendCommandBlobOK(t *testing.T) {
-
 	command := "cmd:test\nblob:5:body\nedgar\ncommit:1\nend\n"
 	response := "status:TRANS_OK\n"
 
-	//define the function that will receive the message
 	handlerFunc := func(input []byte) []byte {
 		assert.Equal(t, command, string(input))
 		return []byte(response)
 	}
-	//initiate the server
 	server := NewMockTransServer()
 	defer server.Close()
 	server.SetHandler(handlerFunc)
 
-	//initiate the conf
 	addr := strings.Split(server.Address, ":")
 	host := addr[0]
 	port, _ := strconv.Atoi(addr[1])
@@ -211,14 +203,14 @@ func TestSendCommandBlobOK(t *testing.T) {
 		Port:            port,
 		Timeout:         15,
 		RetryAfter:      5,
-		AllowedCommands: "test",
+		AllowedCommands: test,
 	}
 	logger := MockLoggerInfrastructure{}
 	expectedResponse := make(map[string]string)
 	expectedResponse["status"] = usecases.TransOK
-	cmd := "test"
+	cmd := test
 	params := []domain.TransParams{
-		domain.TransParams{
+		{
 			Key:   "body",
 			Value: "ZWRnYXI=",
 			Blob:  true,
@@ -234,17 +226,14 @@ func TestSendCommandBlobOK(t *testing.T) {
 	logger.AssertExpectations(t)
 }
 func TestISO8859Input(t *testing.T) {
-	//define the function that will receive the message
 	handlerFunc := func(input []byte) []byte {
 		var response []byte
-		return []byte(response)
+		return response
 	}
-	//initiate the server
 	server := NewMockTransServer()
 	defer server.Close()
 	server.SetHandler(handlerFunc)
 
-	//initiate the conf
 	addr := strings.Split(server.Address, ":")
 	host := addr[0]
 	port, _ := strconv.Atoi(addr[1])
@@ -253,12 +242,12 @@ func TestISO8859Input(t *testing.T) {
 		Port:            port,
 		Timeout:         15,
 		RetryAfter:      5,
-		AllowedCommands: "test",
+		AllowedCommands: test,
 	}
 	logger := MockLoggerInfrastructure{}
-	cmd := "test"
+	cmd := test
 	params := []domain.TransParams{
-		domain.TransParams{
+		{
 			Key:   "param1",
 			Value: "ok\xc1",
 		},

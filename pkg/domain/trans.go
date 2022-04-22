@@ -15,7 +15,7 @@ type TransCommand struct {
 	Params []TransParams
 }
 
-//TransResponse represents the response given to the execution of a TransCommand
+// TransResponse represents the response given to the execution of a TransCommand
 type TransResponse struct {
 	// Status the status of the response (normally TRANS_OK or TRANS_ERROR)
 	Status string

@@ -15,7 +15,7 @@ import (
 
 var shutdownSequence = infrastructure.NewShutdownSequence()
 
-func main() {
+func main() { // nolint funlen
 	var conf infrastructure.Config
 	shutdownSequence.Listen()
 	infrastructure.LoadFromEnv(&conf)
