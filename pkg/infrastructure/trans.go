@@ -212,32 +212,33 @@ func appendCmd(buf []byte, cmd string, args []domain.TransParams) []byte {
 	buf = append(buf, '\n')
 	for _, param := range args {
 		key := param.Key
-		value := param.Value.(string)
-		if param.Blob {
-			if decoded, err := base64.StdEncoding.DecodeString(value); err == nil {
-				value = string(decoded)
-				buf = append(buf, "blob:"...)
-				buf = strconv.AppendInt(buf, int64(len(value)), 10)
-				buf = append(buf, ':')
-				buf = append(buf, key...)
-				buf = append(buf, '\n')
-				buf = append(buf, value...)
-				buf = append(buf, '\n')
+		if value, ok := param.Value.(string); ok {
+			if param.Blob {
+				if decoded, err := base64.StdEncoding.DecodeString(value); err == nil {
+					value = string(decoded)
+					buf = append(buf, "blob:"...)
+					buf = strconv.AppendInt(buf, int64(len(value)), 10)
+					buf = append(buf, ':')
+					buf = append(buf, key...)
+					buf = append(buf, '\n')
+					buf = append(buf, value...)
+					buf = append(buf, '\n')
+				}
+				continue
 			}
-			continue
+			key, err := charmap.ISO8859_1.NewEncoder().String(key)
+			if err != nil {
+				continue
+			}
+			value, err = charmap.ISO8859_1.NewEncoder().String(value)
+			if err != nil {
+				continue
+			}
+			buf = append(buf, key...)
+			buf = append(buf, ':')
+			buf = append(buf, value...)
+			buf = append(buf, '\n')
 		}
-		key, err := charmap.ISO8859_1.NewEncoder().String(key)
-		if err != nil {
-			continue
-		}
-		value, err = charmap.ISO8859_1.NewEncoder().String(value)
-		if err != nil {
-			continue
-		}
-		buf = append(buf, key...)
-		buf = append(buf, ':')
-		buf = append(buf, value...)
-		buf = append(buf, '\n')
 	}
 	buf = append(buf, "commit:1"...)
 	buf = append(buf, "\nend\n"...)
