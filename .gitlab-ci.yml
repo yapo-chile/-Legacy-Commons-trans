@@ -5,15 +5,62 @@ variables:
   CI_JOB_TIMESTAMP: date-tag
 
 include:
-  - project: 'yapo_team/yotf/sre-team/sre-services/ci-templates/golang-pipeline-template'
-    ref: main
-    file: 'gitlab-ci.yml'
   - project: 'yapo_team/yotf/sre-team/sre-services/ci-templates/docker-pipeline-template'
     ref: main
     file: 'gitlab-ci.yml'
   - project: 'yapo_team/yotf/sre-team/sre-services/ci-templates/helm-pipeline-template'
     ref: main
     file: 'gitlab-ci.yml'
+
+
+.set-golang-folders: &set-golang-folders
+  - export GO_PROJECT=${GO_PROJECT}
+  - export CHART_DIR=${CHART_DIR}
+  - export APPNAME=${CI_PROJECT_NAME}
+  - echo ${GOPATH}
+  - echo ${GO_PROJECT}
+# crea el directorio en el workspace de Go
+  - mkdir -p ${GOPATH}/src/${GO_PROJECT}
+# copia todo el contenido de CI_PROJECT_DIR al workspace de Go.
+# CI_PROJECT_DIR es una variable predefinida de GitLab que contiene
+# la ruta donde el repositorio es clonado y donde el job está corriendo
+  - cp -r ${CI_PROJECT_DIR}/* ${GOPATH}/src/${GO_PROJECT}/
+  - cd ${GOPATH}/src/${GO_PROJECT}
+  - pwd
+  - ls -la
+
+.install:
+  image: golang:1.17.0
+  stage: install
+  script:
+    - *set-golang-folders
+    - go mod tidy -compat=1.17
+    - cp ./go.sum $CI_PROJECT_DIR
+    - cp ./go.mod $CI_PROJECT_DIR
+  allow_failure: false
+  artifacts:
+    paths:
+      - go.sum
+      - go.mod
+
+.build:
+  image: golang:1.17.0
+  stage: build
+  script:
+    - *set-golang-folders
+    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -o $CI_PROJECT_DIR/app ./cmd/$CI_PROJECT_NAME/main.go
+  allow_failure: false
+  artifacts:
+    paths:
+      - app
+
+.test:
+  image: registry.gitlab.com/yapo_team/yotf/sre-team/sre-services/docker/go-testing:latest
+  stage: test
+  script:
+    - *set-golang-folders
+    - make test
+  allow_failure: false
 
 stages:
   - install
