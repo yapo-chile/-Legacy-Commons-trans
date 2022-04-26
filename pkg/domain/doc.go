@@ -4,7 +4,7 @@ details has place here.
 
 What lives here
 
-Domain is the home of the business entities, those essencial to our business,
+Domain is the home of the business entities, those essential to our business,
 and declarations for all the interfaces those entities may need in order to
 operate.
 

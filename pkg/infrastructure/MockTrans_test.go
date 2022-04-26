@@ -59,7 +59,6 @@ func TestMockTransServerHandler(t *testing.T) {
 }
 
 func TestMockTransServerBusy(t *testing.T) {
-
 	srv := NewMockTransServer()
 	srv.SetBusy(true)
 	defer srv.Close()
