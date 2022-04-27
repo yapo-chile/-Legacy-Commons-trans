@@ -73,7 +73,7 @@ func TestJsonHandlerFuncOK(t *testing.T) {
 	l := MockLogger{}
 	input := &DummyInput{}
 	response := &goutils.Response{
-		Code: 42,
+		Code: 400,
 		Body: DummyOutput{"That's some bad hat, Harry"},
 	}
 	getter := mock.AnythingOfType("handlers.InputGetter")
@@ -89,7 +89,7 @@ func TestJsonHandlerFuncOK(t *testing.T) {
 	fn := MakeJSONHandlerFunc(&h, &l)
 	fn(w, r)
 
-	assert.Equal(t, 42, w.Code)
+	assert.Equal(t, 400, w.Code)
 	assert.Equal(t, `{"Y":"That's some bad hat, Harry"}`+"\n", w.Body.String())
 	h.AssertExpectations(t)
 	l.AssertExpectations(t)
@@ -99,7 +99,7 @@ func TestJsonHandlerFillGet(t *testing.T) {
 	l := MockLogger{}
 	input := &DummyInputGet{}
 	response := &goutils.Response{
-		Code: 42,
+		Code: 400,
 		Body: DummyOutput{"That's some bad hat, Harry"},
 	}
 	getter := mock.AnythingOfType("handlers.InputGetter")
@@ -115,7 +115,7 @@ func TestJsonHandlerFillGet(t *testing.T) {
 	fn := MakeJSONHandlerFunc(&h, &l)
 	fn(w, r)
 
-	assert.Equal(t, 42, w.Code)
+	assert.Equal(t, 400, w.Code)
 	assert.Equal(t, `{"Y":"That's some bad hat, Harry"}`+"\n", w.Body.String())
 	h.AssertExpectations(t)
 	l.AssertExpectations(t)

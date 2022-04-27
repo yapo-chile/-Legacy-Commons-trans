@@ -1,35 +1,27 @@
-# trans
+# Trans ms (proxy)
 
-<!-- Badger start badges -->
-[![Status of the build](https://badger.spt-engprod-pro.mpi-internal.com/badge/travis/Yapo/trans)](https://travis.mpi-internal.com/Yapo/trans)
-[![Testing Coverage](https://badger.spt-engprod-pro.mpi-internal.com/badge/coverage/Yapo/trans)](https://reports.spt-engprod-pro.mpi-internal.com/#/Yapo/trans?branch=master&type=push&daterange&daterange)
-[![Style/Linting issues](https://badger.spt-engprod-pro.mpi-internal.com/badge/issues/Yapo/trans)](https://reports.spt-engprod-pro.mpi-internal.com/#/Yapo/trans?branch=master&type=push&daterange&daterange)
-[![Badger](https://badger.spt-engprod-pro.mpi-internal.com/badge/flaky_tests/Yapo/trans)](https://databulous.spt-engprod-pro.mpi-internal.com/test/flaky/Yapo/trans)
-[![Badger](https://badger.spt-engprod-pro.mpi-internal.com/badge/quality_index/Yapo/trans)](https://databulous.spt-engprod-pro.mpi-internal.com/quality/repo/Yapo/trans)
-[![Badger](https://badger.spt-engprod-pro.mpi-internal.com/badge/engprod/Yapo/trans)](https://github.mpi-internal.com/spt-engprod/badger)
-<!-- Badger end badges -->
 
 This microservice acts as a proxy between other microservices and a Trans server. The params are passed in a JSON body, and it can be configured to limit what commands can be executed.
 
 
 ## How to run trans
 
-* Create the dir: `~/go/src/github.mpi-internal.com/Yapo`
+* Create the dir: ` ~/go/src/gitlab.com/yapo_team/legacy/commons`
 
 * Set the go path: `export GOPATH=~/go` or add the line on your file `.bash_rc`
 
 * Clone this repo:
 
   ```
-  $ cd ~/go/src/github.mpi-internal.com/Yapo
-  $ git clone git@github.mpi-internal.com:Yapo/trans.git
+  $ cd  ~/go/src/gitlab.com/yapo_team/legacy/commons
+  $ git clone git@gitlab.com:yapo_team/legacy/commons/trans.git
   ```
 
 * On the top dir execute the make instruction to clean and start:
 
   ```
   $ cd trans
-  $ make start
+  $ make docker-start
   ```
 
 * To get a list of available commands:
@@ -37,28 +29,35 @@ This microservice acts as a proxy between other microservices and a Trans server
   ```
   $ make help
   Targets:
-    test                 Run tests and generate quality reports
-    cover                Run tests and output coverage reports
-    coverhtml            Run tests and open report on default web browser
-    checkstyle           Run gometalinter and output report as text
-    setup                Install golang system level dependencies
-    build                Compile the code
-    run                  Execute the service
-    start                Compile and start the service
-    fix-format           Run gofmt to reindent source
-    info                 Display basic service info
-    docker-build         Create docker image based on docker/dockerfile
-    docker-publish       Push docker image to containers.mpi-internal.com
-    docker-attach        Attach to this service's currently running docker container output stream
-    docker-compose-up    Start all required docker containers for this service
-    docker-compose-down  Stop all running docker containers for this service
-    help                 This help message
+  test                 Run tests and generate quality reports
+  cover                Run tests and output coverage reports
+  coverhtml            Run tests and open report on default web browser
+  checkstyle           Run gometalinter and output report as text
+  setup                Install golang system level dependencies
+  build                Compile the code
+  run                  Execute the service
+  start                Compile and start the service
+  docker-start         Compile and start the service using docker
+  docker-stop          Stop docker containers
+  clone                Setup a new service repository based on trans
+  fix-format           Run gofmt to reindent source
+  info                 Display basic service info
+  docs-start           Starts godoc webserver with live docs for the project
+  docs-stop            Stops godoc webserver if running
+  docs-compile         Compiles static documentation to docs folder
+  docs-update          Generates a commit updating the docs
+  docs                 Opens the live documentation on the default web browser
+  docker-build         Create docker image based on docker/dockerfile
+  docker-publish       Push docker image to containers.mpi-internal.com
+  docker-attach        Attach to this service's currently running docker container output stream
+  docker-compose-up    Start all required docker containers for this service
+  docker-compose-down  Stop all running 
   ```
 
 * If you change the code:
 
   ```
-  $ make start
+  $ make docker-start
   ```
 
 * How to run the tests
@@ -137,20 +136,4 @@ by the trans command
 }
 ```
 
-### Contact
-dev@schibsted.cl
 
-## Kubernetes
-
-Kubernetes and Helm have to be installed in your machine.
-If you haven't done it yet, you need to create a secret to reach Artifactory.
-`kubectl create secret docker-registry containers-mpi-internal-com -n <namespace> --docker-server=containers.mpi-internal.com --docker-username=<okta_username> --docker-password=<artifactory_api_key> --docker-email=<your_email>`
-
-### Helm Charts
-
-1. You need to fill out the ENV variables in the k8s/trans/templates/deployment.yaml file.
-2. You should fill out the *tag*, and *host* under hosts to your namespace.
-3. Add this host name to your /etc/hosts file with the correct IP address (127.21.5.11)
-4. You run `helm install -n <name_of_your_release> k8s/trans`
-5. Check your pod is running with `kubectl get pods`
-6. If you want to check your request log `kubectl logs <name_of_your_pod>`

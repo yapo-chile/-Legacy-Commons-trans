@@ -1,4 +1,6 @@
-include scripts/commands/vars.mk
+include mk/vars.mk
+include mk/help.mk
+include mk/colors.mk
 
 ## Run tests and generate quality reports
 test:
@@ -20,19 +22,16 @@ checkstyle:
 setup:
 	@scripts/commands/setup.sh
 
-## Compile the code
-build:
+## Compile the code locally
+build-local:
 	@scripts/commands/build.sh
 
 ## Execute the service
-run:
+run-local: build-local
 	@./${APPNAME}
 
-## Compile and start the service
-start: build run
-
 ## Compile and start the service using docker
-docker-start: build docker-build docker-compose-up info
+docker-start:  docker-compose-up 
 
 ## Stop docker containers
 docker-stop: docker-compose-down
@@ -51,10 +50,15 @@ info:
 	@echo "ServerRoot   : ${SERVER_ROOT}"
 	@echo "API Base URL : ${BASE_URL}"
 	@echo "Healthcheck  : curl ${BASE_URL}/api/v1/healthcheck"
+	@echo "Images from latest commit:"
+	@echo -e "- ${DOCKER_IMAGE}:${DOCKER_TAG}"
+	@echo -e "- ${DOCKER_IMAGE}:${COMMIT_DATE_UTC}"
 
 deploy-k8s:
 	@scripts/commands/deploy-k8s.sh
 
-include docs.mk
-include docker.mk
-include help.mk
+include mk/docs.mk
+include mk/docker.mk
+include mk/dev.mk
+include mk/test.mk
+include mk/deploy.mk
