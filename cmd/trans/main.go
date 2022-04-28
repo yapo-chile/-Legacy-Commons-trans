@@ -6,16 +6,16 @@ import (
 	"net/http"
 	"os"
 
-	"github.mpi-internal.com/Yapo/trans/pkg/infrastructure"
-	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/handlers"
-	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/loggers"
-	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/repository/services"
-	"github.mpi-internal.com/Yapo/trans/pkg/usecases"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/infrastructure"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/interfaces/handlers"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/interfaces/loggers"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/interfaces/repository/services"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/usecases"
 )
 
 var shutdownSequence = infrastructure.NewShutdownSequence()
 
-func main() {
+func main() { // nolint funlen
 	var conf infrastructure.Config
 	shutdownSequence.Listen()
 	infrastructure.LoadFromEnv(&conf)
@@ -40,18 +40,6 @@ func main() {
 		fmt.Println(err)
 		os.Exit(2)
 	}
-	logger.Info("Setting up New Relic")
-	newrelic := infrastructure.NewRelicHandler{
-		Appname: conf.NewRelicConf.Appname,
-		Key:     conf.NewRelicConf.Key,
-		Enabled: conf.NewRelicConf.Enabled,
-		Logger:  logger,
-	}
-	err = newrelic.Start()
-	if err != nil {
-		logger.Error("Error loading New Relic: %+v", err)
-		os.Exit(2)
-	}
 
 	logger.Info("Initializing resources")
 
@@ -74,7 +62,6 @@ func main() {
 	maker := infrastructure.RouterMaker{
 		Logger: logger,
 		WrapperFuncs: []infrastructure.WrapperFunc{
-			newrelic.TrackHandlerFunc,
 			prometheus.TrackHandlerFunc,
 		},
 		WithProfiling: conf.ServiceConf.Profiling,

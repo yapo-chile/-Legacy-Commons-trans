@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.mpi-internal.com/Yapo/trans/pkg/domain"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/domain"
 )
 
 // TransOK Status returned when a trans command executes successfully
@@ -21,7 +21,7 @@ const TransNoCommand = "TRANS_ERROR_NO_SUCH_COMMAND:Err no such command"
 
 // ExecuteTransUsecase states:
 // As a User, I would like to execute my TransCommand on a Trans server and get the corresponding response
-// ExecuteTrans should return a response, or an appropiate error if there was a problem.
+// ExecuteTrans should return a response, or an appropriate error if there was a problem.
 type ExecuteTransUsecase interface {
 	ExecuteCommand(command domain.TransCommand) (domain.TransResponse, error)
 }
@@ -73,7 +73,7 @@ func (interactor TransInteractor) ExecuteCommand(
 	}
 	// if the error is a database error
 	if strings.Contains(response.Status, TransDatabaseError) {
-		//get the specific error message from the status response
+		// get the specific error message from the status response
 		errorString := strings.Replace(response.Status, TransDatabaseError, "", 1)
 		errorString = strings.Replace(errorString, ":", "", 1)
 		err = fmt.Errorf(errorString)

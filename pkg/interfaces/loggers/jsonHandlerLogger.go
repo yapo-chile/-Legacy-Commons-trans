@@ -5,7 +5,7 @@ import (
 
 	"github.com/Yapo/goutils"
 
-	"github.mpi-internal.com/Yapo/trans/pkg/interfaces/handlers"
+	"gitlab.com/yapo_team/legacy/commons/trans/pkg/interfaces/handlers"
 )
 
 type jsonHandlerDefaultLogger struct {
@@ -26,7 +26,6 @@ func (l *jsonHandlerDefaultLogger) LogRequestPanic(r *http.Request, response *go
 
 // MakeJSONHandlerLogger sets up a JsonHandlerLogger instrumented
 // via the provided logger
-//func MakeJSONHandlerLogger(logger Logger) *jsonHandlerDefaultLogger {
 func MakeJSONHandlerLogger(logger Logger) handlers.JSONHandlerLogger {
 	return &jsonHandlerDefaultLogger{
 		logger: logger,

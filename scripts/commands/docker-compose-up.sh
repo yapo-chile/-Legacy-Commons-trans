@@ -5,16 +5,6 @@ DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 . "$DIR/colors.sh"
 
-echoTitle "Starting Docker Engine"
-if [[ $OSTYPE == "darwin"* ]]; then
-    echoTitle "Starting Mac OSX Docker Daemon"
-    $DIR/docker-start-macosx.sh
-elif [[ "$OSTYPE" == "linux-gnu" ]]; then
-    echoTitle "Starting Linux Docker Daemon"
-    sudo start-docker-daemon
-else
-    echoError "Platform not supported"
-fi
 
 echoTitle "Creating needed networks"
 for network in ${DOCKER_COMPOSE_NETWORKS}; do
@@ -27,6 +17,6 @@ for network in ${DOCKER_COMPOSE_NETWORKS}; do
 done
 
 echoTitle "Starting containers"
-docker-compose -f docker/docker-compose.yml -p ${APPNAME} up -d
+docker-compose -f docker/docker-compose.yml -p ${APPNAME} up
 
 echoTitle "Done"
